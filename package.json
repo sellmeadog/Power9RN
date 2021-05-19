@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest --coverage=true",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "pod": "npx pod-install ios/"
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.11",
@@ -18,10 +19,13 @@
     "immer": "^9.0.2",
     "react": "17.0.2",
     "react-native": "0.64.0",
+    "react-native-elements": "3.2.0",
     "react-native-gesture-handler": "^1.10.3",
+    "react-native-get-random-values": "^1.7.0",
     "react-native-reanimated": "^2.1.0",
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "^3.2.0",
+    "react-native-vector-icons": "^8.1.0",
     "rxjs": "^7.0.1",
     "uuid": "^8.3.2"
   },

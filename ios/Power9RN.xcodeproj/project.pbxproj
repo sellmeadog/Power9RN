@@ -11,7 +11,10 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		234C539A2B16437791BCCB46 /* Beleren2016-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F03348358EBB4969A72DAC5B /* Beleren2016-Bold.ttf */; };
+		42E0656B341F421A999A18EA /* Beleren2016SmallCaps-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 49C55082C2F142478723C4EE /* Beleren2016SmallCaps-Bold.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		94893656575C48D1B496674A /* Beleren2016SmallCaps-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2FAE2D890CD24F56A58A2646 /* Beleren2016SmallCaps-BoldItalic.ttf */; };
 		A34F1765F1FBB5B231F92552 /* libPods-Power9RN-Power9RNTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C205BB3F8AD81E701EEBF6C8 /* libPods-Power9RN-Power9RNTests.a */; };
 		B5B509484093FD377F5BBC4D /* libPods-Power9RN.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E77023870DA50A35F3C93C3 /* libPods-Power9RN.a */; };
 /* End PBXBuildFile section */
@@ -37,12 +40,15 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Power9RN/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Power9RN/main.m; sourceTree = "<group>"; };
 		1E6AA52EC14062EB180DA8C0 /* Pods-Power9RN.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Power9RN.debug.xcconfig"; path = "Target Support Files/Pods-Power9RN/Pods-Power9RN.debug.xcconfig"; sourceTree = "<group>"; };
+		2FAE2D890CD24F56A58A2646 /* Beleren2016SmallCaps-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Beleren2016SmallCaps-BoldItalic.ttf"; path = "../src/assets/fonts/Beleren2016SmallCaps-BoldItalic.ttf"; sourceTree = "<group>"; };
 		4818F40E43F749A9E995AC85 /* Pods-Power9RN.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Power9RN.release.xcconfig"; path = "Target Support Files/Pods-Power9RN/Pods-Power9RN.release.xcconfig"; sourceTree = "<group>"; };
+		49C55082C2F142478723C4EE /* Beleren2016SmallCaps-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Beleren2016SmallCaps-Bold.ttf"; path = "../src/assets/fonts/Beleren2016SmallCaps-Bold.ttf"; sourceTree = "<group>"; };
 		4E77023870DA50A35F3C93C3 /* libPods-Power9RN.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Power9RN.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Power9RN/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C205BB3F8AD81E701EEBF6C8 /* libPods-Power9RN-Power9RNTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Power9RN-Power9RNTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C929537A30937435A1467E39 /* Pods-Power9RN-Power9RNTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Power9RN-Power9RNTests.debug.xcconfig"; path = "Target Support Files/Pods-Power9RN-Power9RNTests/Pods-Power9RN-Power9RNTests.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F03348358EBB4969A72DAC5B /* Beleren2016-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Beleren2016-Bold.ttf"; path = "../src/assets/fonts/Beleren2016-Bold.ttf"; sourceTree = "<group>"; };
 		F0F2CB755AF738EA56CCB247 /* Pods-Power9RN-Power9RNTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Power9RN-Power9RNTests.release.xcconfig"; path = "Target Support Files/Pods-Power9RN-Power9RNTests/Pods-Power9RN-Power9RNTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -133,6 +139,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				4FD59EB721D898E79054559F /* Pods */,
+				F92857B2258546A9B016A170 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -146,6 +153,17 @@
 				00E356EE1AD99517003FC87E /* Power9RNTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		F92857B2258546A9B016A170 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F03348358EBB4969A72DAC5B /* Beleren2016-Bold.ttf */,
+				49C55082C2F142478723C4EE /* Beleren2016SmallCaps-Bold.ttf */,
+				2FAE2D890CD24F56A58A2646 /* Beleren2016SmallCaps-BoldItalic.ttf */,
+			);
+			name = Resources;
+			path = "";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -244,6 +262,9 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				234C539A2B16437791BCCB46 /* Beleren2016-Bold.ttf in Resources */,
+				42E0656B341F421A999A18EA /* Beleren2016SmallCaps-Bold.ttf in Resources */,
+				94893656575C48D1B496674A /* Beleren2016SmallCaps-BoldItalic.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
