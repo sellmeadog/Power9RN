@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, useColorScheme, View } from 'react-native';
-
 import {
   Colors,
   DebugInstructions,
@@ -9,35 +8,9 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-const Section: React.FC<{
-  title: string;
-}> = ({ children, title }) => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+export interface P9NewAppScreenProps {}
 
-const App = () => {
+export const P9NewAppScreen: FunctionComponent<P9NewAppScreenProps> = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
@@ -71,6 +44,34 @@ const App = () => {
   );
 };
 
+const Section: React.FC<{
+  title: string;
+}> = ({ children, title }) => {
+  const isDarkMode = useColorScheme() === 'dark';
+  return (
+    <View style={styles.sectionContainer}>
+      <Text
+        style={[
+          styles.sectionTitle,
+          {
+            color: isDarkMode ? Colors.white : Colors.black,
+          },
+        ]}>
+        {title}
+      </Text>
+      <Text
+        style={[
+          styles.sectionDescription,
+          {
+            color: isDarkMode ? Colors.light : Colors.dark,
+          },
+        ]}>
+        {children}
+      </Text>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   sectionContainer: {
     marginTop: 32,
@@ -89,5 +90,3 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
-
-export default App;
