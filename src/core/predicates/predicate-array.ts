@@ -1,5 +1,5 @@
-import { combineLatest, Observable, of, ReplaySubject } from 'rxjs';
-import { distinctUntilChanged, map, share, switchMap } from 'rxjs/operators';
+import { combineLatest, Observable, of } from 'rxjs';
+import { distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 
 import { P9PredicateBase, P9PredicateBaseOptions, P9PredicateState } from './predicate-base';
 import { P9PredicateScalar } from './predicate-scalar';
@@ -26,11 +26,12 @@ export class P9PredicateArray<S extends P9PredicateState = any> extends P9Predic
 
     this.predicateChanges = this.predicates.pipe(
       switchMap((predicates) =>
-        predicates.length ? combineLatest(predicates.map(({ predicateChanges }) => predicateChanges)) : of([]),
+        predicates.length === 0
+          ? of([] as string[])
+          : combineLatest(predicates.map(({ predicateChanges }) => predicateChanges)),
       ),
       map(serializeFn),
       distinctUntilChanged(),
-      share({ connector: () => new ReplaySubject(1) }),
     );
 
     this.canReset = this.predicateChanges.pipe(map(Boolean), distinctUntilChanged());

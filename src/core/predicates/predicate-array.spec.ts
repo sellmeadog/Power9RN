@@ -87,12 +87,12 @@ describe('P9PredicateArray', () => {
     scalar2.setState((draft) => {
       draft.expression = 'of';
     });
+
     scalar2.setState((draft) => {
       draft.expression = '';
     });
 
     expect(actualPredicates).toEqual([
-      '',
       'name BEGINSWITH[c] "huntmaster" name BEGINSWITH[c] "of the" name BEGINSWITH[c] "fells"',
       'name BEGINSWITH[c] "huntmaster" name BEGINSWITH[c] "of" name BEGINSWITH[c] "fells"',
       'name BEGINSWITH[c] "huntmaster" name BEGINSWITH[c] "fells"',
@@ -124,7 +124,6 @@ describe('P9PredicateArray', () => {
 
     expect(scalar2.parent).toBeUndefined();
     expect(actualPredicates).toEqual([
-      '',
       'name BEGINSWITH[c] "huntmaster" name BEGINSWITH[c] "of the" name BEGINSWITH[c] "fells"',
       'name BEGINSWITH[c] "huntmaster" name BEGINSWITH[c] "fells"',
     ]);
