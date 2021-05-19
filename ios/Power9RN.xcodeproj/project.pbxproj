@@ -114,7 +114,6 @@
 				C929537A30937435A1467E39 /* Pods-Power9RN-Power9RNTests.debug.xcconfig */,
 				F0F2CB755AF738EA56CCB247 /* Pods-Power9RN-Power9RNTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -485,6 +484,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LEY7HTAZ6X;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Power9RN/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -511,6 +511,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LEY7HTAZ6X;
 				INFOPLIST_FILE = Power9RN/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
