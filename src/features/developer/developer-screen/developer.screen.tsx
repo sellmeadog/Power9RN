@@ -1,27 +1,25 @@
 import React, { FunctionComponent } from 'react';
-import { Text } from 'react-native';
-import { Button } from 'react-native-elements';
+import { Button, Text } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+import { useNavigation } from '@react-navigation/core';
 
 import { useAuthorizationFacade } from '../../authorization';
 
 export interface P9DeveloperScreenProps {}
 
-let count = 0;
-
 export const P9DeveloperScreen: FunctionComponent<P9DeveloperScreenProps> = () => {
-  const [{ user, isAnonymous, error }, authenticate] = useAuthorizationFacade();
-  console.log('Render:', ++count);
+  const [{ user, isAnonymous }] = useAuthorizationFacade();
+  const { navigate } = useNavigation();
 
   return (
     <SafeAreaView>
       <Text>{'Developer Settings'}</Text>
-      <Text>User: {user?.id}</Text>
-      <Text>isAnonymous: {isAnonymous ? 'True' : 'False'}</Text>
       <Text>
-        Error code: {error?.code} Message: {error?.message}
+        User: {user?.profile.email} ({user?.id})
       </Text>
-      <Button onPress={authenticate} title={'Authenticate'} />
+      <Text>isAnonymous: {isAnonymous ? 'True' : 'False'}</Text>
+      <Button onPress={() => navigate('P9:Authorization')} title={'Authenticate'} />
     </SafeAreaView>
   );
 };

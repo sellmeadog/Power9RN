@@ -52,6 +52,16 @@ export const P9_THEME_DARK: Partial<FullTheme> = {
     size: 19,
   },
 
+  Input: {
+    labelStyle: {
+      color: colors.grey5,
+      fontWeight: '500',
+    },
+    inputStyle: {
+      color: colors.white,
+    },
+  },
+
   StackNavigator: {
     screenOptions: {
       cardStyle: [

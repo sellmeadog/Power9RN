@@ -1,5 +1,6 @@
 import { useObservableState } from 'observable-hooks';
 import React, { createContext, FunctionComponent, useContext, useLayoutEffect, useRef } from 'react';
+import { Credentials } from 'realm';
 
 import { P9AuthorizationQuery } from './state/authorization.query';
 import { AuthError, makeP9AuthorizationService, P9AuthorizationService } from './state/authorization.service';
@@ -24,7 +25,7 @@ export const P9AuthorizationProvider: FunctionComponent<P9AuthorizationProviderP
 
 export function useAuthorizationFacade(): [
   state: { user: P9User; isAnonymous: boolean; error?: AuthError },
-  authenticate: () => void,
+  authenticate: (credentials: Credentials.EmailPasswordPayload) => void,
 ] {
   const context = useContext(P9AuthorizationContext);
 
