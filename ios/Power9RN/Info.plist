@@ -54,6 +54,8 @@
 		<string>Beleren2016-Bold.ttf</string>
 		<string>Beleren2016SmallCaps-Bold.ttf</string>
 		<string>Beleren2016SmallCaps-BoldItalic.ttf</string>
+    <string>MaterialIcons.ttf</string>
+    <string>MaterialCommunityIcons.ttf</string>
 	</array>
 </dict>
 </plist>

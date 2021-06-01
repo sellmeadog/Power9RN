@@ -23,9 +23,12 @@ export class P9AuthorizationService {
     this.store.setLoading(true);
 
     iif(
-      () => Boolean(this.realmClient.currentUser?.isLoggedIn),
+      () => Boolean(this.realmClient.currentUser),
       of(this.realmClient.currentUser!).pipe(
-        mergeMap((user) => defer(() => user.refreshCustomData()).pipe(mapTo(user))),
+        tap(async (user) =>
+          console.debug(user.id, user.profile.name, user.identities, user.state, await user.refreshCustomData()),
+        ),
+        mergeMap((user) => defer(() => user.refreshCustomData()).pipe(retry(3), mapTo(user))),
       ),
       defer(() => this.realmClient.logIn(Credentials.anonymous())).pipe(retry(3)),
     ).subscribe(this.store);
@@ -39,19 +42,28 @@ export class P9AuthorizationService {
       .authenticate(credentials)
       .pipe(
         exhaustMap(({ idToken }) => {
-          const jwt = Credentials.jwt(idToken);
+          return defer(() => this.realmClient.logIn(Credentials.jwt(idToken))).pipe(retry(3));
+        }),
+      )
+      .subscribe(this.store);
+  };
 
-          return defer(() => this.realmClient.logIn(jwt)).pipe(
-            retry(3),
-            tap(async (user) => {
-              await this.realmClient.currentUser?.linkCredentials(jwt);
-              console.debug('Linked anonymous user to JWT');
+  register = (credentials: Credentials.EmailPasswordPayload): void => {
+    this.store.setError(null);
+    this.store.setLoading(true);
 
-              await user.linkCredentials(Credentials.anonymous());
-              console.debug(`Linked ${user.profile.email} to anonymous credentials.`);
-
-              this.realmClient.switchUser(user);
-            }),
+    this.authClient
+      .authenticate(credentials)
+      .pipe(
+        exhaustMap(({ idToken }) => {
+          return of(this.realmClient.currentUser!).pipe(
+            mergeMap((user) =>
+              defer(() => user.linkCredentials(Credentials.jwt(idToken))).pipe(
+                retry(3),
+                tap((user_) => console.debug(JSON.stringify(user_, undefined, 2))),
+                mapTo(user),
+              ),
+            ),
           );
         }),
       )
