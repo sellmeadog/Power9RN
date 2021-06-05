@@ -22,6 +22,7 @@ export class P9MagicCardFilterStore extends EntityStore<P9MagicCardFilterState> 
     const predicates: P9Predicate[] = expression
       .trim()
       .split(' ')
+      .filter(Boolean)
       .map((expression_) => ({ id: v1(), attribute, expression: expression_ }));
 
     this.upsertMany(predicates);

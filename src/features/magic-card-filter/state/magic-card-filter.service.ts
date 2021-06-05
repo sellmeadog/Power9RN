@@ -34,3 +34,12 @@ export function useMagicCardStringPredicateEditor(
     useCallback(() => store.remove(id), [id, store]),
   ];
 }
+
+export function useMagicCardFilterPredicate(): [predicate: string | undefined, reset: () => void] {
+  const [[store, query]] = useState(() => magicCardFilterService);
+
+  const [predicate] = useObservableState(() => query.predicate$, undefined);
+  const reset = useCallback(() => store.remove(), [store]);
+
+  return [predicate, reset];
+}
