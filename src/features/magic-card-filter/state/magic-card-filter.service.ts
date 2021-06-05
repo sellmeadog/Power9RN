@@ -7,6 +7,11 @@ import { makeMagicCardFilterStore } from './magic-card-filter.store';
 
 const magicCardFilterService = makeMagicCardFilterStore();
 
+export function useMagicCardFilterQuery() {
+  const [_, query] = magicCardFilterService;
+  return query;
+}
+
 export function useMagicCardStringPredicateBuilder(
   attribute: string,
 ): [
