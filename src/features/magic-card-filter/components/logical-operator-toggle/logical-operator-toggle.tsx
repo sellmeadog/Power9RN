@@ -2,18 +2,17 @@ import React, { FunctionComponent } from 'react';
 import { StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements';
 
-export enum P9LogicalOperator {
-  And = 'AND',
-  Or = 'OR',
-  Not = 'AND NOT',
-}
+import { P9LogicalOperator } from '../../model/predicate';
 
 export interface P9LogicalOperatorToggleProps {
   value: P9LogicalOperator | undefined;
   onChange(value: P9LogicalOperator): void;
 }
 
-export const P9LogicalOperatorToggle: FunctionComponent<P9LogicalOperatorToggleProps> = ({ onChange, value }) => {
+export const P9LogicalOperatorToggle: FunctionComponent<P9LogicalOperatorToggleProps> = ({
+  onChange,
+  value = P9LogicalOperator.And,
+}) => {
   const handlePress = () =>
     onChange(
       value === P9LogicalOperator.And
@@ -23,11 +22,13 @@ export const P9LogicalOperatorToggle: FunctionComponent<P9LogicalOperatorToggleP
         : P9LogicalOperator.And,
     );
 
+  const title = value === P9LogicalOperator.Not ? 'not' : value.toLowerCase();
+
   return (
     <Button
       type={'clear'}
       onPress={handlePress}
-      title={value?.toLowerCase()}
+      title={title}
       buttonStyle={P9LogicalOperatorToggleTheme.button}
       titleStyle={P9LogicalOperatorToggleTheme.title}
     />

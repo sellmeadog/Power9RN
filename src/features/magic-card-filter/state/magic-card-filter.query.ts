@@ -3,16 +3,19 @@ import { map } from 'rxjs/operators';
 
 import { QueryEntity } from '@datorama/akita';
 
-import { P9MagicCardFilterState, P9MagicCardFilterStore, P9Predicate } from './magic-card-filter.store';
+import { P9Predicate } from '../model/predicate';
+import { serialize } from '../model/serialization';
+import { P9MagicCardFilterState, P9MagicCardFilterStore } from './magic-card-filter.store';
 
 export class P9MagicCardFilterQuery extends QueryEntity<P9MagicCardFilterState> {
   predicate$ = this.selectAll().pipe(
     map((predicates) =>
       predicates
         .filter(({ expression }) => Boolean(expression))
-        .map(({ attribute, expression }) => [attribute, 'BEGINSWITH[c]', `"${expression.trim()}"`].join(' '))
-        .join(' AND '),
+        .map(serialize)
+        .join(' '),
     ),
+    map((predicate) => predicate.replace(/^(AND\s?|OR)\s+/, '')),
   );
 
   constructor(store: P9MagicCardFilterStore) {

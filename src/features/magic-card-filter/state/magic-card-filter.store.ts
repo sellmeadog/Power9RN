@@ -3,13 +3,8 @@ import { v1 } from 'uuid';
 
 import { EntityState, EntityStore } from '@datorama/akita';
 
+import { P9LogicalOperator, P9Predicate, P9StringOperator } from '../model/predicate';
 import { P9MagicCardFilterQuery } from './magic-card-filter.query';
-
-export interface P9Predicate {
-  id: string;
-  attribute: string;
-  expression: string;
-}
 
 export interface P9MagicCardFilterState extends EntityState<P9Predicate> {}
 
@@ -18,12 +13,18 @@ export class P9MagicCardFilterStore extends EntityStore<P9MagicCardFilterState> 
     super({}, { name: 'magic-card-filter', producerFn: produce });
   }
 
-  parseStringExpression = (attribute: string, expression: string) => {
+  parseStringExpression = (attribute: string, expression: string, stringOperator: P9StringOperator) => {
     const predicates: P9Predicate[] = expression
       .trim()
       .split(' ')
       .filter(Boolean)
-      .map((expression_) => ({ id: v1(), attribute, expression: expression_ }));
+      .map((expression_) => ({
+        attribute,
+        expression: expression_,
+        id: v1(),
+        logicalOperator: P9LogicalOperator.And,
+        stringOperator,
+      }));
 
     this.upsertMany(predicates);
   };

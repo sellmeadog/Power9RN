@@ -5,8 +5,9 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 import { useNavigation } from '@react-navigation/core';
 
+import { P9StringOperator } from '../../model/predicate';
 import { useMagicCardFilterPredicate } from '../../state/magic-card-filter.service';
-import { P9TextAttributePredicateBuilder } from '../predicate-builder-text/text-attribute-predicate-builder';
+import { P9TextAttributePredicateBuilder } from '../predicate-builder-string/string-predicate-builder.component';
 
 export interface P9MagicCardFilterScreenProps {}
 
@@ -23,7 +24,11 @@ export const P9MagicCardFilterScreen: FunctionComponent<P9MagicCardFilterScreenP
       />
       <ScrollView>
         <P9TextAttributePredicateBuilder attribute={'card_faces.names'} placeholder={'Card Name'} />
-        <P9TextAttributePredicateBuilder attribute={'card_faces.oracle_text'} placeholder={'Oracle Text'} />
+        <P9TextAttributePredicateBuilder
+          attribute={'card_faces.oracle_text'}
+          placeholder={'Oracle Text'}
+          stringOperator={P9StringOperator.Contains}
+        />
         <Text>{predicate}</Text>
       </ScrollView>
     </>

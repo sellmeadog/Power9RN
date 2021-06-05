@@ -3,25 +3,28 @@ import { StyleSheet, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 import { P9ItemSeparator, P9TextInput } from '../../../../components';
+import { P9StringOperator } from '../../model/predicate';
 import { useMagicCardStringPredicateBuilder } from '../../state/magic-card-filter.service';
-import { P9StringPredicateEditor } from '../predicate-string-editor/predicate-string-editor';
+import { P9StringPredicateEditor } from './string-predicate-editor.component';
 
 export interface P9TextAttributePredicateBuilderProps {
   attribute: string;
   placeholder: string;
+  stringOperator?: P9StringOperator;
 }
 
 export const P9TextAttributePredicateBuilder: FunctionComponent<P9TextAttributePredicateBuilderProps> = ({
   attribute,
   placeholder,
+  stringOperator = P9StringOperator.BeginsWith,
 }) => {
   const [predicates, parseExpression, reset] = useMagicCardStringPredicateBuilder(attribute);
   const [expression, setExpression] = useState('');
 
   const handleBlur = useCallback(() => {
-    parseExpression?.(expression);
+    parseExpression(expression, stringOperator);
     setExpression('');
-  }, [parseExpression, expression]);
+  }, [parseExpression, expression, stringOperator]);
 
   return (
     <>
