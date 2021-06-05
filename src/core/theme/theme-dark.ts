@@ -45,6 +45,7 @@ export const P9_THEME_DARK: Partial<FullTheme> = {
       },
     ],
     rightComponent: { style: { fontSize: 17, color: colors.primary } },
+    leftComponent: { style: { fontSize: 17, color: colors.primary } },
   },
 
   Icon: {
