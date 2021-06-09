@@ -33,13 +33,13 @@ export const P9ColorPredicateFuzzinessToggle: FunctionComponent<P9ColorPredicate
       type={'clear'}
       onPress={handlePress}
       title={title(value)}
-      buttonStyle={P9LogicalOperatorToggleTheme.button}
-      titleStyle={P9LogicalOperatorToggleTheme.title}
+      buttonStyle={P9ColorPredicateFuzzinessToggleTheme.button}
+      titleStyle={P9ColorPredicateFuzzinessToggleTheme.title}
     />
   );
 };
 
-const P9LogicalOperatorToggleTheme = StyleSheet.create({
+const P9ColorPredicateFuzzinessToggleTheme = StyleSheet.create({
   button: {
     paddingHorizontal: 0,
     paddingVertical: 0,

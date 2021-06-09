@@ -7,13 +7,13 @@ import { P9StringOperator } from '../../model/predicate';
 import { useMagicCardStringPredicateBuilder } from '../../state/magic-card-filter.service';
 import { P9StringPredicateEditor } from './string-predicate-editor.component';
 
-export interface P9TextAttributePredicateBuilderProps {
+export interface P9StringPredicateBuilderProps {
   attribute: string;
   placeholder: string;
   stringOperator?: P9StringOperator;
 }
 
-export const P9TextAttributePredicateBuilder: FunctionComponent<P9TextAttributePredicateBuilderProps> = ({
+export const P9StringPredicateBuilder: FunctionComponent<P9StringPredicateBuilderProps> = ({
   attribute,
   placeholder,
   stringOperator = P9StringOperator.BeginsWith,

@@ -1,4 +1,7 @@
+export * from './button/game-symbol-toggle-button.component';
+export * from './button/spring-button';
 export * from './button/toggle-button';
+export * from './divider/divider-table.component';
 export * from './game-symbol/game-symbol';
 export * from './header/header-navigator-drawer.component';
 export * from './header/header-navigator-drawer.component';
@@ -8,4 +11,3 @@ export * from './new-app-screen/new-app-screen.component';
 export * from './search-bar/search-bar';
 export * from './search-box/search-box';
 export * from './separator/item-separator.component';
-export * from './divider/divider-table.component';
