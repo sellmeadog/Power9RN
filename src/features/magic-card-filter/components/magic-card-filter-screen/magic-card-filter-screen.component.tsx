@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/core';
 
 import { P9StringOperator } from '../../model/predicate';
 import { useMagicCardFilterPredicate } from '../../state/magic-card-filter.service';
+import { P9ColorPredicateBuilder } from '../predicate-builder-color/color-predicate-builder.component';
 import { P9TextAttributePredicateBuilder } from '../predicate-builder-string/string-predicate-builder.component';
 
 export interface P9MagicCardFilterScreenProps {}
@@ -29,6 +30,7 @@ export const P9MagicCardFilterScreen: FunctionComponent<P9MagicCardFilterScreenP
           placeholder={'Oracle Text'}
           stringOperator={P9StringOperator.Contains}
         />
+        <P9ColorPredicateBuilder />
         <Text>{predicate}</Text>
       </ScrollView>
     </>

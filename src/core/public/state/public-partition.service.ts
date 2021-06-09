@@ -30,7 +30,7 @@ export class P9PublicPartitionService {
     if (!this.#partition || this.#partition.isClosed) {
       console.debug(`Opening PUBLIC partition for ${user.id}...`);
       this.#partition = new Realm({ schema: P9_PUBLIC_SCHEMA, sync: { partitionValue: 'PUBLIC', user } });
-      this.#magic_cards = this.#partition.objects<P9MagicCard>(P9MagicCardSchema.name);
+      this.#magic_cards = this.#partition.objects<P9MagicCard>(P9MagicCardSchema.name).sorted([['name', false]]);
 
       this.store.next({ partition: this.#partition, magicCards: this.#magic_cards });
       console.debug('PUBLIC partition opened.');

@@ -8,6 +8,8 @@ import { serialize } from '../model/serialization';
 import { P9MagicCardFilterState, P9MagicCardFilterStore } from './magic-card-filter.store';
 
 export class P9MagicCardFilterQuery extends QueryEntity<P9MagicCardFilterState> {
+  colorPredicate$: Observable<P9Predicate<{}> | undefined> = this.selectEntity('card_faces.colors');
+
   predicate$ = this.selectAll().pipe(
     map((predicates) =>
       predicates

@@ -1,3 +1,5 @@
+import { P9GameSymbolType } from '../../../components';
+
 export enum P9ComparisonOperator {
   Equal = '==',
   GreaterThan = '>',
@@ -22,8 +24,12 @@ export enum P9StringOperator {
 export interface P9Predicate<E = any> {
   attribute: string;
   comparisonOperator?: P9ComparisonOperator;
-  expression: E | null | undefined;
+  expression: E;
   id: string;
   logicalOperator?: P9LogicalOperator;
   stringOperator?: P9StringOperator;
 }
+
+export type P9ColorPredicateExpression<K extends P9GameSymbolType = P9GameSymbolType> = {
+  [key in K]?: boolean;
+} & { fuzziness?: number };
