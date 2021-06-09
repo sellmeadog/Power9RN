@@ -1,9 +1,10 @@
 import React, { FunctionComponent, useState } from 'react';
-import { StyleSheet } from 'react-native';
-import { ButtonGroup, Text } from 'react-native-elements';
+import { StyleSheet, Switch } from 'react-native';
+import { Text } from 'react-native-elements';
 
-import { P9GameSymbolType, P9ItemSeparator, P9RowView } from '../../../../components';
+import { P9GameSymbolType, P9ItemSeparator, P9RowView, P9TableDivider } from '../../../../components';
 import { useMagicCardColorPredicateBuilder } from '../../state/magic-card-filter.service';
+import { P9ColorPredicateFuzzinessToggle } from './color-predicate-toggle-fuzziness.component';
 import { P9ColorToggleButton } from './color-toggle-button.component';
 
 export interface P9ColorPredicateBuilderProps {}
@@ -14,37 +15,32 @@ export const P9ColorPredicateBuilder: FunctionComponent<P9ColorPredicateBuilderP
 
   console.debug('P9ColorPredicateBuilder', predicate);
 
+  const handleEnforceIdentity = (enforceIdentity: boolean) => update({ enforceIdentity });
   const handleFuzziness = (fuzziness: number) => update({ fuzziness });
   const handleToggle = (type: P9GameSymbolType, value: boolean) => update({ [type]: value });
 
   return (
     <>
-      <P9RowView style={[P9ColorPredicateBuilderTheme.pickerContainer]}>
-        <ButtonGroup
-          onPress={handleFuzziness}
-          selectedIndex={predicate?.expression?.fuzziness || 0}
-          containerStyle={[{ marginLeft: 0, marginRight: 5 }]}
-          buttons={['And', 'Or', 'Not']}
-        />
-        {colors.map((type) => (
-          <P9ColorToggleButton
-            active={predicate?.expression?.[type]}
-            key={type}
-            color={type}
-            containerStyle={[P9ColorPredicateBuilderTheme.pickerButtonContainer]}
-            onToggle={handleToggle}
-            value={type}
-          />
-        ))}
+      <P9TableDivider title={'Color'} />
+      <P9RowView>
+        <P9ColorPredicateFuzzinessToggle onChange={handleFuzziness} value={predicate?.expression?.fuzziness} />
+        <P9RowView style={[P9ColorPredicateBuilderTheme.pickerContainer]}>
+          {colors.map((type) => (
+            <P9ColorToggleButton
+              active={predicate?.expression?.[type]}
+              key={type}
+              color={type}
+              containerStyle={[P9ColorPredicateBuilderTheme.pickerButtonContainer]}
+              onToggle={handleToggle}
+              value={type}
+            />
+          ))}
+        </P9RowView>
       </P9RowView>
       <P9ItemSeparator />
-      <P9RowView>
-        <Text>Match</Text>
-        <ButtonGroup
-          onPress={handleFuzziness}
-          selectedIndex={predicate?.expression?.fuzziness || 0}
-          buttons={['Exact', 'Include', 'Only']}
-        />
+      <P9RowView style={[P9ColorPredicateBuilderTheme.switchContainer]}>
+        <Text>Enforce Color Identity</Text>
+        <Switch onValueChange={handleEnforceIdentity} value={predicate?.expression?.enforceIdentity} />
       </P9RowView>
     </>
   );
@@ -53,6 +49,10 @@ export const P9ColorPredicateBuilder: FunctionComponent<P9ColorPredicateBuilderP
 const P9ColorPredicateBuilderTheme = StyleSheet.create({
   pickerContainer: {
     justifyContent: 'flex-end',
+    paddingRight: 10,
+  },
+
+  switchContainer: {
     paddingRight: 10,
   },
 

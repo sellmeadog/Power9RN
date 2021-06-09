@@ -3,8 +3,9 @@ import { P9ColorPredicateExpression, P9LogicalOperator, P9Predicate, P9StringOpe
 
 export function serializeColorPredicate({
   attribute,
-  expression: { fuzziness, ...rest },
+  expression: { enforceIdentity, fuzziness = 0, ...rest },
 }: P9Predicate<P9ColorPredicateExpression>) {
+  const attribute_ = enforceIdentity ? 'color_identity' : attribute;
   const colors: P9GameSymbolType[] = ['W', 'U', 'B', 'R', 'G', 'C'];
   const selection = colors.map((color): [color: P9GameSymbolType, value: boolean] => [color, Boolean(rest[color])]);
 
@@ -16,25 +17,28 @@ export function serializeColorPredicate({
     case 0:
       return selection
         .sort(([_, a], [__, b]) => Number(b) - Number(a))
-        .map(([color, value]) => `${value ? 'AND' : 'AND NOT'} ${attribute} =[c] "${color}"`)
+        .map(([color, value]) => `${value ? 'AND' : 'AND NOT'} ${attribute_} =[c] "${color}"`)
         .join(' ');
 
     case 1:
       return selection
         .filter(([_, value]) => value)
-        .map(([color]) => `AND ${attribute} =[c] "${color}"`)
+        .map(([color]) => `AND ${attribute_} =[c] "${color}"`)
         .join(' ');
 
     case 2:
       const include = selection
         .filter(([_, value]) => value)
-        .map(([color]) => `${attribute} =[c] "${color}"`)
-        .reduceRight((acc, curr) => [curr, ...acc], ['card_faces.colors.@count == 0'])
+        .map(([color]) => `${attribute_} =[c] "${color}"`)
+        .reduceRight(
+          (acc, curr) => [curr, ...acc],
+          [enforceIdentity ? 'color_identity =[c] "C"' : 'card_faces.colors.@count == 0'],
+        )
         .join(' OR ');
 
       const exclude = selection
         .filter(([_, value]) => !value)
-        .map(([color]) => `NOT ${attribute} =[c] "${color}"`)
+        .map(([color]) => `NOT ${attribute_} =[c] "${color}"`)
         .join(' AND ');
 
       return ['', include, exclude]
@@ -42,6 +46,12 @@ export function serializeColorPredicate({
         .map((predicate, index) => (index === 0 ? '' : `(${predicate})`))
         .join(' AND ')
         .trim();
+
+    case 3:
+      return selection
+        .filter(([_, value]) => value)
+        .map(([color]) => `AND NOT ${attribute_} =[c] "${color}"`)
+        .join(' ');
 
     default:
       return '';

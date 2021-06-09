@@ -2,7 +2,7 @@ import React, { FunctionComponent, useCallback, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 
-import { P9ItemSeparator, P9TextInput } from '../../../../components';
+import { P9TextInput } from '../../../../components';
 import { P9StringOperator } from '../../model/predicate';
 import { useMagicCardStringPredicateBuilder } from '../../state/magic-card-filter.service';
 import { P9StringPredicateEditor } from './string-predicate-editor.component';
@@ -40,7 +40,6 @@ export const P9TextAttributePredicateBuilder: FunctionComponent<P9TextAttributeP
           <Icon name={'minus-circle-multiple-outline'} onPress={reset} type={'material-community'} size={15} />
         )}
       </View>
-      <P9ItemSeparator />
       {predicates?.map(({ id }, index) => (
         <P9StringPredicateEditor key={index} id={id} />
       ))}

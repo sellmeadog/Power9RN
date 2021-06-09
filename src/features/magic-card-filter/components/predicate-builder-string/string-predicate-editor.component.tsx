@@ -19,6 +19,7 @@ export const P9StringPredicateEditor: FunctionComponent<P9StringPredicateEditorP
 
   return (
     <>
+      <P9ItemSeparator marginBottom={0} marginTop={0} marginLeft={15} />
       <View style={P9StringPredicateEditorTheme.container}>
         <P9LogicalOperatorToggle onChange={handleChangeLogicalOperator} value={predicate?.logicalOperator} />
         <P9TextInput
@@ -28,7 +29,6 @@ export const P9StringPredicateEditor: FunctionComponent<P9StringPredicateEditorP
         />
         <Icon name={'minus-circle-outline'} type={'material-community'} size={15} onPress={remove} />
       </View>
-      <P9ItemSeparator marginBottom={0} marginTop={0} marginLeft={15} />
     </>
   );
 };

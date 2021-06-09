@@ -32,4 +32,4 @@ export interface P9Predicate<E = any> {
 
 export type P9ColorPredicateExpression<K extends P9GameSymbolType = P9GameSymbolType> = {
   [key in K]?: boolean;
-} & { fuzziness?: number };
+} & { enforceIdentity?: boolean; fuzziness?: number };
