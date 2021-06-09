@@ -6,7 +6,7 @@ import { EntityState, EntityStore } from '@datorama/akita';
 import { P9LogicalOperator, P9Predicate, P9StringOperator } from '../model/predicate';
 import { P9MagicCardFilterQuery } from './magic-card-filter.query';
 
-export interface P9MagicCardFilterState extends EntityState<P9Predicate> {}
+export interface P9MagicCardFilterState extends EntityState<P9Predicate, string> {}
 
 export class P9MagicCardFilterStore extends EntityStore<P9MagicCardFilterState> {
   constructor() {

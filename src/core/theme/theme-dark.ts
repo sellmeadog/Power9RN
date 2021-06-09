@@ -21,6 +21,17 @@ export const P9_THEME_DARK: Partial<FullTheme> = {
     ],
   },
 
+  ButtonGroup: {
+    activeOpacity: 0.9,
+    buttonStyle: [{ backgroundColor: colors.grey2 }],
+    containerStyle: [
+      { borderColor: colors.border, borderRadius: 16, flex: 1, height: 32, marginLeft: 10, marginRight: 10 },
+    ],
+    selectedButtonStyle: [{ backgroundColor: colors.grey0 }],
+    selectedTextStyle: [{ color: colors.primary, fontWeight: '600' }],
+    textStyle: [{ color: colors.white, fontWeight: '600' }],
+  },
+
   Header: {
     backgroundColor: colors.background,
     statusBarProps: { animated: true, barStyle: 'light-content' },

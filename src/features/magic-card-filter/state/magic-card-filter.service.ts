@@ -2,7 +2,7 @@ import { useObservable, useObservableState } from 'observable-hooks';
 import { useCallback, useState } from 'react';
 import { switchMap } from 'rxjs/operators';
 
-import { P9Predicate, P9StringOperator } from '../model/predicate';
+import { P9ColorPredicateExpression, P9Predicate, P9StringOperator } from '../model/predicate';
 import { makeMagicCardFilterStore } from './magic-card-filter.store';
 
 const magicCardFilterService = makeMagicCardFilterStore();
@@ -12,10 +12,41 @@ export function useMagicCardFilterQuery() {
   return query;
 }
 
+export function useMagicCardColorPredicateBuilder(): [
+  predicate: P9Predicate<P9ColorPredicateExpression> | undefined,
+  update: (draft: Partial<P9ColorPredicateExpression>) => void,
+] {
+  const [[store, query]] = useState(() => magicCardFilterService);
+
+  const [predicate] = useObservableState(
+    () => query.colorPredicate$,
+    () =>
+      ({
+        attribute: 'card_faces.colors',
+        expression: { fuzziness: 0 },
+        id: 'card_faces.colors',
+      } as P9Predicate<P9ColorPredicateExpression>),
+  );
+
+  const update = useCallback(
+    (expression: Partial<P9ColorPredicateExpression>) =>
+      //@ts-ignore
+      store.upsert(
+        'card_faces.colors',
+        //@ts-ignore
+        (state) => ({ ...state, expression: { ...state.expression, ...expression } }),
+        (id, state) => ({ attribute: 'card_faces.colors', id, ...state }),
+      ),
+    [store],
+  );
+
+  return [predicate, update];
+}
+
 export function useMagicCardStringPredicateBuilder(
   attribute: string,
 ): [
-  predicates: P9Predicate[] | undefined,
+  predicates: P9Predicate<string>[] | undefined,
   parser: (expression: string, stringOperator: P9StringOperator) => void,
   reset: () => void,
 ] {
