@@ -9,6 +9,7 @@ import { P9ItemSeparator } from '../../../../components';
 import { P9StringOperator } from '../../model/predicate';
 import { useMagicCardFilterPredicate } from '../../state/magic-card-filter.service';
 import { P9ColorPredicateBuilder } from '../predicate-builder-color/color-predicate-builder.component';
+import { P9PickerPredicateBuilder } from '../predicate-builder-picker/predicate-builder-picker.component';
 import { P9StringPredicateBuilder } from '../predicate-builder-string/string-predicate-builder.component';
 
 export interface P9MagicCardFilterScreenProps {}
@@ -33,6 +34,12 @@ export const P9MagicCardFilterScreen: FunctionComponent<P9MagicCardFilterScreenP
           stringOperator={P9StringOperator.Contains}
         />
         <P9ColorPredicateBuilder />
+        <P9ItemSeparator />
+        <P9PickerPredicateBuilder
+          attribute={'card_faces.artist'}
+          placeholder={'Artist'}
+          route={'P9:Modal:MagicCardFilter:MagicCardTypePicker'}
+        />
         <Text>{predicate}</Text>
       </ScrollView>
     </>

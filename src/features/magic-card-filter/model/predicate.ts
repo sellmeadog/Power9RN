@@ -1,3 +1,5 @@
+import { HashMap } from '@datorama/akita';
+
 import { P9GameSymbolType } from '../../../components';
 
 export enum P9ComparisonOperator {
@@ -33,3 +35,5 @@ export interface P9Predicate<E = any> {
 export type P9ColorPredicateExpression<K extends P9GameSymbolType = P9GameSymbolType> = {
   [key in K]?: boolean;
 } & { enforceIdentity?: boolean; fuzziness?: number };
+
+export type P9PickerPredicateExpression = HashMap<P9Predicate<{ value: string; selected: boolean }>>;

@@ -1,13 +1,14 @@
 import produce from 'immer';
+import { singleton } from 'tsyringe';
 import { v1 } from 'uuid';
 
 import { EntityState, EntityStore } from '@datorama/akita';
 
 import { P9LogicalOperator, P9Predicate, P9StringOperator } from '../model/predicate';
-import { P9MagicCardFilterQuery } from './magic-card-filter.query';
 
 export interface P9MagicCardFilterState extends EntityState<P9Predicate, string> {}
 
+@singleton()
 export class P9MagicCardFilterStore extends EntityStore<P9MagicCardFilterState> {
   constructor() {
     super({}, { name: 'magic-card-filter', producerFn: produce });
@@ -34,11 +35,11 @@ export class P9MagicCardFilterStore extends EntityStore<P9MagicCardFilterState> 
   };
 }
 
-export type P9MagicCardFilterTuple = [store: P9MagicCardFilterStore, query: P9MagicCardFilterQuery];
+// export type P9MagicCardFilterTuple = [store: P9MagicCardFilterStore, query: P9MagicCardFilterQuery];
 
-export function makeMagicCardFilterStore(): P9MagicCardFilterTuple {
-  const store = new P9MagicCardFilterStore();
-  const query = new P9MagicCardFilterQuery(store);
+// export function makeMagicCardFilterStore(): P9MagicCardFilterTuple {
+//   const store = new P9MagicCardFilterStore();
+//   const query = new P9MagicCardFilterQuery(store);
 
-  return [store, query];
-}
+//   return [store, query];
+// }

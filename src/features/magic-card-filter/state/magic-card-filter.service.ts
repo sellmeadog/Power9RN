@@ -1,22 +1,22 @@
 import { useObservable, useObservableState } from 'observable-hooks';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { switchMap } from 'rxjs/operators';
 
+import { useDependency } from '../../../core/di';
 import { P9ColorPredicateExpression, P9Predicate, P9StringOperator } from '../model/predicate';
-import { makeMagicCardFilterStore } from './magic-card-filter.store';
-
-const magicCardFilterService = makeMagicCardFilterStore();
+import { P9MagicCardFilterQuery } from './magic-card-filter.query';
+import { P9MagicCardFilterStore } from './magic-card-filter.store';
 
 export function useMagicCardFilterQuery() {
-  const [_, query] = magicCardFilterService;
-  return query;
+  return useDependency(P9MagicCardFilterQuery);
 }
 
 export function useMagicCardColorPredicateBuilder(): [
   predicate: P9Predicate<P9ColorPredicateExpression> | undefined,
   update: (draft: Partial<P9ColorPredicateExpression>) => void,
 ] {
-  const [[store, query]] = useState(() => magicCardFilterService);
+  const store = useDependency(P9MagicCardFilterStore);
+  const query = useDependency(P9MagicCardFilterQuery);
 
   const [predicate] = useObservableState(
     () => query.colorPredicate$,
@@ -50,7 +50,8 @@ export function useMagicCardStringPredicateBuilder(
   parser: (expression: string, stringOperator: P9StringOperator) => void,
   reset: () => void,
 ] {
-  const [[store, query]] = useState(() => magicCardFilterService);
+  const store = useDependency(P9MagicCardFilterStore);
+  const query = useDependency(P9MagicCardFilterQuery);
 
   return [
     useObservableState(
@@ -71,7 +72,8 @@ export function useMagicCardStringPredicateBuilder(
 export function useMagicCardStringPredicateEditor(
   id: string,
 ): [predicate: P9Predicate | undefined, update: (draft: Partial<P9Predicate>) => void, remove: () => void] {
-  const [[store, query]] = useState(() => magicCardFilterService);
+  const store = useDependency(P9MagicCardFilterStore);
+  const query = useDependency(P9MagicCardFilterQuery);
 
   return [
     useObservableState(useObservable((id$) => id$.pipe(switchMap(([id_]) => query.selectEntity(id_))), [id])),
@@ -81,7 +83,8 @@ export function useMagicCardStringPredicateEditor(
 }
 
 export function useMagicCardFilterPredicate(): [predicate: string | undefined, reset: () => void] {
-  const [[store, query]] = useState(() => magicCardFilterService);
+  const store = useDependency(P9MagicCardFilterStore);
+  const query = useDependency(P9MagicCardFilterQuery);
 
   const [predicate] = useObservableState(() => query.predicate$, undefined);
   const reset = useCallback(() => store.remove(), [store]);

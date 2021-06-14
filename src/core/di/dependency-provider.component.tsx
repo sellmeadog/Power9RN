@@ -16,6 +16,6 @@ export function useDependency<T>(token: InjectionToken<T>): T {
     throw new Error('useDependency must be called within a P9DependencyContainerProvider');
   }
 
-  const { current } = useRef(context.resolve<T>(token));
-  return current;
+  const depRef = useRef(context.resolve<T>(token));
+  return depRef.current;
 }

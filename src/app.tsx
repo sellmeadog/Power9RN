@@ -11,13 +11,13 @@ export const P9App = () => {
   return (
     <SafeAreaProvider>
       <P9AuthorizationProvider>
-        <P9PartitionProvider>
-          <P9ThemeProvider>
-            <P9DependencyContainerProvider>
+        <P9DependencyContainerProvider>
+          <P9PartitionProvider>
+            <P9ThemeProvider>
               <P9NavigationContainer />
-            </P9DependencyContainerProvider>
-          </P9ThemeProvider>
-        </P9PartitionProvider>
+            </P9ThemeProvider>
+          </P9PartitionProvider>
+        </P9DependencyContainerProvider>
       </P9AuthorizationProvider>
     </SafeAreaProvider>
   );

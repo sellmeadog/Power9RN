@@ -1,5 +1,11 @@
 import { P9GameSymbolType } from '../../../components';
-import { P9ColorPredicateExpression, P9LogicalOperator, P9Predicate, P9StringOperator } from './predicate';
+import {
+  P9ColorPredicateExpression,
+  P9LogicalOperator,
+  P9PickerPredicateExpression,
+  P9Predicate,
+  P9StringOperator,
+} from './predicate';
 
 export function serializeColorPredicate({
   attribute,
@@ -58,6 +64,17 @@ export function serializeColorPredicate({
   }
 }
 
+export function serializePickerPredicate(predicate: P9Predicate<P9PickerPredicateExpression>) {
+  const predicates = Object.values(predicate.expression);
+
+  return `AND (${predicates
+    .filter(({ expression }) => expression.selected)
+    .map(({ attribute, expression, logicalOperator }, index) =>
+      [index ? logicalOperator : '', attribute, '=[c]', `"${expression.value}"`].join(' ').trim(),
+    )
+    .join(' ')})`;
+}
+
 export function serializeStringPredicate(predicate: P9Predicate<string>) {
   const {
     attribute,
@@ -69,7 +86,11 @@ export function serializeStringPredicate(predicate: P9Predicate<string>) {
   const expression_ = expression?.trim();
 
   if (expression_) {
-    return [logicalOperator, attribute, stringOperator, `"${expression_}"`].join(' ');
+    if (logicalOperator === P9LogicalOperator.Not) {
+      return `AND (NOT ${attribute} ${stringOperator} "${expression}")`;
+    }
+
+    return `${logicalOperator} ${attribute} ${stringOperator} "${expression}"`;
   }
 
   return undefined;
@@ -77,6 +98,9 @@ export function serializeStringPredicate(predicate: P9Predicate<string>) {
 
 export function serialize(predicate: P9Predicate) {
   switch (predicate.attribute) {
+    case 'card_faces.artist':
+      return serializePickerPredicate(predicate);
+
     case 'card_faces.colors':
       return serializeColorPredicate(predicate);
 
