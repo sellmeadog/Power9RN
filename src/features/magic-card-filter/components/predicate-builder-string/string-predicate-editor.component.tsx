@@ -3,16 +3,16 @@ import { StyleSheet, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 import { P9ItemSeparator, P9TextInput } from '../../../../components';
-import { P9LogicalOperator } from '../../model/predicate';
+import { P9LogicalOperator, P9Predicate } from '../../model/predicate';
 import { useMagicCardStringPredicateEditor } from '../../state/magic-card-filter.service';
 import { P9LogicalOperatorToggle } from '../logical-operator-toggle/logical-operator-toggle';
 
 export interface P9StringPredicateEditorProps {
-  id: string;
+  predicate: P9Predicate<string>;
 }
 
-export const P9StringPredicateEditor: FunctionComponent<P9StringPredicateEditorProps> = ({ id }) => {
-  const [predicate, update, remove] = useMagicCardStringPredicateEditor(id);
+export const P9StringPredicateEditor: FunctionComponent<P9StringPredicateEditorProps> = ({ predicate }) => {
+  const [update, remove] = useMagicCardStringPredicateEditor(predicate);
 
   const handleChangeLogicalOperator = (logicalOperator: P9LogicalOperator) => update({ logicalOperator });
   const handleChangeText = (expression: string) => update({ expression });
@@ -21,11 +21,11 @@ export const P9StringPredicateEditor: FunctionComponent<P9StringPredicateEditorP
     <>
       <P9ItemSeparator marginBottom={0} marginTop={0} marginLeft={15} />
       <View style={P9StringPredicateEditorTheme.container}>
-        <P9LogicalOperatorToggle onChange={handleChangeLogicalOperator} value={predicate?.logicalOperator} />
+        <P9LogicalOperatorToggle onChange={handleChangeLogicalOperator} value={predicate.logicalOperator} />
         <P9TextInput
           onChangeText={handleChangeText}
           style={[P9StringPredicateEditorTheme.textInput]}
-          value={predicate?.expression}
+          value={predicate.expression}
         />
         <Icon name={'minus-circle-outline'} type={'material-community'} size={15} onPress={remove} />
       </View>

@@ -21,6 +21,8 @@ export const P9StringPredicateBuilder: FunctionComponent<P9StringPredicateBuilde
   const [predicates, parseExpression, reset] = useMagicCardStringPredicateBuilder(attribute);
   const [expression, setExpression] = useState('');
 
+  console.debug('predicates', predicates);
+
   const handleBlur = useCallback(() => {
     parseExpression(expression, stringOperator);
     setExpression('');
@@ -40,8 +42,8 @@ export const P9StringPredicateBuilder: FunctionComponent<P9StringPredicateBuilde
           <Icon name={'minus-circle-multiple-outline'} onPress={reset} type={'material-community'} size={15} />
         )}
       </View>
-      {predicates?.map(({ id }, index) => (
-        <P9StringPredicateEditor key={index} id={id} />
+      {predicates?.map((predicate) => (
+        <P9StringPredicateEditor key={predicate.id} predicate={predicate} />
       ))}
     </>
   );

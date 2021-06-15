@@ -35,8 +35,6 @@ export const P9PickerTableItem_: FunctionComponent<P9PickerTableItemProps> = ({
   const handlePressIn = useCallback(() => (highlightColor.value = colors!.grey0), [highlightColor, colors]);
   const handlePressOut = useCallback(() => (highlightColor.value = colors!.background), [highlightColor, colors]);
 
-  console.debug('Rendering', title);
-
   return (
     <Pressable onPress={handlePress} onPressIn={handlePressIn} onPressOut={handlePressOut}>
       <P9ListItem style={[P9PickerTableItemTheme.container, highlightStyle]}>

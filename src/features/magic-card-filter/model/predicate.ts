@@ -23,6 +23,11 @@ export enum P9StringOperator {
   Like = 'LIKE[c]',
 }
 
+export interface P9AttributePredicate<E = any> {
+  attribute: string;
+  predicates: HashMap<P9Predicate<E>> | P9Predicate<E>[] | E;
+}
+
 export interface P9Predicate<E = any> {
   attribute: string;
   comparisonOperator?: P9ComparisonOperator;
@@ -36,4 +41,4 @@ export type P9ColorPredicateExpression<K extends P9GameSymbolType = P9GameSymbol
   [key in K]?: boolean;
 } & { enforceIdentity?: boolean; fuzziness?: number };
 
-export type P9PickerPredicateExpression = HashMap<P9Predicate<{ value: string; selected: boolean }>>;
+export type P9PickerPredicateExpression = { value: string; selected: boolean };

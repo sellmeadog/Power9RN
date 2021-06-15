@@ -2,6 +2,8 @@ import { useObservable, useObservableState } from 'observable-hooks';
 import { useCallback } from 'react';
 import { switchMap } from 'rxjs/operators';
 
+import { arrayRemove, arrayUpdate } from '@datorama/akita';
+
 import { useDependency } from '../../../core/di';
 import { P9ColorPredicateExpression, P9Predicate, P9StringOperator } from '../model/predicate';
 import { P9MagicCardFilterQuery } from './magic-card-filter.query';
@@ -12,35 +14,27 @@ export function useMagicCardFilterQuery() {
 }
 
 export function useMagicCardColorPredicateBuilder(): [
-  predicate: P9Predicate<P9ColorPredicateExpression> | undefined,
-  update: (draft: Partial<P9ColorPredicateExpression>) => void,
+  expression: P9ColorPredicateExpression | undefined,
+  update: (patch: Partial<P9ColorPredicateExpression>) => void,
 ] {
   const store = useDependency(P9MagicCardFilterStore);
   const query = useDependency(P9MagicCardFilterQuery);
 
-  const [predicate] = useObservableState(
+  const [expression] = useObservableState(
     () => query.colorPredicate$,
-    () =>
-      ({
-        attribute: 'card_faces.colors',
-        expression: { fuzziness: 0 },
-        id: 'card_faces.colors',
-      } as P9Predicate<P9ColorPredicateExpression>),
+    () => ({ fuzziness: 0 }),
   );
 
   const update = useCallback(
-    (expression: Partial<P9ColorPredicateExpression>) =>
-      //@ts-ignore
-      store.upsert(
-        'card_faces.colors',
-        //@ts-ignore
-        (state) => ({ ...state, expression: { ...state.expression, ...expression } }),
-        (id, state) => ({ attribute: 'card_faces.colors', id, ...state }),
-      ),
+    (patch: Partial<P9ColorPredicateExpression>) => {
+      store.update('card_faces.colors', (draft) => {
+        draft.predicates = { ...draft.predicates, ...patch };
+      });
+    },
     [store],
   );
 
-  return [predicate, update];
+  return [expression, update];
 }
 
 export function useMagicCardStringPredicateBuilder(
@@ -56,7 +50,7 @@ export function useMagicCardStringPredicateBuilder(
   return [
     useObservableState(
       useObservable(
-        (attribute$) => attribute$.pipe(switchMap(([attribute_]) => query.forAttribute(attribute_))),
+        (attribute$) => attribute$.pipe(switchMap(([attribute_]) => query.predicateArray(attribute_))),
         [attribute],
       ),
     ),
@@ -65,20 +59,33 @@ export function useMagicCardStringPredicateBuilder(
         store.parseStringExpression(attribute, expression, stringOperator),
       [attribute, store],
     ),
-    useCallback(() => store.removePerAttribute(attribute), [attribute, store]),
+    useCallback(() => store.resetAttribute(attribute), [attribute, store]),
   ];
 }
 
-export function useMagicCardStringPredicateEditor(
-  id: string,
-): [predicate: P9Predicate | undefined, update: (draft: Partial<P9Predicate>) => void, remove: () => void] {
+export function useMagicCardStringPredicateEditor({
+  attribute,
+  id,
+}: P9Predicate<string>): [update: (patch: Partial<P9Predicate>) => void, remove: () => void] {
   const store = useDependency(P9MagicCardFilterStore);
-  const query = useDependency(P9MagicCardFilterQuery);
 
   return [
-    useObservableState(useObservable((id$) => id$.pipe(switchMap(([id_]) => query.selectEntity(id_))), [id])),
-    useCallback((draft: Partial<P9Predicate>) => store.update(id, draft), [id, store]),
-    useCallback(() => store.remove(id), [id, store]),
+    useCallback(
+      (patch: Partial<P9Predicate<string>>) => {
+        console.debug(attribute, id, patch);
+        store.update(attribute, (state) => {
+          state.predicates = arrayUpdate(state.predicates as any, id, patch);
+        });
+      },
+      [attribute, id, store],
+    ),
+    useCallback(
+      () =>
+        store.update(attribute, (state) => {
+          state.predicates = arrayRemove(state.predicates as any, id);
+        }),
+      [attribute, id, store],
+    ),
   ];
 }
 

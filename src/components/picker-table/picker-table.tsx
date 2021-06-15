@@ -8,7 +8,6 @@ import {
   StyleSheet,
 } from 'react-native';
 
-import { P9PickerPredicateExpression } from '../../features/magic-card-filter/model/predicate';
 import { P9TableDivider } from '../divider/divider-table.component';
 import { P9ViewSurface } from '../layout/surface.component';
 import { P9ItemSeparator } from '../separator/item-separator.component';
@@ -26,27 +25,19 @@ export type P9PickerTableSection = {
   [key: string]: any;
 };
 
+export type P9PickerTableSelection = {
+  [key: string]: boolean;
+};
+
 export interface P9PickerTableProps {
   options: ReadonlyArray<SectionListData<string, P9PickerTableSection>>;
-  selection?: P9PickerPredicateExpression;
+  selection?: P9PickerTableSelection;
   onSelection(event: P9PickerTableSelectionChange): void;
 }
 
-export const P9PickerTable: FunctionComponent<P9PickerTableProps> = ({ onSelection, options, selection }) => {
-  // const handleSelect = useCallback(
-  //   (tuple: P9PickerTableSelectionTuple) => {
-  //     onSelection?.({ [value]: selected });
-  //   },
-  //   [onSelection],
-  // );
-
+export const P9PickerTable: FunctionComponent<P9PickerTableProps> = ({ onSelection, options, selection = {} }) => {
   const renderItem: SectionListRenderItem<string, P9PickerTableSection> = ({ item }) => (
-    <P9PickerTableItem
-      title={item}
-      onSelect={onSelection}
-      selected={Boolean(selection?.[item]?.expression.selected)}
-      value={item}
-    />
+    <P9PickerTableItem title={item} onSelect={onSelection} selected={Boolean(selection[item])} value={item} />
   );
 
   if (options === undefined) {

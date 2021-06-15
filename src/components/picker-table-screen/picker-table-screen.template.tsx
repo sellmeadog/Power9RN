@@ -4,8 +4,7 @@ import { Header } from 'react-native-elements';
 
 import { useNavigation } from '@react-navigation/core';
 
-import { P9PickerPredicateExpression } from '../../features/magic-card-filter/model/predicate';
-import { P9PickerTable, P9PickerTableSection } from '../picker-table/picker-table';
+import { P9PickerTable, P9PickerTableSection, P9PickerTableSelection } from '../picker-table/picker-table';
 import { P9PickerTableSelectionChange } from '../picker-table/picker-table-item';
 import { P9SearchBox } from '../search-box/search-box';
 
@@ -17,7 +16,7 @@ export interface P9PickerTableScreenTemplateProps {
   onReset(): void;
   onSelection(event: P9PickerTableSelectionChange): void;
   options: ReadonlyArray<SectionListData<string, P9PickerTableSection>>;
-  selection?: P9PickerPredicateExpression;
+  selection?: P9PickerTableSelection;
   title: string;
 }
 
