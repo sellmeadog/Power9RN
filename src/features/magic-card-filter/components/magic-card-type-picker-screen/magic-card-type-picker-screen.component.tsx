@@ -18,7 +18,7 @@ export interface P9MagicCardArtistPickerScreenProps {
 export const P9MagicCardArtistPickerScreen: FunctionComponent<P9MagicCardArtistPickerScreenProps> = ({ route }) => {
   const { attribute, title } = route.params;
   const [catalog, expression, setExpression] = useArtistCatalog();
-  const [selection, toggle, handleReset] = usePickerPredicateBuilder(attribute);
+  const [selection, canReset, toggle, handleReset] = usePickerPredicateBuilder(attribute);
 
   const handleSelection = useCallback(
     (change: P9PickerTableSelectionChange) => {
@@ -40,7 +40,7 @@ export const P9MagicCardArtistPickerScreen: FunctionComponent<P9MagicCardArtistP
 
   return (
     <P9PickerTableScreenTemplate
-      canReset={Boolean(selection)}
+      canReset={canReset}
       expression={expression}
       onExpressionChange={setExpression}
       onReset={handleReset}

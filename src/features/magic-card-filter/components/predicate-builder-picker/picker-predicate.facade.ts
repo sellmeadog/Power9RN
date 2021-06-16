@@ -1,4 +1,4 @@
-import { useObservableState } from 'observable-hooks';
+import { useObservable, useObservableState } from 'observable-hooks';
 import { useCallback } from 'react';
 import { map } from 'rxjs/operators';
 
@@ -12,26 +12,27 @@ export function usePickerPredicateBuilder(
   attribute: string,
 ): [
   expression: P9PickerTableSelection | undefined,
+  canReset: boolean,
   toggle: (draft: P9Predicate<P9PickerPredicateExpression>) => void,
   reset: () => void,
 ] {
   const store = useDependency(P9MagicCardFilterStore);
   const query = useDependency(P9MagicCardFilterQuery);
 
-  const [expression] = useObservableState(() =>
+  const expression$ = useObservable(() =>
     query
       .predicateMap(attribute)
       .pipe(
         map((hash) =>
-          hash
-            ? Object.values(hash).reduce(
-                (selection, predicate) => ({ ...selection, ...predicate.expression }),
-                {} as P9PickerTableSelection,
-              )
-            : undefined,
+          Object.values(hash!).reduce(
+            (selection, predicate) => ({ ...selection, [predicate.expression.value]: predicate.expression.selected }),
+            {} as P9PickerTableSelection,
+          ),
         ),
       ),
   );
+
+  const canReset$ = useObservable(() => expression$.pipe(map((expression) => Object.values(expression).some(Boolean))));
 
   const toggle = useCallback(
     (predicate: P9Predicate<P9PickerPredicateExpression>) => {
@@ -52,7 +53,7 @@ export function usePickerPredicateBuilder(
     });
   }, [attribute, store]);
 
-  return [expression, toggle, reset];
+  return [useObservableState(expression$, {}), useObservableState(canReset$, false), toggle, reset];
 }
 
 export function usePickerPredicateEditor(
