@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { Switch } from 'react-native';
 import { Text } from 'react-native-elements';
 
-import { P9GameSymbolType, P9ItemSeparator, P9RowView, P9TableDivider } from '../../../../components';
+import { P9GameSymbolType, P9ItemSeparator, P9RowView } from '../../../../components';
 import { useMagicCardColorPredicateBuilder } from '../../state/magic-card-filter.service';
 import { P9ColorPredicateBuilderTheme } from './color-predicate-builder.theme';
 import { P9ColorPredicateFuzzinessToggle } from './color-predicate-toggle-fuzziness.component';
@@ -23,7 +23,6 @@ export const P9ColorPredicateBuilder: FunctionComponent<P9ColorPredicateBuilderP
 
   return (
     <>
-      <P9TableDivider title={'Color'} />
       <P9RowView>
         <P9ColorPredicateFuzzinessToggle onChange={handleFuzziness} value={expression?.fuzziness} />
         <P9ColorPredicateSymbolToggleGroup symbols={symbols} expression={expression} onToggle={handleToggle} />

@@ -5,7 +5,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 import { useNavigation } from '@react-navigation/core';
 
-import { P9ItemSeparator } from '../../../../components';
+import { P9ItemSeparator, P9TableDivider } from '../../../../components';
 import { P9StringOperator } from '../../model/predicate';
 import { useMagicCardFilterPredicate } from '../../state/magic-card-filter.service';
 import { P9ColorPredicateBuilder } from '../predicate-builder-color/color-predicate-builder.component';
@@ -26,6 +26,7 @@ export const P9MagicCardFilterScreen: FunctionComponent<P9MagicCardFilterScreenP
         rightComponent={{ onPress: goBack, text: 'Done' }}
       />
       <ScrollView>
+        <P9TableDivider title={''} />
         <P9StringPredicateBuilder attribute={'card_faces.names'} placeholder={'Card Name'} />
         <P9ItemSeparator />
         <P9StringPredicateBuilder
@@ -36,11 +37,12 @@ export const P9MagicCardFilterScreen: FunctionComponent<P9MagicCardFilterScreenP
         <P9ItemSeparator />
         <P9PickerPredicateBuilder
           attribute={'card_faces.types'}
-          placeholder={'Card Types'}
+          placeholder={'Type Line'}
           navigationParams={{ route: 'P9:Modal:MagicCardFilter:MagicCardTypePicker', title: 'Card Types' }}
         />
+        <P9TableDivider title={'Color'} />
         <P9ColorPredicateBuilder />
-        <P9ItemSeparator />
+        <P9TableDivider title={'Attributes'} />
         <P9PickerPredicateBuilder
           attribute={'card_faces.artist'}
           placeholder={'Artist'}
