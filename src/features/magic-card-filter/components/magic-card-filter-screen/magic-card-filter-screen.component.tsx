@@ -40,6 +40,12 @@ export const P9MagicCardFilterScreen: FunctionComponent<P9MagicCardFilterScreenP
           placeholder={'Type Line'}
           navigationParams={{ route: 'P9:Modal:MagicCardFilter:MagicCardTypePicker', title: 'Card Types' }}
         />
+        <P9ItemSeparator />
+        <P9PickerPredicateBuilder
+          attribute={'legalities'}
+          placeholder={'Formats'}
+          navigationParams={{ route: 'P9:Modal:MagicCardFilter:MagicCardTypePicker', title: 'Game Formats' }}
+        />
         <P9TableDivider title={'Color'} />
         <P9ColorPredicateBuilder />
         <P9TableDivider title={'Attributes'} />

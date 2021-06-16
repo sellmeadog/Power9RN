@@ -68,14 +68,37 @@ export function serializeColorPredicate({ attribute, predicates }: P9AttributePr
   return predicate ? `(${predicate.replace(/^(AND\s?|OR)\s+/, '')})` : undefined;
 }
 
-export function serializePickerPredicate(predicate: P9AttributePredicate<P9PickerPredicateExpression>) {
+export function serializePickerPredicate(
+  predicate: P9AttributePredicate<P9PickerPredicateExpression>,
+  serializeFn = defaultPickerSerializeFn,
+) {
   const predicates = Object.values(predicate.predicates as HashMap<P9Predicate<P9PickerPredicateExpression>>);
 
   const serialization = predicates
     .filter(({ expression }) => expression.selected)
-    .map(({ attribute, expression, logicalOperator }) =>
-      [logicalOperator, attribute, '=[c]', `"${expression.value}"`].join(' ').trim(),
-    )
+    .sort(({ logicalOperator: a = P9LogicalOperator.And }, { logicalOperator: b = P9LogicalOperator.And }) => {
+      const charA = a[a.length - 1];
+      const charB = b[b.length - 1];
+      return charA > charB ? 1 : charA < charB ? -1 : 0;
+    })
+    .map(serializeFn)
+    .join(' ')
+    .replace(/^(AND\s?|OR)\s+/, '');
+
+  return serialization ? `(${serialization})` : undefined;
+}
+
+export function serializeLegalityPredicate(predicate: P9AttributePredicate<P9PickerPredicateExpression>) {
+  const predicates = Object.values(predicate.predicates as HashMap<P9Predicate<P9PickerPredicateExpression>>);
+
+  const serialization = predicates
+    .filter(({ expression }) => expression.selected)
+    .sort(({ logicalOperator: a = P9LogicalOperator.And }, { logicalOperator: b = P9LogicalOperator.And }) => {
+      const charA = a[a.length - 1];
+      const charB = b[b.length - 1];
+      return charA > charB ? 1 : charA < charB ? -1 : 0;
+    })
+    .map(legalitySerializeFn)
     .join(' ')
     .replace(/^(AND\s?|OR)\s+/, '');
 
@@ -142,6 +165,9 @@ export function serialize(predicate: P9AttributePredicate) {
     case 'card_faces.types':
       return serializePickerPredicate(predicate);
 
+    case 'legalities':
+      return serializeLegalityPredicate(predicate);
+
     case 'card_faces.colors':
       return serializeColorPredicate(predicate);
 
@@ -149,3 +175,24 @@ export function serialize(predicate: P9AttributePredicate) {
       return serializeStringPredicate(predicate);
   }
 }
+
+const defaultPickerSerializeFn = ({
+  attribute,
+  expression,
+  logicalOperator,
+}: P9Predicate<P9PickerPredicateExpression>): string =>
+  [logicalOperator, attribute, '=[c]', `"${expression.value}"`].join(' ').trim();
+
+const legalitySerializeFn = ({
+  attribute,
+  expression,
+  logicalOperator,
+}: P9Predicate<P9PickerPredicateExpression>): string => {
+  if (logicalOperator === P9LogicalOperator.Not) {
+    return `${P9LogicalOperator.And} (${attribute} =[c] "${expression.value}:banned")`;
+  } else {
+    return `${logicalOperator} (${['legal', 'restricted']
+      .map((status) => [attribute, '=[c]', `"${expression.value}:${status}"`].join(' ').trim())
+      .join(' OR ')})`;
+  }
+};

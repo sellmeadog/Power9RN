@@ -22,6 +22,8 @@ export class P9ScryfallCatalogQuery extends QueryEntity<P9ScryfallCatalogState> 
     this.expression$,
   ]).pipe(map(filterCatalogs));
 
+  gameFormats$ = this.selectAll({ filterBy: ({ id }) => id.includes('game-formats') }).pipe(whenDefined());
+
   types$ = this.selectAll({
     filterBy: ({ id }) => id.includes('-types'),
   });
@@ -39,6 +41,9 @@ export class P9ScryfallCatalogQuery extends QueryEntity<P9ScryfallCatalogState> 
 
       case 'card_faces.types':
         return this.visibleTypes$;
+
+      case 'legalities':
+        return this.gameFormats$;
 
       default:
         return EMPTY;

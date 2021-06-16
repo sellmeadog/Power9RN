@@ -44,6 +44,16 @@ export class P9ScryfallCatalogStore
         data: ['Basic', 'Elite', 'Legendary', 'Ongoing', 'Snow', 'Token', 'World'],
         title: 'Supertypes',
       },
+      {
+        id: 'game-formats-constructed',
+        data: ['Standard', 'Historic', 'Pioneer', 'Modern', 'Pauper', 'Legacy', 'Vintage'],
+        title: '',
+      },
+      {
+        id: 'game-formats-singleton',
+        data: ['Brawl', 'Commander'],
+        title: 'Singleton',
+      },
     ]);
   }
 
