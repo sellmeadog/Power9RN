@@ -68,7 +68,7 @@ export class P9ScryfallCatalogService {
     catalogRequests$.subscribe(this.store);
   };
 
-  filterArtists = (expression?: string) => this.store.update({ artist: expression });
+  setExpression = (expression?: string) => this.store.update({ expression });
 }
 
 export function useScryfallCatalogService(): [query: P9ScryfallCatalogQuery, service: P9ScryfallCatalogService] {
@@ -80,13 +80,14 @@ export function useScryfallCatalogService(): [query: P9ScryfallCatalogQuery, ser
   return tuple;
 }
 
-export function useArtistCatalog(): [
-  artists: P9ScryfallCatalog[] | undefined,
-  expression: string | undefined,
-  handleExpressionChange: (expression?: string) => void,
-] {
-  const [{ visibleArtists$, artistExpression$ }, service] = useScryfallCatalogService();
-  const handleExpressionChange = useCallback((expression?: string) => service.filterArtists(expression), [service]);
+export function useCatalogFacade(
+  attribute: string,
+): [catalogs: P9ScryfallCatalog[], expression: string | undefined, setExpression: (expression?: string) => void] {
+  const [query, service] = useScryfallCatalogService();
 
-  return [useObservableState(visibleArtists$), useObservableState(artistExpression$), handleExpressionChange];
+  return [
+    useObservableState(query.attributeCatalog(attribute), []),
+    useObservableState(query.expression$, ''),
+    useCallback((expression?: string) => service.setExpression(expression), [service]),
+  ];
 }

@@ -33,6 +33,12 @@ export const P9MagicCardFilterScreen: FunctionComponent<P9MagicCardFilterScreenP
           placeholder={'Oracle Text'}
           stringOperator={P9StringOperator.Contains}
         />
+        <P9ItemSeparator />
+        <P9PickerPredicateBuilder
+          attribute={'card_faces.types'}
+          placeholder={'Card Types'}
+          navigationParams={{ route: 'P9:Modal:MagicCardFilter:MagicCardTypePicker', title: 'Card Types' }}
+        />
         <P9ColorPredicateBuilder />
         <P9ItemSeparator />
         <P9PickerPredicateBuilder

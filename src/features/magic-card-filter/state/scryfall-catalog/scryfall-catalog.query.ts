@@ -1,4 +1,4 @@
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, EMPTY, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { singleton } from 'tsyringe';
 
@@ -10,33 +10,51 @@ import { P9ScryfallCatalogState, P9ScryfallCatalogStore } from './scryfall-catal
 
 @singleton()
 export class P9ScryfallCatalogQuery extends QueryEntity<P9ScryfallCatalogState> {
-  artists$: Observable<P9ScryfallCatalog[]> = this.selectEntity('artist-names').pipe(map(groupArtistNames));
-  artistExpression$ = this.select((state) => state.artist);
+  expression$ = this.select((state) => state.expression).pipe(
+    debounceTime(50),
+    map((expression) => expression?.trim()),
+    distinctUntilChanged(),
+  );
 
+  artists$: Observable<P9ScryfallCatalog[]> = this.selectEntity('artist-names').pipe(map(groupArtistNames));
   visibleArtists$: Observable<P9ScryfallCatalog[]> = combineLatest([
     this.artists$.pipe(whenDefined()),
-    this.artistExpression$.pipe(
-      debounceTime(50),
-      map((expression) => expression?.trim()),
-      distinctUntilChanged(),
-    ),
-  ]).pipe(map(filterArtists));
+    this.expression$,
+  ]).pipe(map(filterCatalogs));
 
   types$ = this.selectAll({
-    filterBy: ({ id }) => id.includes('_types'),
+    filterBy: ({ id }) => id.includes('-types'),
   });
+
+  visibleTypes$ = combineLatest([this.types$.pipe(whenDefined()), this.expression$]).pipe(map(filterCatalogs));
 
   constructor(store: P9ScryfallCatalogStore) {
     super(store);
   }
+
+  attributeCatalog = (attribute: string) => {
+    switch (attribute) {
+      case 'card_faces.artist':
+        return this.visibleArtists$;
+
+      case 'card_faces.types':
+        return this.visibleTypes$;
+
+      default:
+        return EMPTY;
+    }
+  };
 }
 
-function filterArtists([catalogs, filter = '']: [catalogs: P9ScryfallCatalog[], filter?: string]): P9ScryfallCatalog[] {
+function filterCatalogs([catalogs, expression = '']: [
+  catalogs: P9ScryfallCatalog[],
+  expression?: string,
+]): P9ScryfallCatalog[] {
   return catalogs
     .map(({ title, id, data }) => ({
       id,
       title,
-      data: data.filter((item) => item.toLowerCase().includes(filter.toLowerCase())),
+      data: data.filter((item) => item.toLowerCase().includes(expression.toLowerCase())),
     }))
     .filter(({ data }) => Boolean(data.length));
 }

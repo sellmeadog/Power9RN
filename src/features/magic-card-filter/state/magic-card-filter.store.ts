@@ -17,6 +17,7 @@ export class P9MagicCardFilterStore extends EntityStore<P9MagicCardFilterState> 
       { attribute: 'card_faces.oracle_text', predicates: [] },
       { attribute: 'card_faces.colors', predicates: {} },
       { attribute: 'card_faces.artist', predicates: {} },
+      { attribute: 'card_faces.types', predicates: {} },
     ]);
   }
 

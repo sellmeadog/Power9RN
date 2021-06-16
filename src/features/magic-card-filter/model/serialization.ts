@@ -139,6 +139,7 @@ export function serializeStringPredicate({ predicates }: P9AttributePredicate<st
 export function serialize(predicate: P9AttributePredicate) {
   switch (predicate.attribute) {
     case 'card_faces.artist':
+    case 'card_faces.types':
       return serializePickerPredicate(predicate);
 
     case 'card_faces.colors':

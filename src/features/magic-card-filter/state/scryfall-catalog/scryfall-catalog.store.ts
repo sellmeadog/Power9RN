@@ -7,7 +7,7 @@ import { P9ScryfallCatalog } from './model';
 import { P9ScryfallCatalogQuery } from './scryfall-catalog.query';
 
 export interface P9ScryfallCatalogState extends EntityState<P9ScryfallCatalog, string> {
-  artist?: string;
+  expression?: string;
 }
 
 @singleton()
@@ -17,10 +17,38 @@ export class P9ScryfallCatalogStore
 {
   constructor() {
     super({}, { name: 'scryfall-catalog' });
+    this.set([
+      {
+        id: 'base-types',
+        data: [
+          'Artifact',
+          'Conspiracy',
+          'Creature',
+          'Emblem',
+          'Enchantment',
+          'Hero',
+          'Instant',
+          'Land',
+          'Phenomenon',
+          'Plane',
+          'Planeswalker',
+          'Scheme',
+          'Sorcery',
+          'Tribal',
+          'Vanguard',
+        ],
+        title: 'Types',
+      },
+      {
+        id: 'super-types',
+        data: ['Basic', 'Elite', 'Legendary', 'Ongoing', 'Snow', 'Token', 'World'],
+        title: 'Supertypes',
+      },
+    ]);
   }
 
   next(value: P9ScryfallCatalog[]) {
-    this.set(value);
+    this.add(value);
     this.setLoading(false);
   }
 
