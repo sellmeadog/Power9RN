@@ -1,17 +1,13 @@
 import React, { FunctionComponent, useCallback, useState } from 'react';
 
-import { P9GameSymbolType, P9RowView } from '../../../../components';
+import { P9CarouselToggleButton, P9CarouselToggleOption, P9GameSymbolType, P9RowView } from '../../../../components';
 import { P9ColorPredicateExpression } from '../../model/predicate';
-import {
-  P9CarouselToggleButton,
-  P9CarouselToggleOption,
-} from '../carousel-toggle-button/carousel-toggle-button.component';
 import { P9ColorPredicateSymbolToggleGroup } from '../predicate-builder-color/color-predicate-toggle-symbol.component';
 
 export interface P9SymbolPickerPredicateBuilderProps {
   expression?: P9ColorPredicateExpression;
   onSymbolToggle: (option: string, symbol: P9GameSymbolType) => void;
-  options: P9CarouselToggleOption[];
+  options: P9CarouselToggleOption<string>[];
   symbols: P9GameSymbolType[];
 }
 
@@ -30,7 +26,7 @@ export const P9SymbolPickerPredicateBuilder: FunctionComponent<P9SymbolPickerPre
   return (
     <>
       <P9RowView>
-        <P9CarouselToggleButton<string> onToggle={setOption} options={options} value={option} />
+        <P9CarouselToggleButton onToggle={setOption} options={options} value={option} />
         <P9ColorPredicateSymbolToggleGroup symbols={symbols} expression={expression} onToggle={handleToggle} />
       </P9RowView>
     </>

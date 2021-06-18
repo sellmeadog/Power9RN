@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 
+import { P9ToggleButton, P9ToggleButtonProps } from '../button-toggle/toggle-button';
 import { P9GameSymbol, P9GameSymbolType } from '../game-symbol/game-symbol';
-import { P9ToggleButton, P9ToggleButtonProps } from './toggle-button';
 
 export interface P9ColorToggleButtonProps extends P9ToggleButtonProps {
   color: P9GameSymbolType;

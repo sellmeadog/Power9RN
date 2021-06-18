@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { ViewStyle } from 'react-native';
 import { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 
-import { P9SpringButton, P9SpringButtonProps } from './spring-button';
+import { P9SpringButton, P9SpringButtonProps } from '../button-spring/spring-button';
 
 export interface P9ToggleButtonProps extends P9SpringButtonProps {
   active?: boolean;

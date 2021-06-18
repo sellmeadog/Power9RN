@@ -3,7 +3,7 @@ import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
 import { useNavigation } from '@react-navigation/core';
 
-import { P9ToggleButton } from '../button/toggle-button';
+import { P9ToggleButton } from '../button-toggle/toggle-button';
 import { P9SearchBox } from '../search-box/search-box';
 
 export interface P9SearchBarProps {

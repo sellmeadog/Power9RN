@@ -2,9 +2,8 @@ import React, { FunctionComponent, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Icon, Text } from 'react-native-elements';
 
-import { P9ItemSeparator } from '../../../../components';
+import { P9CarouselToggleButton, P9ItemSeparator } from '../../../../components';
 import { P9ComparisonOperator, P9LogicalOperator, P9Predicate } from '../../model/predicate';
-import { P9CarouselToggleButton } from '../carousel-toggle-button/carousel-toggle-button.component';
 import { P9LogicalOperatorToggle } from '../logical-operator-toggle/logical-operator-toggle';
 
 export interface P9GameplayStatePredicateEditorProps {
