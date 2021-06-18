@@ -21,8 +21,6 @@ export const P9StringPredicateBuilder: FunctionComponent<P9StringPredicateBuilde
   const [predicates, parseExpression, reset] = useMagicCardStringPredicateBuilder(attribute);
   const [expression, setExpression] = useState('');
 
-  console.debug('predicates', predicates);
-
   const handleBlur = useCallback(() => {
     parseExpression(expression, stringOperator);
     setExpression('');

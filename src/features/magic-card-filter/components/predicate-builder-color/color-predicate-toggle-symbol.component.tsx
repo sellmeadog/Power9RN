@@ -7,7 +7,7 @@ import { P9ColorPredicateBuilderTheme } from './color-predicate-builder.theme';
 export interface P9ColorPredicateSymbolToggleGroupProps {
   symbols: P9GameSymbolType[];
   expression: P9ColorPredicateExpression | undefined;
-  onToggle(symbol: P9GameSymbolType, value: boolean): void;
+  onToggle?(symbol: P9GameSymbolType, value: boolean): void;
 }
 
 export const P9ColorPredicateSymbolToggleGroup: FunctionComponent<P9ColorPredicateSymbolToggleGroupProps> = ({

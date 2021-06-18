@@ -72,7 +72,6 @@ export function useMagicCardStringPredicateEditor({
   return [
     useCallback(
       (patch: Partial<P9Predicate<string>>) => {
-        console.debug(attribute, id, patch);
         store.update(attribute, (state) => {
           state.predicates = arrayUpdate(state.predicates as any, id, patch);
         });

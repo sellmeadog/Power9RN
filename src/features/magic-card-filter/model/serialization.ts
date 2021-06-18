@@ -4,6 +4,7 @@ import { P9GameSymbolType } from '../../../components';
 import {
   P9AttributePredicate,
   P9ColorPredicateExpression,
+  P9ComparisonOperator,
   P9LogicalOperator,
   P9PickerPredicateExpression,
   P9Predicate,
@@ -76,11 +77,7 @@ export function serializePickerPredicate(
 
   const serialization = predicates
     .filter(({ expression }) => expression.selected)
-    .sort(({ logicalOperator: a = P9LogicalOperator.And }, { logicalOperator: b = P9LogicalOperator.And }) => {
-      const charA = a[a.length - 1];
-      const charB = b[b.length - 1];
-      return charA > charB ? 1 : charA < charB ? -1 : 0;
-    })
+    .sort(byLogicalOperator)
     .map(serializeFn)
     .join(' ')
     .replace(/^(AND\s?|OR)\s+/, '');
@@ -93,11 +90,7 @@ export function serializeLegalityPredicate(predicate: P9AttributePredicate<P9Pic
 
   const serialization = predicates
     .filter(({ expression }) => expression.selected)
-    .sort(({ logicalOperator: a = P9LogicalOperator.And }, { logicalOperator: b = P9LogicalOperator.And }) => {
-      const charA = a[a.length - 1];
-      const charB = b[b.length - 1];
-      return charA > charB ? 1 : charA < charB ? -1 : 0;
-    })
+    .sort(byLogicalOperator)
     .map(legalitySerializeFn)
     .join(' ')
     .replace(/^(AND\s?|OR)\s+/, '');
@@ -109,11 +102,7 @@ export function serializeStringPredicate({ predicates }: P9AttributePredicate<st
   if (isArray(predicates)) {
     const predicate = predicates
       .filter(({ expression }) => Boolean(expression))
-      .sort(({ logicalOperator: a = P9LogicalOperator.And }, { logicalOperator: b = P9LogicalOperator.And }) => {
-        const charA = a[a.length - 1];
-        const charB = b[b.length - 1];
-        return charA > charB ? 1 : charA < charB ? -1 : 0;
-      })
+      .sort(byLogicalOperator)
       .map(
         (
           {
@@ -139,24 +128,38 @@ export function serializeStringPredicate({ predicates }: P9AttributePredicate<st
   } else {
     throw new Error('serializeStringPredicate was called for an attribute predicate whose body is not an array.');
   }
-  // const {
-  //   attribute,
-  //   expression,
-  //   logicalOperator = P9LogicalOperator.And,
-  //   stringOperator = P9StringOperator.BeginsWith,
-  // } = predicate;
+}
 
-  // const expression_ = expression?.trim();
+export function serializeNumericPredicate({ predicates }: P9AttributePredicate<number>) {
+  if (isArray(predicates)) {
+    const predicate = predicates
+      .filter(({ expression }) => Number.isInteger(expression))
+      .sort(byLogicalOperator)
+      .map(
+        (
+          {
+            attribute,
+            comparisonOperator = P9ComparisonOperator.Equal,
+            expression,
+            logicalOperator = P9LogicalOperator.And,
+          },
+          index,
+        ) =>
+          [
+            index === 0 ? (logicalOperator === P9LogicalOperator.Not ? 'NOT' : '') : logicalOperator,
+            attribute,
+            comparisonOperator,
+            expression,
+          ]
+            .join(' ')
+            .trim(),
+      )
+      .join(' ');
 
-  // if (expression_) {
-  //   if (logicalOperator === P9LogicalOperator.Not) {
-  //     return `AND (NOT ${attribute} ${stringOperator} "${expression}")`;
-  //   }
-
-  //   return `${logicalOperator} ${attribute} ${stringOperator} "${expression}"`;
-  // }
-
-  // return undefined;
+    return predicate ? `(${predicate})` : undefined;
+  } else {
+    throw new Error('serializeNumericPredicate was called for an attribute predicate whose body is not an array.');
+  }
 }
 
 export function serialize(predicate: P9AttributePredicate) {
@@ -170,6 +173,9 @@ export function serialize(predicate: P9AttributePredicate) {
 
     case 'card_faces.colors':
       return serializeColorPredicate(predicate);
+
+    case 'gameplay.stats':
+      return serializeNumericPredicate(predicate);
 
     default:
       return serializeStringPredicate(predicate);
@@ -195,4 +201,14 @@ const legalitySerializeFn = ({
       .map((status) => [attribute, '=[c]', `"${expression.value}:${status}"`].join(' ').trim())
       .join(' OR ')})`;
   }
+};
+
+const byLogicalOperator = (
+  { logicalOperator: a = P9LogicalOperator.And }: P9Predicate,
+  { logicalOperator: b = P9LogicalOperator.And }: P9Predicate,
+) => {
+  const charA = a[a.length - 1];
+  const charB = b[b.length - 1];
+
+  return charA > charB ? 1 : charA < charB ? -1 : 0;
 };

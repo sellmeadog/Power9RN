@@ -15,9 +15,9 @@ export const P9TableDivider: FunctionComponent<P9TableDividerProps> = ({ title }
     <View
       style={[
         P9TableDividerTheme.container,
-        { backgroundColor: colors?.grey0, borderBottomColor: colors?.border, borderTopColor: colors?.border },
+        { backgroundColor: colors?.grey0, borderBottomColor: colors?.grey3, borderTopColor: colors?.grey3 },
       ]}>
-      <Text>{title}</Text>
+      <Text style={[P9TableDividerTheme.title]}>{title}</Text>
     </View>
   );
 };
@@ -31,5 +31,10 @@ const P9TableDividerTheme = StyleSheet.create({
     justifyContent: 'flex-end',
     paddingBottom: 5,
     paddingHorizontal: 10,
+  },
+
+  title: {
+    fontSize: 17,
+    fontFamily: 'Beleren2016SmallCaps-Bold',
   },
 });

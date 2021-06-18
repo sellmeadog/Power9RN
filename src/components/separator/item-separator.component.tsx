@@ -25,7 +25,7 @@ export const P9ItemSeparator: FunctionComponent<P9ItemSeparatorProps> = ({
       {...rest}
       style={[
         P9ItemSeparatorTheme.container,
-        { backgroundColor: colors?.grey4, marginBottom, marginLeft, marginRight, marginTop },
+        { backgroundColor: colors?.grey3, marginBottom, marginLeft, marginRight, marginTop },
         style,
       ]}
     />

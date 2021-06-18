@@ -9,6 +9,7 @@ import { P9ItemSeparator, P9TableDivider } from '../../../../components';
 import { P9StringOperator } from '../../model/predicate';
 import { useMagicCardFilterPredicate } from '../../state/magic-card-filter.service';
 import { P9ColorPredicateBuilder } from '../predicate-builder-color/color-predicate-builder.component';
+import { P9GameplayStatPredicateBuilder } from '../predicate-builder-gameplay-stat/predicate-builder-gameplay-stat.component';
 import { P9PickerPredicateBuilder } from '../predicate-builder-picker/picker-predicate-builder.component';
 import { P9StringPredicateBuilder } from '../predicate-builder-string/string-predicate-builder.component';
 
@@ -48,11 +49,19 @@ export const P9MagicCardFilterScreen: FunctionComponent<P9MagicCardFilterScreenP
         />
         <P9TableDivider title={'Color'} />
         <P9ColorPredicateBuilder />
-        <P9TableDivider title={'Attributes'} />
+        <P9TableDivider title={'Gameplay Stats'} />
+        <P9GameplayStatPredicateBuilder />
+        <P9TableDivider title={'Printing'} />
         <P9PickerPredicateBuilder
           attribute={'card_faces.artist'}
           placeholder={'Artist'}
           navigationParams={{ route: 'P9:Modal:MagicCardFilter:MagicCardTypePicker', title: 'Artists' }}
+        />
+        <P9ItemSeparator />
+        <P9StringPredicateBuilder
+          attribute={'card_faces.flavor_text'}
+          placeholder={'Flavor Text'}
+          stringOperator={P9StringOperator.Contains}
         />
         <P9ItemSeparator />
         <Text>{predicate}</Text>
