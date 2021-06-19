@@ -1,18 +1,23 @@
 import React, { FunctionComponent, useCallback, useState } from 'react';
 
-import { P9CarouselToggleButton, P9CarouselToggleOption, P9GameSymbolType, P9RowView } from '../../../../components';
-import { P9ColorPredicateExpression } from '../../model/predicate';
-import { P9ColorPredicateSymbolToggleGroup } from '../predicate-builder-color/color-predicate-toggle-symbol.component';
+import {
+  P9CarouselToggleButton,
+  P9CarouselToggleOption,
+  P9GameSymbolToggleButtonGroup,
+  P9GameSymbolType,
+  P9RowView,
+} from '../../../../components';
+import { P9SymbolPredicateExpression } from '../../model/predicate';
 
 export interface P9SymbolPickerPredicateBuilderProps {
-  expression?: P9ColorPredicateExpression;
+  expression?: P9SymbolPredicateExpression;
   onSymbolToggle: (option: string, symbol: P9GameSymbolType) => void;
   options: P9CarouselToggleOption<string>[];
   symbols: P9GameSymbolType[];
 }
 
 export const P9SymbolPickerPredicateBuilder: FunctionComponent<P9SymbolPickerPredicateBuilderProps> = ({
-  expression = {},
+  expression,
   onSymbolToggle,
   options,
   symbols,
@@ -27,7 +32,7 @@ export const P9SymbolPickerPredicateBuilder: FunctionComponent<P9SymbolPickerPre
     <>
       <P9RowView>
         <P9CarouselToggleButton onToggle={setOption} options={options} value={option} />
-        <P9ColorPredicateSymbolToggleGroup symbols={symbols} expression={expression} onToggle={handleToggle} />
+        <P9GameSymbolToggleButtonGroup onToggle={handleToggle} options={symbols} selection={expression} />
       </P9RowView>
     </>
   );

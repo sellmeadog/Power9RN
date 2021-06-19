@@ -7,7 +7,7 @@ describe('Predicate Serialization', () => {
 
     const actual = serializeColorPredicate({
       attribute: 'card_faces.colors',
-      predicates: { fuzziness: 0, W: true, U: true },
+      predicates: { fuzziness: 0, selection: { W: true, U: true } },
     });
 
     expect(actual).toEqual(expected);
@@ -18,7 +18,7 @@ describe('Predicate Serialization', () => {
 
     const actual = serializeColorPredicate({
       attribute: 'card_faces.colors',
-      predicates: { fuzziness: 1, W: true, U: true },
+      predicates: { fuzziness: 1, selection: { W: true, U: true } },
     });
 
     expect(actual).toEqual(expected);
@@ -30,7 +30,7 @@ describe('Predicate Serialization', () => {
 
     const actual = serializeColorPredicate({
       attribute: 'card_faces.colors',
-      predicates: { fuzziness: 2, W: true, U: true },
+      predicates: { fuzziness: 2, selection: { W: true, U: true } },
     });
 
     expect(actual).toEqual(expected);
@@ -40,7 +40,7 @@ describe('Predicate Serialization', () => {
     const expected = '';
     const actual = serializeColorPredicate({
       attribute: 'card_faces.colors',
-      predicates: { fuzziness: 2, W: false, U: false, B: false, R: false, G: false, C: false },
+      predicates: { fuzziness: 2, selection: { W: false, U: false, B: false, R: false, G: false, C: false } },
     });
 
     expect(actual).toEqual(expected);

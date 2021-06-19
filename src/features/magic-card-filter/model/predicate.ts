@@ -37,8 +37,14 @@ export interface P9Predicate<E = any> {
   stringOperator?: P9StringOperator;
 }
 
-export type P9ColorPredicateExpression<K extends P9GameSymbolType = P9GameSymbolType> = {
+export type P9SymbolPredicateExpression<K extends P9GameSymbolType = P9GameSymbolType> = {
   [key in K]?: boolean;
-} & { enforceIdentity?: boolean; fuzziness?: number };
+};
+
+export type P9ColorPredicateExpression = {
+  selection: P9SymbolPredicateExpression;
+  enforceIdentity?: boolean;
+  fuzziness?: number;
+};
 
 export type P9PickerPredicateExpression = { value: string; selected: boolean };

@@ -6,18 +6,18 @@ export interface P9GameSymbolProps {
   containerStyle?: StyleProp<ViewStyle>;
   imageProps?: Omit<FastImageProps, 'source' | 'style'>;
   imageStyle?: StyleProp<ImageStyle>;
-  type: P9GameSymbolType;
+  symbol: P9GameSymbolType;
 }
 
 export const P9GameSymbol: FunctionComponent<P9GameSymbolProps> = ({
   containerStyle,
   imageProps,
   imageStyle,
-  type,
+  symbol,
 }) => {
   return (
     <View style={[P9GameSymbolTheme.container, containerStyle]}>
-      <FastImage {...imageProps} source={P9GameSymbolSource[type]} style={[P9GameSymbolTheme.image, imageStyle]} />
+      <FastImage {...imageProps} source={P9GameSymbolSource[symbol]} style={[P9GameSymbolTheme.image, imageStyle]} />
     </View>
   );
 };

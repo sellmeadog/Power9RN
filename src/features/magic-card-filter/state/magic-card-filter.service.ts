@@ -22,13 +22,16 @@ export function useMagicCardColorPredicateBuilder(): [
 
   const [expression] = useObservableState(
     () => query.colorPredicate$,
-    () => ({ fuzziness: 0 }),
+    () => ({ fuzziness: 0, selection: {} }),
   );
 
   const update = useCallback(
-    (patch: Partial<P9ColorPredicateExpression>) => {
+    ({ selection, ...rest }: Partial<P9ColorPredicateExpression>) => {
       store.update('card_faces.colors', (draft) => {
-        draft.predicates = { ...draft.predicates, ...patch };
+        if (selection) {
+          draft.predicates.selection = selection;
+        }
+        draft.predicates = { ...draft.predicates, ...rest };
       });
     },
     [store],

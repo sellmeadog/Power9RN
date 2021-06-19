@@ -12,33 +12,36 @@ import {
 } from './predicate';
 
 export function serializeColorPredicate({ attribute, predicates }: P9AttributePredicate<P9ColorPredicateExpression>) {
-  const { enforceIdentity, fuzziness = 0, ...rest } = predicates as P9ColorPredicateExpression;
+  const { enforceIdentity, fuzziness = 0, selection } = predicates as P9ColorPredicateExpression;
   const attribute_ = enforceIdentity ? 'color_identity' : attribute;
   const colors: P9GameSymbolType[] = ['W', 'U', 'B', 'R', 'G', 'C'];
-  const selection = colors.map((color): [color: P9GameSymbolType, value: boolean] => [color, Boolean(rest[color])]);
+  const selectionTuples = colors.map((color): [color: P9GameSymbolType, value: boolean] => [
+    color,
+    Boolean(selection?.[color]),
+  ]);
   let predicate = '';
 
-  if (selection.every(([_, value]) => !value)) {
+  if (selectionTuples.every(([_, value]) => !value)) {
     return predicate;
   }
 
   switch (fuzziness) {
     case 0:
-      predicate = selection
+      predicate = selectionTuples
         .sort(([_, a], [__, b]) => Number(b) - Number(a))
         .map(([color, value]) => `${value ? 'AND' : 'AND NOT'} ${attribute_} =[c] "${color}"`)
         .join(' ');
       break;
 
     case 1:
-      predicate = selection
+      predicate = selectionTuples
         .filter(([_, value]) => value)
         .map(([color]) => `AND ${attribute_} =[c] "${color}"`)
         .join(' ');
       break;
 
     case 2:
-      const include = selection
+      const include = selectionTuples
         .filter(([_, value]) => value)
         .map(([color]) => `${attribute_} =[c] "${color}"`)
         .reduceRight(
@@ -47,7 +50,7 @@ export function serializeColorPredicate({ attribute, predicates }: P9AttributePr
         )
         .join(' OR ');
 
-      const exclude = selection
+      const exclude = selectionTuples
         .filter(([_, value]) => !value)
         .map(([color]) => `NOT ${attribute_} =[c] "${color}"`)
         .join(' AND ');
@@ -59,7 +62,7 @@ export function serializeColorPredicate({ attribute, predicates }: P9AttributePr
       break;
 
     case 3:
-      predicate = selection
+      predicate = selectionTuples
         .filter(([_, value]) => value)
         .map(([color]) => `AND NOT ${attribute_} =[c] "${color}"`)
         .join(' ');
