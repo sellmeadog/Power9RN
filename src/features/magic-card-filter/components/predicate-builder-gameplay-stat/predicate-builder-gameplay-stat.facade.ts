@@ -27,10 +27,12 @@ export function useGameplayStatPredicateBuilderFacade(): [
   const addPredicate = useCallback(
     (attribute: string, expression: number) => {
       store.update('gameplay.stats', (draft: P9AttributePredicate<number>) => {
+        const expressionX = expression === 6;
+
         (draft.predicates as P9Predicate<number>[]) = arrayAdd(draft.predicates as P9Predicate<number>[], {
           attribute,
-          comparisonOperator: P9ComparisonOperator.Equal,
-          expression,
+          comparisonOperator: expressionX ? P9ComparisonOperator.GreaterThan : P9ComparisonOperator.Equal,
+          expression: expressionX ? 5 : expression,
           id: v1(),
           logicalOperator: P9LogicalOperator.And,
         });

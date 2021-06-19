@@ -21,6 +21,7 @@ export class P9MagicCardFilterStore extends EntityStore<P9MagicCardFilterState> 
       { attribute: 'card_faces.types', predicates: {} },
       { attribute: 'legalities', predicates: {} },
       { attribute: 'gameplay.stats', predicates: [] },
+      { attribute: 'rarity', predicates: {} },
     ]);
   }
 

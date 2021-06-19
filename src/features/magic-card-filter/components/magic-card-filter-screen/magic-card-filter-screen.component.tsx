@@ -11,6 +11,7 @@ import { useMagicCardFilterPredicate } from '../../state/magic-card-filter.servi
 import { P9ColorPredicateBuilder } from '../predicate-builder-color/color-predicate-builder.component';
 import { P9GameplayStatPredicateBuilder } from '../predicate-builder-gameplay-stat/predicate-builder-gameplay-stat.component';
 import { P9PickerPredicateBuilder } from '../predicate-builder-picker/picker-predicate-builder.component';
+import { P9MagicCardRarityPredicateBuilder } from '../predicate-builder-rarity/predicate-builder-rarity.component';
 import { P9StringPredicateBuilder } from '../predicate-builder-string/string-predicate-builder.component';
 
 export interface P9MagicCardFilterScreenProps {}
@@ -57,6 +58,8 @@ export const P9MagicCardFilterScreen: FunctionComponent<P9MagicCardFilterScreenP
           placeholder={'Artist'}
           navigationParams={{ route: 'P9:Modal:MagicCardFilter:MagicCardTypePicker', title: 'Artists' }}
         />
+        <P9ItemSeparator />
+        <P9MagicCardRarityPredicateBuilder />
         <P9ItemSeparator />
         <P9StringPredicateBuilder
           attribute={'card_faces.flavor_text'}

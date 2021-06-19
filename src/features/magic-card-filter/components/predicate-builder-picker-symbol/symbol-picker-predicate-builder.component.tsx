@@ -1,4 +1,5 @@
 import React, { FunctionComponent, useCallback, useState } from 'react';
+import { StyleSheet } from 'react-native';
 
 import {
   P9CarouselToggleButton,
@@ -30,10 +31,16 @@ export const P9SymbolPickerPredicateBuilder: FunctionComponent<P9SymbolPickerPre
 
   return (
     <>
-      <P9RowView>
+      <P9RowView style={[P9SymbolPickerPredicateBuilderTheme.container]}>
         <P9CarouselToggleButton onToggle={setOption} options={options} value={option} />
         <P9GameSymbolToggleButtonGroup onToggle={handleToggle} options={symbols} selection={expression} />
       </P9RowView>
     </>
   );
 };
+
+const P9SymbolPickerPredicateBuilderTheme = StyleSheet.create({
+  container: {
+    paddingRight: 10,
+  },
+});

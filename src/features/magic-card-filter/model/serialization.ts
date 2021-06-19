@@ -180,6 +180,9 @@ export function serialize(predicate: P9AttributePredicate) {
     case 'gameplay.stats':
       return serializeNumericPredicate(predicate);
 
+    case 'rarity':
+      return serializePickerPredicate(predicate);
+
     default:
       return serializeStringPredicate(predicate);
   }

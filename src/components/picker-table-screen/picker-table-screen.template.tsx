@@ -37,7 +37,7 @@ export const P9PickerTableScreenTemplate: FunctionComponent<P9PickerTableScreenT
     <>
       <Header
         centerComponent={{ text: title }}
-        leftComponent={{ icon: 'arrow-back-ios', onPress: goBack }}
+        leftComponent={{ icon: 'arrow-back-ios', onPress: goBack, size: 24 }}
         rightComponent={canReset ? { text: 'Reset', onPress: onReset } : undefined}
       />
       {canFilter && (

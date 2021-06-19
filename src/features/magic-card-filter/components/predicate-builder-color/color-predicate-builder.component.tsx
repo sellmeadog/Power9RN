@@ -23,7 +23,7 @@ export const P9ColorPredicateBuilder: FunctionComponent<P9ColorPredicateBuilderP
 
   return (
     <>
-      <P9RowView>
+      <P9RowView style={[P9ColorPredicateBuilderTheme.container]}>
         <P9ColorPredicateFuzzinessToggle onChange={handleFuzziness} value={expression?.fuzziness} />
         <P9GameSymbolToggleButtonGroup options={symbols} selection={expression?.selection} onToggle={handleToggle} />
       </P9RowView>
