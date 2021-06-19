@@ -17,6 +17,8 @@ export interface P9ToggleButtonProps<T = string> extends P9SpringButtonProps {
 
 export function P9ToggleButton<T = string>({
   active = false,
+  activeBackgroundColor,
+  activeTintColor,
   children,
   inactiveOpacity = 0.6,
   onPress,
@@ -38,7 +40,13 @@ export function P9ToggleButton<T = string>({
   };
 
   return (
-    <P9SpringButton contentStyle={animatedStyle} {...rest} onPress={handlePress}>
+    <P9SpringButton
+      backgroundColor={active ? activeBackgroundColor : undefined}
+      contentStyle={animatedStyle}
+      tintColor={active ? activeTintColor : undefined}
+      {...rest}
+      onPress={handlePress}
+    >
       {children}
     </P9SpringButton>
   );

@@ -1,8 +1,9 @@
 import { useObservable, useObservableState } from 'observable-hooks';
 import { useCallback } from 'react';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 import { arrayRemove, arrayUpdate } from '@datorama/akita';
+import { useNavigation } from '@react-navigation/core';
 
 import { useDependency } from '../../../core/di';
 import { P9ColorPredicateExpression, P9Predicate, P9StringOperator } from '../model/predicate';
@@ -91,12 +92,21 @@ export function useMagicCardStringPredicateEditor({
   ];
 }
 
-export function useMagicCardFilterPredicate(): [predicate: string | undefined, reset: () => void] {
+export function useMagicCardFilterFacade(): [
+  state: { predicate: string | undefined; canReset: boolean },
+  reset: () => void,
+  navigate: () => void,
+] {
+  const { navigate } = useNavigation();
   const store = useDependency(P9MagicCardFilterStore);
   const query = useDependency(P9MagicCardFilterQuery);
 
-  const [predicate] = useObservableState(() => query.predicate$, undefined);
-  const reset = useCallback(() => store.remove(), [store]);
-
-  return [predicate, reset];
+  return [
+    {
+      predicate: useObservableState(query.predicate$, undefined),
+      canReset: useObservableState(query.predicate$.pipe(map(Boolean)), false),
+    },
+    useCallback(() => store.reset(), [store]),
+    useCallback(() => navigate('P9:MagicCardFilter'), [navigate]),
+  ];
 }

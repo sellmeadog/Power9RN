@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/core';
 
 import { P9ItemSeparator, P9TableDivider } from '../../../../components';
 import { P9StringOperator } from '../../model/predicate';
-import { useMagicCardFilterPredicate } from '../../state/magic-card-filter.service';
+import { useMagicCardFilterFacade } from '../../state/magic-card-filter.service';
 import { P9ColorPredicateBuilder } from '../predicate-builder-color/color-predicate-builder.component';
 import { P9GameplayStatPredicateBuilder } from '../predicate-builder-gameplay-stat/predicate-builder-gameplay-stat.component';
 import { P9PickerPredicateBuilder } from '../predicate-builder-picker/picker-predicate-builder.component';
@@ -19,13 +19,13 @@ export interface P9MagicCardFilterScreenProps {}
 
 export const P9MagicCardFilterScreen: FunctionComponent<P9MagicCardFilterScreenProps> = () => {
   const { goBack } = useNavigation();
-  const [predicate, reset] = useMagicCardFilterPredicate();
+  const [{ canReset, predicate }, reset] = useMagicCardFilterFacade();
 
   return (
     <>
       <Header
         centerComponent={{ text: 'Advanced Filter' }}
-        leftComponent={predicate ? { onPress: reset, text: 'Reset' } : undefined}
+        leftComponent={canReset ? { onPress: reset, text: 'Reset' } : undefined}
         rightComponent={{ onPress: goBack, text: 'Done' }}
       />
       <KeyboardAvoidingView behavior={'height'}>

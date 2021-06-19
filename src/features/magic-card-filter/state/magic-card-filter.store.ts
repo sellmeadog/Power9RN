@@ -12,17 +12,7 @@ export interface P9MagicCardFilterState extends EntityState<P9AttributePredicate
 export class P9MagicCardFilterStore extends EntityStore<P9MagicCardFilterState> {
   constructor() {
     super({}, { name: 'magic-card-filter', producerFn: produce, idKey: 'attribute' });
-    this.set([
-      { attribute: 'card_faces.names', predicates: [] },
-      { attribute: 'card_faces.oracle_text', predicates: [] },
-      { attribute: 'card_faces.flavor_text', predicates: [] },
-      { attribute: 'card_faces.colors', predicates: {} },
-      { attribute: 'card_faces.artist', predicates: {} },
-      { attribute: 'card_faces.types', predicates: {} },
-      { attribute: 'legalities', predicates: {} },
-      { attribute: 'gameplay.stats', predicates: [] },
-      { attribute: 'rarity', predicates: {} },
-    ]);
+    this.reset();
   }
 
   parseStringExpression = (attribute: string, expression: string, stringOperator: P9StringOperator) => {
@@ -41,15 +31,24 @@ export class P9MagicCardFilterStore extends EntityStore<P9MagicCardFilterState> 
     });
   };
 
-  removePerAttribute = (_attribute: string) => {
-    // this.remove((entity: Readonly<P9Predicate>) => entity.attribute === attribute);
-  };
-
   resetAttribute = (attribute: string) => {
     this.update(attribute, (state) => {
       state.predicates = isArray(state.predicates) ? [] : {};
     });
   };
+
+  reset = () =>
+    this.set([
+      { attribute: 'card_faces.names', predicates: [] },
+      { attribute: 'card_faces.oracle_text', predicates: [] },
+      { attribute: 'card_faces.flavor_text', predicates: [] },
+      { attribute: 'card_faces.colors', predicates: {} },
+      { attribute: 'card_faces.artist', predicates: {} },
+      { attribute: 'card_faces.types', predicates: {} },
+      { attribute: 'legalities', predicates: {} },
+      { attribute: 'gameplay.stats', predicates: [] },
+      { attribute: 'rarity', predicates: {} },
+    ]);
 }
 
 const makeStringPredicate =

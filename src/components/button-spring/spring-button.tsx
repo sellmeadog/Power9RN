@@ -8,22 +8,26 @@ import { usePower9Theme } from '../../core/theme';
 const BUTTON_WIDTH = 32;
 
 export interface P9SpringButtonProps {
+  backgroundColor?: string;
   buttonStyle?: StyleProp<ViewStyle>;
   containerStyle?: StyleProp<ViewStyle>;
   contentStyle?: StyleProp<ViewStyle>;
   iconProps?: IconProps;
-  onPress?(): void;
   onLongPress?(): void;
+  onPress?(): void;
+  tintColor?: string;
 }
 
 export const P9SpringButton: FunctionComponent<P9SpringButtonProps> = ({
+  backgroundColor,
   buttonStyle,
   children,
   containerStyle,
   contentStyle,
   iconProps,
-  onPress,
   onLongPress,
+  onPress,
+  tintColor,
 }) => {
   const springConfig = { stiffness: 300 };
 
@@ -48,15 +52,17 @@ export const P9SpringButton: FunctionComponent<P9SpringButtonProps> = ({
       onPress={onPress}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      style={[P9SpringButtonTheme.container, containerStyle]}>
+      style={[P9SpringButtonTheme.container, containerStyle]}
+    >
       <Animated.View
         style={[
           P9SpringButtonTheme.button,
-          { backgroundColor: colors?.backgroundInput, borderColor: colors?.border },
+          { backgroundColor: backgroundColor || colors?.backgroundInput, borderColor: colors?.border },
           buttonStyle,
-        ]}>
+        ]}
+      >
         <Animated.View style={[P9SpringButtonTheme.contentContainer, animatedStyle, contentStyle]}>
-          {iconProps ? <Icon color={colors?.primary} size={19} {...iconProps} /> : children}
+          {iconProps ? <Icon color={tintColor || colors?.primary} size={19} {...iconProps} /> : children}
         </Animated.View>
       </Animated.View>
     </Pressable>
