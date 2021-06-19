@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useCallback } from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
 import { usePower9Theme } from '../../core/theme';
@@ -24,11 +24,11 @@ export const P9SearchBar: FunctionComponent<P9SearchBarProps> = ({
   const [{ colors }] = usePower9Theme();
   const [{ canReset }, reset, handlePress] = useMagicCardFilterFacade();
 
-  const handleLongPress = () => {
+  const handleLongPress = useCallback(() => {
     if (canReset) {
       reset();
     }
-  };
+  }, [canReset, reset]);
 
   return (
     <View style={[P9SearchBarTheme.container, containerStyle]}>
