@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from 'react';
+import { KeyboardAvoidingView } from 'react-native';
 // import { StyleSheet } from 'react-native';
 import { Header, Text } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -27,48 +28,50 @@ export const P9MagicCardFilterScreen: FunctionComponent<P9MagicCardFilterScreenP
         leftComponent={predicate ? { onPress: reset, text: 'Reset' } : undefined}
         rightComponent={{ onPress: goBack, text: 'Done' }}
       />
-      <ScrollView>
-        <P9TableDivider title={''} />
-        <P9StringPredicateBuilder attribute={'card_faces.names'} placeholder={'Card Name'} />
-        <P9ItemSeparator />
-        <P9StringPredicateBuilder
-          attribute={'card_faces.oracle_text'}
-          placeholder={'Oracle Text'}
-          stringOperator={P9StringOperator.Contains}
-        />
-        <P9ItemSeparator />
-        <P9PickerPredicateBuilder
-          attribute={'card_faces.types'}
-          placeholder={'Type Line'}
-          navigationParams={{ route: 'P9:Modal:MagicCardFilter:MagicCardTypePicker', title: 'Card Types' }}
-        />
-        <P9ItemSeparator />
-        <P9PickerPredicateBuilder
-          attribute={'legalities'}
-          placeholder={'Formats'}
-          navigationParams={{ route: 'P9:Modal:MagicCardFilter:MagicCardTypePicker', title: 'Game Formats' }}
-        />
-        <P9TableDivider title={'Color'} />
-        <P9ColorPredicateBuilder />
-        <P9TableDivider title={'Gameplay Stats'} />
-        <P9GameplayStatPredicateBuilder />
-        <P9TableDivider title={'Printing'} />
-        <P9PickerPredicateBuilder
-          attribute={'card_faces.artist'}
-          placeholder={'Artist'}
-          navigationParams={{ route: 'P9:Modal:MagicCardFilter:MagicCardTypePicker', title: 'Artists' }}
-        />
-        <P9ItemSeparator />
-        <P9MagicCardRarityPredicateBuilder />
-        <P9ItemSeparator />
-        <P9StringPredicateBuilder
-          attribute={'card_faces.flavor_text'}
-          placeholder={'Flavor Text'}
-          stringOperator={P9StringOperator.Contains}
-        />
-        <P9ItemSeparator />
-        <Text>{predicate}</Text>
-      </ScrollView>
+      <KeyboardAvoidingView behavior={'height'}>
+        <ScrollView keyboardDismissMode={'interactive'} keyboardShouldPersistTaps={'always'}>
+          <P9TableDivider title={''} />
+          <P9StringPredicateBuilder attribute={'card_faces.names'} placeholder={'Card Name'} />
+          <P9ItemSeparator />
+          <P9StringPredicateBuilder
+            attribute={'card_faces.oracle_text'}
+            placeholder={'Oracle Text'}
+            stringOperator={P9StringOperator.Contains}
+          />
+          <P9ItemSeparator />
+          <P9PickerPredicateBuilder
+            attribute={'card_faces.types'}
+            placeholder={'Type Line'}
+            navigationParams={{ route: 'P9:Modal:MagicCardFilter:MagicCardTypePicker', title: 'Card Types' }}
+          />
+          <P9ItemSeparator />
+          <P9PickerPredicateBuilder
+            attribute={'legalities'}
+            placeholder={'Formats'}
+            navigationParams={{ route: 'P9:Modal:MagicCardFilter:MagicCardTypePicker', title: 'Game Formats' }}
+          />
+          <P9TableDivider title={'Color'} />
+          <P9ColorPredicateBuilder />
+          <P9TableDivider title={'Gameplay Stats'} />
+          <P9GameplayStatPredicateBuilder />
+          <P9TableDivider title={'Printing'} />
+          <P9PickerPredicateBuilder
+            attribute={'card_faces.artist'}
+            placeholder={'Artist'}
+            navigationParams={{ route: 'P9:Modal:MagicCardFilter:MagicCardTypePicker', title: 'Artists' }}
+          />
+          <P9ItemSeparator />
+          <P9MagicCardRarityPredicateBuilder />
+          <P9ItemSeparator />
+          <P9StringPredicateBuilder
+            attribute={'card_faces.flavor_text'}
+            placeholder={'Flavor Text'}
+            stringOperator={P9StringOperator.Contains}
+          />
+          <P9ItemSeparator />
+          <Text>{predicate}</Text>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </>
   );
 };
