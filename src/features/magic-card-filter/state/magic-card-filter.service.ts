@@ -1,14 +1,69 @@
 import { useObservable, useObservableState } from 'observable-hooks';
 import { useCallback } from 'react';
+import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { singleton } from 'tsyringe';
+import { v1 } from 'uuid';
 
-import { arrayRemove, arrayUpdate } from '@datorama/akita';
+import { arrayAdd, arrayRemove, arrayToggle, arrayUpdate, ID } from '@datorama/akita';
 import { useNavigation } from '@react-navigation/core';
 
 import { useDependency } from '../../../core/di';
-import { P9ColorPredicateExpression, P9Predicate, P9StringOperator } from '../model/predicate';
+import { P9ColorPredicateExpression, P9LogicalOperator, P9Predicate, P9StringOperator } from '../model/predicate';
 import { P9MagicCardFilterQuery } from './magic-card-filter.query';
 import { P9MagicCardFilterStore } from './magic-card-filter.store';
+
+@singleton()
+export class P9MagicCardFilterService {
+  constructor(private store: P9MagicCardFilterStore, private query: P9MagicCardFilterQuery) {}
+
+  selectAttributePredicates = <E = any>(attribute: string): Observable<P9Predicate<E>[]> =>
+    this.query.attributePredicates(attribute);
+
+  parseStringExpression = (
+    attribute: string,
+    expression: string,
+    logicalOperator: P9LogicalOperator,
+    stringOperator: P9StringOperator,
+  ) => {
+    this.store.update(attribute, (draft) => {
+      draft.predicates = arrayAdd(
+        draft.predicates,
+        expression
+          .trim()
+          .split(' ')
+          .filter(Boolean)
+          .map(makeStringPredicate(attribute, logicalOperator, stringOperator)),
+      );
+    });
+  };
+
+  removePredicate = (attribute: string, id: string) => {
+    this.store.update(attribute, (draft) => {
+      draft.predicates = arrayRemove(draft.predicates, id);
+    });
+  };
+
+  resetAll = () => {
+    this.store.reset();
+  };
+
+  resetAttribute = (attribute: string) => {
+    this.store.resetAttribute(attribute);
+  };
+
+  togglePredicate = <E = any>(attribute: string, predicate: P9Predicate<E>) => {
+    this.store.update(attribute, (draft) => {
+      draft.predicates = arrayToggle(draft.predicates, predicate);
+    });
+  };
+
+  updatePredicate = <E extends ID = any>(attribute: string, id: E, patch: Partial<P9Predicate<E>>) => {
+    this.store.update(attribute, (draft) => {
+      draft.predicates = arrayUpdate(draft.predicates, id, patch);
+    });
+  };
+}
 
 export function useMagicCardFilterQuery() {
   return useDependency(P9MagicCardFilterQuery);
@@ -110,3 +165,13 @@ export function useMagicCardFilterFacade(): [
     useCallback(() => navigate('P9:MagicCardFilter'), [navigate]),
   ];
 }
+
+const makeStringPredicate =
+  (attribute: string, logicalOperator: P9LogicalOperator, stringOperator: P9StringOperator) =>
+  (expression: string): P9Predicate<string> => ({
+    attribute,
+    expression,
+    id: v1(),
+    logicalOperator,
+    stringOperator,
+  });

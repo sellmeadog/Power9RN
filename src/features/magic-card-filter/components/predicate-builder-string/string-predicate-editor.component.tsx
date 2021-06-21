@@ -4,15 +4,15 @@ import { Icon } from 'react-native-elements';
 
 import { P9ItemSeparator, P9TextInput } from '../../../../components';
 import { P9LogicalOperator, P9Predicate } from '../../model/predicate';
-import { useMagicCardStringPredicateEditor } from '../../state/magic-card-filter.service';
 import { P9LogicalOperatorToggle } from '../logical-operator-toggle/logical-operator-toggle';
+import { useStringPredicateEditorFacade } from './string-predicate-editor.facade';
 
 export interface P9StringPredicateEditorProps {
   predicate: P9Predicate<string>;
 }
 
 export const P9StringPredicateEditor: FunctionComponent<P9StringPredicateEditorProps> = ({ predicate }) => {
-  const [update, remove] = useMagicCardStringPredicateEditor(predicate);
+  const [update, remove] = useStringPredicateEditorFacade(predicate);
 
   const handleChangeLogicalOperator = (logicalOperator: P9LogicalOperator) => update({ logicalOperator });
   const handleChangeText = (expression: string) => update({ expression });

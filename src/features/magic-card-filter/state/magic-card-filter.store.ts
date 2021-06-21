@@ -32,22 +32,26 @@ export class P9MagicCardFilterStore extends EntityStore<P9MagicCardFilterState> 
   };
 
   resetAttribute = (attribute: string) => {
-    this.update(attribute, (state) => {
-      state.predicates = isArray(state.predicates) ? [] : {};
+    this.update(attribute, (draft) => {
+      draft.predicates = [];
     });
   };
 
   reset = () =>
     this.set([
+      { attribute: 'card_faces.artist', predicates: [] },
+      { attribute: 'card_faces.colors', predicates: [] },
+      { attribute: 'card_faces.flavor_text', predicates: [] },
+      { attribute: 'card_faces.loyalty', predicates: [] },
       { attribute: 'card_faces.names', predicates: [] },
       { attribute: 'card_faces.oracle_text', predicates: [] },
-      { attribute: 'card_faces.flavor_text', predicates: [] },
-      { attribute: 'card_faces.colors', predicates: {} },
-      { attribute: 'card_faces.artist', predicates: {} },
-      { attribute: 'card_faces.types', predicates: {} },
-      { attribute: 'legalities', predicates: {} },
+      { attribute: 'card_faces.power', predicates: [] },
+      { attribute: 'card_faces.toughness', predicates: [] },
+      { attribute: 'card_faces.types', predicates: [] },
+      { attribute: 'cmc', predicates: [] },
       { attribute: 'gameplay.stats', predicates: [] },
-      { attribute: 'rarity', predicates: {} },
+      { attribute: 'legalities', predicates: [] },
+      { attribute: 'rarity', predicates: [] },
     ]);
 }
 

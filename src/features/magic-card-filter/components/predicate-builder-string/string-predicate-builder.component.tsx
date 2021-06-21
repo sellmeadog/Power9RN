@@ -3,28 +3,34 @@ import { StyleSheet, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 import { P9TextInput } from '../../../../components';
-import { P9StringOperator } from '../../model/predicate';
-import { useMagicCardStringPredicateBuilder } from '../../state/magic-card-filter.service';
+import { P9LogicalOperator, P9StringOperator } from '../../model/predicate';
+import { useStringPredicateBuilderFacade } from './string-predicate-builder.facade';
 import { P9StringPredicateEditor } from './string-predicate-editor.component';
 
 export interface P9StringPredicateBuilderProps {
   attribute: string;
+  logicalOperator?: P9LogicalOperator;
   placeholder: string;
   stringOperator?: P9StringOperator;
 }
 
 export const P9StringPredicateBuilder: FunctionComponent<P9StringPredicateBuilderProps> = ({
   attribute,
+  logicalOperator = P9LogicalOperator.And,
   placeholder,
   stringOperator = P9StringOperator.BeginsWith,
 }) => {
-  const [predicates, parseExpression, reset] = useMagicCardStringPredicateBuilder(attribute);
+  const [{ canReset, predicates }, parseExpression, reset] = useStringPredicateBuilderFacade(
+    attribute,
+    stringOperator,
+    logicalOperator,
+  );
   const [expression, setExpression] = useState('');
 
   const handleBlur = useCallback(() => {
-    parseExpression(expression, stringOperator);
+    parseExpression(expression);
     setExpression('');
-  }, [parseExpression, expression, stringOperator]);
+  }, [parseExpression, expression]);
 
   return (
     <>
@@ -36,7 +42,7 @@ export const P9StringPredicateBuilder: FunctionComponent<P9StringPredicateBuilde
           style={[P9TextAttributePredicateBuilderTheme.input]}
           value={expression}
         />
-        {Boolean(predicates?.length) && (
+        {canReset && (
           <Icon name={'minus-circle-multiple-outline'} onPress={reset} type={'material-community'} size={15} />
         )}
       </View>
