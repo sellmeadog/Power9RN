@@ -20,11 +20,13 @@ export class P9MagicCardFilterService {
   selectAttributePredicates = <E = any>(attribute: string): Observable<P9Predicate<E>[]> =>
     this.query.attributePredicates(attribute);
 
+  selectAttributeSelection = (attribute: string) => this.query.attributeSelection(attribute);
+
   parseStringExpression = (
     attribute: string,
     expression: string,
-    logicalOperator: P9LogicalOperator,
-    stringOperator: P9StringOperator,
+    logicalOperator = P9LogicalOperator.And,
+    stringOperator = P9StringOperator.BeginsWith,
   ) => {
     this.store.update(attribute, (draft) => {
       draft.predicates = arrayAdd(
@@ -54,7 +56,7 @@ export class P9MagicCardFilterService {
 
   togglePredicate = <E = any>(attribute: string, predicate: P9Predicate<E>) => {
     this.store.update(attribute, (draft) => {
-      draft.predicates = arrayToggle(draft.predicates, predicate);
+      draft.predicates = arrayToggle(draft.predicates, predicate, ({ expression: a }, { expression: b }) => a === b);
     });
   };
 

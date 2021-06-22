@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from 'react';
 import { KeyboardAvoidingView } from 'react-native';
-// import { StyleSheet } from 'react-native';
 import { Header, Text } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -41,14 +40,16 @@ export const P9MagicCardFilterScreen: FunctionComponent<P9MagicCardFilterScreenP
           <P9ItemSeparator />
           <P9PickerPredicateBuilder
             attribute={'card_faces.types'}
+            navigationRoute={'P9:Modal:MagicCardFilter:MagicCardTypePicker'}
+            navigationTitle={'Card Types'}
             placeholder={'Type Line'}
-            navigationParams={{ route: 'P9:Modal:MagicCardFilter:MagicCardTypePicker', title: 'Card Types' }}
           />
           <P9ItemSeparator />
           <P9PickerPredicateBuilder
             attribute={'legalities'}
+            navigationRoute={'P9:Modal:MagicCardFilter:MagicCardTypePicker'}
+            navigationTitle={'Game Formats'}
             placeholder={'Formats'}
-            navigationParams={{ route: 'P9:Modal:MagicCardFilter:MagicCardTypePicker', title: 'Game Formats' }}
           />
           <P9TableDivider title={'Color'} />
           <P9ColorPredicateBuilder />
@@ -57,8 +58,9 @@ export const P9MagicCardFilterScreen: FunctionComponent<P9MagicCardFilterScreenP
           <P9TableDivider title={'Printing'} />
           <P9PickerPredicateBuilder
             attribute={'card_faces.artist'}
+            navigationRoute={'P9:Modal:MagicCardFilter:MagicCardTypePicker'}
+            navigationTitle={'Artists'}
             placeholder={'Artist'}
-            navigationParams={{ route: 'P9:Modal:MagicCardFilter:MagicCardTypePicker', title: 'Artists' }}
           />
           <P9ItemSeparator />
           <P9MagicCardRarityPredicateBuilder />
@@ -75,5 +77,3 @@ export const P9MagicCardFilterScreen: FunctionComponent<P9MagicCardFilterScreenP
     </>
   );
 };
-
-// const P9MagicCardFilterScreenTheme = StyleSheet.create({});

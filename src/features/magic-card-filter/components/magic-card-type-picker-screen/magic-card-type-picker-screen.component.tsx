@@ -5,10 +5,9 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 import { P9PickerTableScreenTemplate } from '../../../../components';
 import { P9PickerTableSelectionChange } from '../../../../components/picker-table/picker-table-item';
-import { P9LogicalOperator } from '../../model/predicate';
 import { useCatalogFacade } from '../../state/scryfall-catalog/scryfall-catalog.service';
 import { P9MagicCardFilterNavigatorParamList } from '../magic-card-filter-navigator/magic-card-filter-navigator.component';
-import { usePickerPredicateBuilder } from '../predicate-builder-picker/picker-predicate.facade';
+import { usePickerPredicateTableFacade } from '../predicate-builder-picker/picker-predicate-table.facade';
 
 export interface P9MagicCardArtistPickerScreenProps {
   navigation: StackNavigationProp<P9MagicCardFilterNavigatorParamList, 'P9:Modal:MagicCardFilter:MagicCardTypePicker'>;
@@ -16,20 +15,22 @@ export interface P9MagicCardArtistPickerScreenProps {
 }
 
 export const P9MagicCardArtistPickerScreen: FunctionComponent<P9MagicCardArtistPickerScreenProps> = ({ route }) => {
-  const { attribute, title } = route.params;
+  const { attribute, comparisonOperator, logicalOperator, stringOperator, title } = route.params;
   const [catalogs, expression, setExpression] = useCatalogFacade(attribute);
-  const [selection, canReset, toggle, handleReset] = usePickerPredicateBuilder(attribute);
+  const [{ canReset, selection }, toggle, handleReset] = usePickerPredicateTableFacade(attribute);
 
   const handleSelection = useCallback(
     (change: P9PickerTableSelectionChange) => {
       toggle({
         attribute,
+        comparisonOperator,
+        expression: change.value,
         id: change.value,
-        logicalOperator: P9LogicalOperator.Or,
-        expression: change,
+        logicalOperator,
+        stringOperator,
       });
     },
-    [attribute, toggle],
+    [attribute, comparisonOperator, logicalOperator, stringOperator, toggle],
   );
 
   useEffect(() => {

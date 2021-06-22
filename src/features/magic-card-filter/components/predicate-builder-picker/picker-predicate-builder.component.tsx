@@ -6,25 +6,37 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import { useNavigation } from '@react-navigation/core';
 
 import { usePower9Theme } from '../../../../core/theme';
-import { P9LogicalOperator } from '../../model/predicate';
+import { P9ComparisonOperator, P9LogicalOperator, P9StringOperator } from '../../model/predicate';
 import { P9PickerPredicateEditor } from './picker-predicate-editor.component';
 import { usePickerPredicateEditor } from './picker-predicate.facade';
 
 export type P9PredicateBuilderNavigationParams = {
+  comparisonOperator?: P9ComparisonOperator;
+  logicalOperator?: P9LogicalOperator;
   route: string;
+  stringOperator?: P9StringOperator;
   title: string;
 };
 
 export interface P9PickerPredicateBuilderProps {
   attribute: string;
+  comparisonOperator?: P9ComparisonOperator;
+  logicalOperator?: P9LogicalOperator;
+  navigationParams?: P9PredicateBuilderNavigationParams;
   placeholder: string;
-  navigationParams: P9PredicateBuilderNavigationParams;
+  stringOperator?: P9StringOperator;
+  navigationRoute: string;
+  navigationTitle: string;
 }
 
 export const P9PickerPredicateBuilder: FunctionComponent<P9PickerPredicateBuilderProps> = ({
   attribute,
+  comparisonOperator,
+  logicalOperator,
+  navigationRoute,
+  navigationTitle,
   placeholder,
-  navigationParams: { route, title },
+  stringOperator,
 }) => {
   const { navigate } = useNavigation();
   const [{ colors }] = usePower9Theme();
@@ -38,18 +50,29 @@ export const P9PickerPredicateBuilder: FunctionComponent<P9PickerPredicateBuilde
   });
 
   const handleLogicalOperatorToggle = useCallback(
-    (id: string, logicalOperator: P9LogicalOperator) => update(id, { logicalOperator }),
+    (id: string, value: P9LogicalOperator) => update(id, { logicalOperator: value }),
     [update],
   );
 
-  const handlePress = useCallback(() => navigate(route, { attribute, title }), [attribute, navigate, route, title]);
+  const handlePress = useCallback(
+    () =>
+      navigate(navigationRoute, {
+        attribute,
+        comparisonOperator,
+        logicalOperator,
+        stringOperator,
+        title: navigationTitle,
+      }),
+    [attribute, comparisonOperator, logicalOperator, navigate, navigationRoute, navigationTitle, stringOperator],
+  );
 
   return (
     <>
       <Pressable
         onPress={handlePress}
         onPressIn={() => (animated.value = colors!.grey0!)}
-        onPressOut={() => (animated.value = colors!.background!)}>
+        onPressOut={() => (animated.value = colors!.background!)}
+      >
         <Animated.View style={[P9PickerPredicateBuilderTheme.pressable, pressedStyle]}>
           <Text>{placeholder}</Text>
           <Icon name={'arrow-forward-ios'} />

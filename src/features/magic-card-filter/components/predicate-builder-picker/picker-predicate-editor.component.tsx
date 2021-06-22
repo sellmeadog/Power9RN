@@ -29,7 +29,7 @@ export const P9PickerPredicateEditor: FunctionComponent<P9PickerPredicateEditorP
       <P9ItemSeparator marginLeft={15} />
       <View style={P9PickerPredicateEditorTheme.container}>
         <P9LogicalOperatorToggle onChange={handleChangeLogicalOperator} value={predicate?.logicalOperator} />
-        <Text style={[P9PickerPredicateEditorTheme.title]}>{predicate?.expression?.value}</Text>
+        <Text style={[P9PickerPredicateEditorTheme.title]}>{predicate?.expression}</Text>
         <Icon name={'minus-circle-outline'} type={'material-community'} size={15} onPress={handleRemove} />
       </View>
     </>

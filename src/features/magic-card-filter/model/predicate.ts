@@ -20,6 +20,7 @@ export enum P9StringOperator {
   BeginsWith = 'BEGINSWITH[c]',
   Contains = 'CONTAINS[c]',
   EndsWith = 'ENDSWITH[c]',
+  Equals = '=[c]',
   Like = 'LIKE[c]',
 }
 
