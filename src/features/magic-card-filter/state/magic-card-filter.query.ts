@@ -18,7 +18,7 @@ const MAGIC_CARD_FILTER_ATTRIBUTES = [
   // 'card_faces.toughness',
   'card_faces.types',
   // 'cmc',
-  // 'legalities',
+  'legalities',
   // 'rarity',
 ];
 
@@ -38,10 +38,9 @@ export class P9MagicCardFilterQuery extends QueryEntity<P9MagicCardFilterState> 
     map((predicate) => predicate?.predicates as P9ColorPredicateExpression),
   );
 
-  // predicate$ = this.selectAll().pipe(map((predicates) => predicates.map(serialize).filter(Boolean).join(' AND ')));
   predicate$: Observable<string> = combineLatest(
     MAGIC_CARD_FILTER_ATTRIBUTES.map((attribute) =>
-      this.selectEntity(attribute, 'predicates').pipe(map(serializeStringPredicateArray)),
+      this.selectEntity(attribute).pipe(map((group) => serialize(group!.attribute, group!.predicates))),
     ),
   ).pipe(
     map((predicates) =>
@@ -95,4 +94,37 @@ function serializeStringPredicateArray(predicates: P9Predicate<string>[]): strin
     .join(' ');
 }
 
-// function serializationStrategy({ attribute, predicates }: { attribute: string; predicates: P9Predicate[] }) {}
+function serialize(attribute: string, predicates: P9Predicate[]) {
+  switch (attribute) {
+    case 'card_faces.colors':
+      return '';
+
+    default:
+      return defaultPredicateSerializer(predicates);
+  }
+}
+
+const byLogicalOperator = (
+  { logicalOperator: a = P9LogicalOperator.And }: P9Predicate,
+  { logicalOperator: b = P9LogicalOperator.And }: P9Predicate,
+) => {
+  const charA = a[a.length - 1];
+  const charB = b[b.length - 1];
+
+  return charA > charB ? 1 : charA < charB ? -1 : 0;
+};
+
+function defaultPredicateSerializer<E extends number | string = any>(predicates: P9Predicate<E>[]) {
+  return predicates
+    .filter(({ expression }) => (typeof expression === 'string' ? Boolean(expression) : true))
+    .sort(byLogicalOperator)
+    .map(({ attribute, comparisonOperator, logicalOperator, stringOperator, expression }) =>
+      [
+        logicalOperator,
+        attribute,
+        comparisonOperator || stringOperator,
+        typeof expression === 'string' ? `"${expression.trim()}"` : expression,
+      ].join(' '),
+    )
+    .join(' ');
+}

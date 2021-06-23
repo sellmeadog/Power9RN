@@ -40,7 +40,7 @@ export class P9MagicCardFilterService {
     });
   };
 
-  removePredicate = (attribute: string, id: string) => {
+  removePredicate = (attribute: string, id: ID) => {
     this.store.update(attribute, (draft) => {
       draft.predicates = arrayRemove(draft.predicates, id);
     });
@@ -60,7 +60,7 @@ export class P9MagicCardFilterService {
     });
   };
 
-  updatePredicate = <E extends ID = any>(attribute: string, id: E, patch: Partial<P9Predicate<E>>) => {
+  updatePredicate = <E = any>(attribute: string, id: ID, patch: Partial<P9Predicate<E>>) => {
     this.store.update(attribute, (draft) => {
       draft.predicates = arrayUpdate(draft.predicates, id, patch);
     });

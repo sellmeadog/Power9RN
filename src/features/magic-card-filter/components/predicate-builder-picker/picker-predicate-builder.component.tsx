@@ -32,11 +32,11 @@ export interface P9PickerPredicateBuilderProps {
 export const P9PickerPredicateBuilder: FunctionComponent<P9PickerPredicateBuilderProps> = ({
   attribute,
   comparisonOperator,
-  logicalOperator,
+  logicalOperator = P9LogicalOperator.Or,
   navigationRoute,
   navigationTitle,
   placeholder,
-  stringOperator,
+  stringOperator = P9StringOperator.Equals,
 }) => {
   const { navigate } = useNavigation();
   const [{ colors }] = usePower9Theme();

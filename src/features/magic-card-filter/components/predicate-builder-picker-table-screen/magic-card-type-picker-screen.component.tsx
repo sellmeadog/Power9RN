@@ -9,12 +9,12 @@ import { useCatalogFacade } from '../../state/scryfall-catalog/scryfall-catalog.
 import { P9MagicCardFilterNavigatorParamList } from '../magic-card-filter-navigator/magic-card-filter-navigator.component';
 import { usePickerPredicateTableFacade } from '../predicate-builder-picker/picker-predicate-table.facade';
 
-export interface P9MagicCardArtistPickerScreenProps {
-  navigation: StackNavigationProp<P9MagicCardFilterNavigatorParamList, 'P9:Modal:MagicCardFilter:MagicCardTypePicker'>;
-  route: RouteProp<P9MagicCardFilterNavigatorParamList, 'P9:Modal:MagicCardFilter:MagicCardTypePicker'>;
+export interface P9PredicatePickerTableScreenProps {
+  navigation: StackNavigationProp<P9MagicCardFilterNavigatorParamList, 'P9:Modal:MagicCardFilter:PredicatePickerTable'>;
+  route: RouteProp<P9MagicCardFilterNavigatorParamList, 'P9:Modal:MagicCardFilter:PredicatePickerTable'>;
 }
 
-export const P9MagicCardArtistPickerScreen: FunctionComponent<P9MagicCardArtistPickerScreenProps> = ({ route }) => {
+export const P9PredicatePickerTableScreen: FunctionComponent<P9PredicatePickerTableScreenProps> = ({ route }) => {
   const { attribute, comparisonOperator, logicalOperator, stringOperator, title } = route.params;
   const [catalogs, expression, setExpression] = useCatalogFacade(attribute);
   const [{ canReset, selection }, toggle, handleReset] = usePickerPredicateTableFacade(attribute);

@@ -2,10 +2,13 @@ import { useObservable, useObservableState } from 'observable-hooks';
 import { useCallback } from 'react';
 import { map } from 'rxjs/operators';
 
+import { ID } from '@datorama/akita';
+
 import { P9PickerTableSelection } from '../../../../components/picker-table/picker-table';
 import { useDependency } from '../../../../core/di';
 import { P9PickerPredicateExpression, P9Predicate } from '../../model/predicate';
 import { P9MagicCardFilterQuery } from '../../state/magic-card-filter.query';
+import { P9MagicCardFilterService } from '../../state/magic-card-filter.service';
 import { P9MagicCardFilterStore } from '../../state/magic-card-filter.store';
 
 export function usePickerPredicateBuilder(
@@ -56,42 +59,28 @@ export function usePickerPredicateBuilder(
   return [useObservableState(expression$, {}), useObservableState(canReset$, false), toggle, reset];
 }
 
-export function usePickerPredicateEditor(
+export function usePickerPredicateEditor<E extends number | string = any>(
   attribute: string,
 ): [
-  predicates: P9Predicate<P9PickerPredicateExpression>[] | undefined,
-  update: (id: string, patch: Partial<P9Predicate<P9PickerPredicateExpression>>) => void,
+  predicates: P9Predicate<E>[],
+  update: (id: string, patch: Partial<P9Predicate<E>>) => void,
   remove: (id: string) => void,
 ] {
-  const store = useDependency(P9MagicCardFilterStore);
-  const query = useDependency(P9MagicCardFilterQuery);
-
-  const [predicates] = useObservableState(() =>
-    query
-      .selectEntity(attribute)
-      .pipe(
-        map((entity) =>
-          entity?.predicates ? (Object.values(entity.predicates) as P9Predicate<P9PickerPredicateExpression>[]) : [],
-        ),
-      ),
-  );
+  const service = useDependency(P9MagicCardFilterService);
+  const predicates = useObservableState(service.selectAttributePredicates(attribute), []);
 
   const update = useCallback(
-    (id: string, patch: Partial<P9Predicate<P9PickerPredicateExpression>>) => {
-      store.update(attribute, (draft) => {
-        draft.predicates[id] = { ...draft.predicates[id], ...patch };
-      });
+    (id: ID, patch: Partial<P9Predicate<E>>) => {
+      service.updatePredicate(attribute, id, patch);
     },
-    [attribute, store],
+    [attribute, service],
   );
 
   const remove = useCallback(
-    (id: string) => {
-      store.update(attribute, (draft) => {
-        delete draft.predicates[id];
-      });
+    (id: ID) => {
+      service.removePredicate(attribute, id);
     },
-    [attribute, store],
+    [attribute, service],
   );
 
   return [predicates, update, remove];

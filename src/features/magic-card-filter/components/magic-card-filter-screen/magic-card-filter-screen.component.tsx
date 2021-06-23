@@ -40,14 +40,14 @@ export const P9MagicCardFilterScreen: FunctionComponent<P9MagicCardFilterScreenP
           <P9ItemSeparator />
           <P9PickerPredicateBuilder
             attribute={'card_faces.types'}
-            navigationRoute={'P9:Modal:MagicCardFilter:MagicCardTypePicker'}
+            navigationRoute={'P9:Modal:MagicCardFilter:PredicatePickerTable'}
             navigationTitle={'Card Types'}
             placeholder={'Type Line'}
           />
           <P9ItemSeparator />
           <P9PickerPredicateBuilder
             attribute={'legalities'}
-            navigationRoute={'P9:Modal:MagicCardFilter:MagicCardTypePicker'}
+            navigationRoute={'P9:Modal:MagicCardFilter:PredicatePickerTable'}
             navigationTitle={'Game Formats'}
             placeholder={'Formats'}
           />
@@ -58,7 +58,7 @@ export const P9MagicCardFilterScreen: FunctionComponent<P9MagicCardFilterScreenP
           <P9TableDivider title={'Printing'} />
           <P9PickerPredicateBuilder
             attribute={'card_faces.artist'}
-            navigationRoute={'P9:Modal:MagicCardFilter:MagicCardTypePicker'}
+            navigationRoute={'P9:Modal:MagicCardFilter:PredicatePickerTable'}
             navigationTitle={'Artists'}
             placeholder={'Artist'}
           />
