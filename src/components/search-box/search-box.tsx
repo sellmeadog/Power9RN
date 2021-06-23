@@ -31,7 +31,8 @@ export const P9SearchBox: FunctionComponent<P9SearchBoxProps> = ({
           { borderColor: colors?.border, backgroundColor: colors?.backgroundInput },
           P9SearchBoxStyle.frameContainer,
           borderContainerStyle,
-        ]}>
+        ]}
+      >
         <Icon color={colors?.placeholder} name={'search'} size={19} style={[P9SearchBoxStyle.icon]} />
         <View style={[P9SearchBoxStyle.inputContainer, inputContainerStyle]}>
           <P9TextInput

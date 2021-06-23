@@ -16,7 +16,8 @@ export const P9TableDivider: FunctionComponent<P9TableDividerProps> = ({ title }
       style={[
         P9TableDividerTheme.container,
         { backgroundColor: colors?.grey0, borderBottomColor: colors?.grey3, borderTopColor: colors?.grey3 },
-      ]}>
+      ]}
+    >
       <Text style={[P9TableDividerTheme.title]}>{title}</Text>
     </View>
   );

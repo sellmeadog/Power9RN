@@ -18,7 +18,8 @@ export const P9DrawerNavigatorHeader: FunctionComponent<P9DrawerNavigatorHeaderP
       leftComponent={<P9DrawerNavigatorAvatar />}
       leftContainerStyle={[leftContainerStyle]}
       rightContainerStyle={[rightContainerStyle]}
-      {...rest}>
+      {...rest}
+    >
       {children}
     </Header>
   );
