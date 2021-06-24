@@ -2,14 +2,16 @@ import React, { FunctionComponent, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Icon, Text } from 'react-native-elements';
 
+import { ID } from '@datorama/akita';
+
 import { P9CarouselToggleButton, P9ItemSeparator } from '../../../../components';
 import { P9ComparisonOperator, P9LogicalOperator, P9Predicate } from '../../model/predicate';
 import { P9LogicalOperatorToggle } from '../logical-operator-toggle/logical-operator-toggle';
 
 export interface P9GameplayStatePredicateEditorProps {
   predicate: P9Predicate<number>;
-  onUpdate?: (id: string, patch: Partial<P9Predicate<number>>) => void;
-  onRemove?: (id: string) => void;
+  onUpdate?: (id: ID, patch: Partial<P9Predicate<number>>) => void;
+  onRemove?: (id: ID) => void;
 }
 
 export const P9GameplayStatePredicateEditor: FunctionComponent<P9GameplayStatePredicateEditorProps> = ({

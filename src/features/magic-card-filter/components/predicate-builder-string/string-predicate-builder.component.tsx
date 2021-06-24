@@ -3,8 +3,8 @@ import { StyleSheet, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 import { P9TextInput } from '../../../../components';
+import { usePredicateAttributeGroupFacade } from '../../facades/predicate-attribute-group.facade';
 import { P9LogicalOperator, P9StringOperator } from '../../model/predicate';
-import { useStringPredicateBuilderFacade } from './string-predicate-builder.facade';
 import { P9StringPredicateEditor } from './string-predicate-editor.component';
 
 export interface P9StringPredicateBuilderProps {
@@ -20,11 +20,11 @@ export const P9StringPredicateBuilder: FunctionComponent<P9StringPredicateBuilde
   placeholder,
   stringOperator = P9StringOperator.BeginsWith,
 }) => {
-  const [{ canReset, predicates }, parseExpression, reset] = useStringPredicateBuilderFacade(
-    attribute,
-    stringOperator,
-    logicalOperator,
-  );
+  const [{ canReset, predicates }, { parseExpression, reset }, { removePredicate, updatePredicate }] =
+    usePredicateAttributeGroupFacade<string>(attribute, {
+      logicalOperator,
+      stringOperator,
+    });
   const [expression, setExpression] = useState('');
 
   const handleBlur = useCallback(() => {
@@ -47,7 +47,13 @@ export const P9StringPredicateBuilder: FunctionComponent<P9StringPredicateBuilde
         )}
       </View>
       {predicates?.map((predicate) => (
-        <P9StringPredicateEditor key={predicate.id} predicate={predicate} />
+        <P9StringPredicateEditor
+          id={predicate.id}
+          key={predicate.id}
+          onRemove={removePredicate}
+          onUpdate={updatePredicate}
+          predicate={predicate}
+        />
       ))}
     </>
   );

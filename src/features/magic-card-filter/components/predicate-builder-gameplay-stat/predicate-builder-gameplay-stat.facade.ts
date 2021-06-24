@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { Observable } from 'rxjs';
 import { v1 } from 'uuid';
 
-import { arrayAdd, arrayRemove, arrayUpdate } from '@datorama/akita';
+import { arrayAdd, arrayRemove, arrayUpdate, ID } from '@datorama/akita';
 
 import { useDependency } from '../../../../core/di';
 import { P9AttributePredicate, P9ComparisonOperator, P9LogicalOperator, P9Predicate } from '../../model/predicate';
@@ -13,8 +13,8 @@ import { P9MagicCardFilterStore } from '../../state/magic-card-filter.store';
 export function useGameplayStatPredicateBuilderFacade(): [
   predicates: P9Predicate<number>[],
   addPredicate: (attribute: string, expression: number) => void,
-  updatePredicate: (id: string, patch: Partial<P9Predicate<number>>) => void,
-  removePredicate: (id: string) => void,
+  updatePredicate: (id: ID, patch: Partial<P9Predicate<number>>) => void,
+  removePredicate: (id: ID) => void,
 ] {
   const store = useDependency(P9MagicCardFilterStore);
   const query = useDependency(P9MagicCardFilterQuery);
@@ -42,7 +42,7 @@ export function useGameplayStatPredicateBuilderFacade(): [
   );
 
   const updatePredicate = useCallback(
-    (id: string, patch: Partial<P9Predicate<number>>) => {
+    (id: ID, patch: Partial<P9Predicate<number>>) => {
       store.update('gameplay.stats', (draft: P9AttributePredicate<number>) => {
         (draft.predicates as P9Predicate<number>[]) = arrayUpdate(draft.predicates as P9Predicate<number>[], id, patch);
       });
@@ -51,7 +51,7 @@ export function useGameplayStatPredicateBuilderFacade(): [
   );
 
   const removePredicate = useCallback(
-    (id: string) => {
+    (id: ID) => {
       store.update('gameplay.stats', (draft) => {
         draft.predicates = arrayRemove(draft.predicates, id);
       });

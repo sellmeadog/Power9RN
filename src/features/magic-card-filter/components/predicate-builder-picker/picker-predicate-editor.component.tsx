@@ -2,15 +2,17 @@ import React, { FunctionComponent } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Icon, Text } from 'react-native-elements';
 
+import { ID } from '@datorama/akita';
+
 import { P9ItemSeparator } from '../../../../components';
 import { P9LogicalOperator, P9Predicate } from '../../model/predicate';
 import { P9LogicalOperatorToggle } from '../logical-operator-toggle/logical-operator-toggle';
 
 export interface P9PickerPredicateEditorProps {
-  id: string;
-  onLogicalOperatorToggle?(id: string, logicalOperator: P9LogicalOperator): void;
+  id: ID;
+  onLogicalOperatorToggle?(id: ID, logicalOperator: P9LogicalOperator): void;
   predicate?: P9Predicate<{ value: string; selected: boolean }>;
-  remove?(id: string): void;
+  remove?(id: ID): void;
 }
 
 export const P9PickerPredicateEditor: FunctionComponent<P9PickerPredicateEditorProps> = ({

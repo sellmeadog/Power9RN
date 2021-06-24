@@ -9,7 +9,13 @@ import { arrayAdd, arrayRemove, arrayToggle, arrayUpdate, ID } from '@datorama/a
 import { useNavigation } from '@react-navigation/core';
 
 import { useDependency } from '../../../core/di';
-import { P9ColorPredicateExpression, P9LogicalOperator, P9Predicate, P9StringOperator } from '../model/predicate';
+import {
+  P9ColorPredicateExpression,
+  P9LogicalOperator,
+  P9Predicate,
+  P9PredicateAttributeGroup,
+  P9StringOperator,
+} from '../model/predicate';
 import { P9MagicCardFilterQuery } from './magic-card-filter.query';
 import { P9MagicCardFilterStore } from './magic-card-filter.store';
 
@@ -21,6 +27,19 @@ export class P9MagicCardFilterService {
     this.query.attributePredicates(attribute);
 
   selectAttributeSelection = (attribute: string) => this.query.attributeSelection(attribute);
+
+  parseExpression = <E extends number | string>(attribute: string, expression: E) => {
+    const expressionType = typeof expression;
+
+    switch (expressionType) {
+      case 'string':
+        this.parseStringExpression(attribute, expression as string);
+        break;
+
+      default:
+        throw new Error(`Cannot parse an expression of type ${expressionType}`);
+    }
+  };
 
   parseStringExpression = (
     attribute: string,
@@ -63,6 +82,17 @@ export class P9MagicCardFilterService {
   updatePredicate = <E = any>(attribute: string, id: ID, patch: Partial<P9Predicate<E>>) => {
     this.store.update(attribute, (draft) => {
       draft.predicates = arrayUpdate(draft.predicates, id, patch);
+    });
+  };
+
+  updateAttributeGroup = <E extends number | string = any>(
+    attribute: string,
+    patch: Partial<P9PredicateAttributeGroup<E>>,
+  ) => {
+    this.store.update(attribute, (draft) => {
+      Object.entries(patch).forEach(([key, value]) => {
+        draft[key] = value;
+      });
     });
   };
 }
