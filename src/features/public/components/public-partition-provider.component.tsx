@@ -2,10 +2,11 @@ import { useObservableState } from 'observable-hooks';
 import React, { createContext, FunctionComponent, useCallback, useContext, useEffect, useMemo, useRef } from 'react';
 import { Results } from 'realm';
 
+import { useDependency } from '../../../core/di';
 import { P9MagicCard } from '../../../core/public';
 import { makePublicPartitionService } from '../../../core/public/state/public-partition.service';
 import { useAuthorizationFacade } from '../../authorization';
-import { useMagicCardFilterQuery } from '../../magic-card-filter';
+import { P9MagicCardFilterQuery } from '../../magic-card-filter/state/magic-card-filter/magic-card-filter.query';
 import { makeMagicCardGalleryStore, P9MagicCardGalleryStateTuple } from '../../magic-cards/state/magic-card.store';
 
 const P9PartitionContext = createContext<{ magicCardGallery: P9MagicCardGalleryStateTuple } | undefined>(undefined);
@@ -15,7 +16,7 @@ export interface P9PartitionProviderProps {}
 export const P9PartitionProvider: FunctionComponent<P9PartitionProviderProps> = ({ children }) => {
   const [{ user }] = useAuthorizationFacade();
   const serviceRef = useRef(makePublicPartitionService());
-  const galleryRef = useRef(makeMagicCardGalleryStore(serviceRef.current[0], useMagicCardFilterQuery()));
+  const galleryRef = useRef(makeMagicCardGalleryStore(serviceRef.current[0], useDependency(P9MagicCardFilterQuery)));
 
   useEffect(() => {
     if (!user || !user.isLoggedIn) {

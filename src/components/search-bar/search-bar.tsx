@@ -2,7 +2,7 @@ import React, { FunctionComponent, useCallback } from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
 import { usePower9Theme } from '../../core/theme';
-import { useMagicCardFilterFacade } from '../../features/magic-card-filter/state/magic-card-filter.service';
+import { useMagicCardFilterFacade } from '../../features/magic-card-filter';
 import { P9ToggleButton } from '../button-toggle/toggle-button';
 import { P9SearchBox } from '../search-box/search-box';
 

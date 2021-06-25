@@ -4,9 +4,14 @@ import { singleton } from 'tsyringe';
 
 import { QueryEntity } from '@datorama/akita';
 
-import { whenDefined } from '../../../core/operators';
-import { P9LogicalOperator, P9Predicate, P9PredicateAttributeGroup, P9PredicateExpression } from '../model/predicate';
-import { serializeColorPredicate, serializeLegalityPredicate } from '../model/serialization';
+import { whenDefined } from '../../../../core/operators';
+import {
+  P9LogicalOperator,
+  P9Predicate,
+  P9PredicateAttributeGroup,
+  P9PredicateExpression,
+} from '../../model/predicate';
+import { serializeColorPredicate, serializeLegalityPredicate } from '../../model/serialization';
 import { P9MagicCardFilterState, P9MagicCardFilterStore } from './magic-card-filter.store';
 
 const MAGIC_CARD_FILTER_ATTRIBUTES = [

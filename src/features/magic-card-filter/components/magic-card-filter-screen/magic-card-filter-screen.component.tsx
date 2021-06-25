@@ -6,8 +6,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/core';
 
 import { P9ItemSeparator, P9TableDivider } from '../../../../components';
+import { useMagicCardFilterFacade } from '../../facades/magic-card-filter.facade';
 import { P9StringOperator } from '../../model/predicate';
-import { useMagicCardFilterFacade } from '../../state/magic-card-filter.service';
 import { P9ColorPredicateBuilder } from '../predicate-builder-color/color-predicate-builder.component';
 import { P9GameplayStatPredicateBuilder } from '../predicate-builder-gameplay-stat/predicate-builder-gameplay-stat.component';
 import { P9PickerPredicateBuilder } from '../predicate-builder-picker/picker-predicate-builder.component';

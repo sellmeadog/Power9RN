@@ -3,7 +3,7 @@ import { singleton } from 'tsyringe';
 
 import { EntityState, EntityStore } from '@datorama/akita';
 
-import { P9PredicateAttributeGroup } from '../model/predicate';
+import { P9PredicateAttributeGroup } from '../../model/predicate';
 
 export interface P9MagicCardFilterState extends EntityState<P9PredicateAttributeGroup, string> {}
 

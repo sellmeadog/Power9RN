@@ -1,14 +1,10 @@
-import { useObservableState } from 'observable-hooks';
-import { useCallback } from 'react';
 import { Observable } from 'rxjs';
 import { singleton } from 'tsyringe';
 import { v1 } from 'uuid';
 
 import { arrayAdd, arrayRemove, arrayToggle, arrayUpdate, ID } from '@datorama/akita';
-import { useNavigation } from '@react-navigation/core';
 
-import { useDependency } from '../../../core/di';
-import { whenDefined } from '../../../core/operators';
+import { whenDefined } from '../../../../core/operators';
 import {
   P9LogicalOperator,
   P9Predicate,
@@ -16,7 +12,7 @@ import {
   P9PredicateExpression,
   P9PredicateOptions,
   P9StringOperator,
-} from '../model/predicate';
+} from '../../model/predicate';
 import { P9MagicCardFilterQuery } from './magic-card-filter.query';
 import { P9MagicCardFilterStore } from './magic-card-filter.store';
 
@@ -104,54 +100,6 @@ export class P9MagicCardFilterService {
       );
     });
   };
-}
-
-export function useMagicCardFilterQuery() {
-  return useDependency(P9MagicCardFilterQuery);
-}
-
-export function useMagicCardStringPredicateEditor({
-  attribute,
-  id,
-}: P9Predicate<string>): [update: (patch: Partial<P9Predicate>) => void, remove: () => void] {
-  const store = useDependency(P9MagicCardFilterStore);
-
-  return [
-    useCallback(
-      (patch: Partial<P9Predicate<string>>) => {
-        store.update(attribute, (state) => {
-          state.predicates = arrayUpdate(state.predicates as any, id, patch);
-        });
-      },
-      [attribute, id, store],
-    ),
-    useCallback(
-      () =>
-        store.update(attribute, (state) => {
-          state.predicates = arrayRemove(state.predicates as any, id);
-        }),
-      [attribute, id, store],
-    ),
-  ];
-}
-
-export function useMagicCardFilterFacade(): [
-  state: { predicate: string; canReset: boolean },
-  reset: () => void,
-  navigate: () => void,
-] {
-  const { navigate } = useNavigation();
-  const store = useDependency(P9MagicCardFilterStore);
-  const query = useDependency(P9MagicCardFilterQuery);
-
-  return [
-    {
-      predicate: useObservableState(query.predicate$, ''),
-      canReset: useObservableState(query.canReset$, false),
-    },
-    useCallback(() => store.reset(), [store]),
-    useCallback(() => navigate('P9:MagicCardFilter'), [navigate]),
-  ];
 }
 
 const makeStringPredicate =

@@ -13,7 +13,7 @@ import {
   P9PredicateExpression,
   P9PredicateOptions,
 } from '../model/predicate';
-import { P9MagicCardFilterService } from '../state/magic-card-filter.service';
+import { P9MagicCardFilterService } from '../state/magic-card-filter/magic-card-filter.service';
 
 export type P9PredicateAttributeGroupActions<E extends P9PredicateExpression, S> = {
   parseExpression: (expression: E, options: P9PredicateOptions) => void;
