@@ -6,9 +6,9 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import { useNavigation } from '@react-navigation/core';
 
 import { usePower9Theme } from '../../../../core/theme';
+import { usePredicateAttributeGroupFacade } from '../../facades/predicate-attribute-group.facade';
 import { P9ComparisonOperator, P9LogicalOperator, P9StringOperator } from '../../model/predicate';
 import { P9PickerPredicateEditor } from './picker-predicate-editor.component';
-import { usePickerPredicateEditor } from './picker-predicate.facade';
 
 export type P9PredicateBuilderNavigationParams = {
   comparisonOperator?: P9ComparisonOperator;
@@ -40,7 +40,14 @@ export const P9PickerPredicateBuilder: FunctionComponent<P9PickerPredicateBuilde
 }) => {
   const { navigate } = useNavigation();
   const [{ colors }] = usePower9Theme();
-  const [predicates, update, remove] = usePickerPredicateEditor(attribute);
+  const [{ predicates }, _, { removePredicate, updatePredicate }] = usePredicateAttributeGroupFacade<string>(
+    attribute,
+    {
+      comparisonOperator,
+      logicalOperator,
+      stringOperator,
+    },
+  );
   const animated = useSharedValue(colors!.background!);
 
   const pressedStyle = useAnimatedStyle(() => {
@@ -50,8 +57,8 @@ export const P9PickerPredicateBuilder: FunctionComponent<P9PickerPredicateBuilde
   });
 
   const handleLogicalOperatorToggle = useCallback(
-    (id: string, value: P9LogicalOperator) => update(id, { logicalOperator: value }),
-    [update],
+    (id: string, value: P9LogicalOperator) => updatePredicate(id, { logicalOperator: value }),
+    [updatePredicate],
   );
 
   const handlePress = useCallback(
@@ -83,7 +90,7 @@ export const P9PickerPredicateBuilder: FunctionComponent<P9PickerPredicateBuilde
           key={index}
           id={predicate.id}
           predicate={predicate}
-          remove={remove}
+          onRemove={removePredicate}
           onLogicalOperatorToggle={handleLogicalOperatorToggle}
         />
       ))}

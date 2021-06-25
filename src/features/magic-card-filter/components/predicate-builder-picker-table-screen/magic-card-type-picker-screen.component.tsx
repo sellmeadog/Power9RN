@@ -5,9 +5,9 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 import { P9PickerTableScreenTemplate } from '../../../../components';
 import { P9PickerTableSelectionChange } from '../../../../components/picker-table/picker-table-item';
+import { usePredicateAttributeGroupFacade } from '../../facades/predicate-attribute-group.facade';
 import { useCatalogFacade } from '../../state/scryfall-catalog/scryfall-catalog.service';
 import { P9MagicCardFilterNavigatorParamList } from '../magic-card-filter-navigator/magic-card-filter-navigator.component';
-import { usePickerPredicateTableFacade } from '../predicate-builder-picker/picker-predicate-table.facade';
 
 export interface P9PredicatePickerTableScreenProps {
   navigation: StackNavigationProp<P9MagicCardFilterNavigatorParamList, 'P9:Modal:MagicCardFilter:PredicatePickerTable'>;
@@ -17,11 +17,11 @@ export interface P9PredicatePickerTableScreenProps {
 export const P9PredicatePickerTableScreen: FunctionComponent<P9PredicatePickerTableScreenProps> = ({ route }) => {
   const { attribute, comparisonOperator, logicalOperator, stringOperator, title } = route.params;
   const [catalogs, expression, setExpression] = useCatalogFacade(attribute);
-  const [{ canReset, selection }, toggle, handleReset] = usePickerPredicateTableFacade(attribute);
+  const [{ canReset, selection }, { reset, togglePredicate }] = usePredicateAttributeGroupFacade(attribute);
 
   const handleSelection = useCallback(
     (change: P9PickerTableSelectionChange) => {
-      toggle({
+      togglePredicate({
         attribute,
         comparisonOperator,
         expression: change.value,
@@ -30,7 +30,7 @@ export const P9PredicatePickerTableScreen: FunctionComponent<P9PredicatePickerTa
         stringOperator,
       });
     },
-    [attribute, comparisonOperator, logicalOperator, stringOperator, toggle],
+    [attribute, comparisonOperator, logicalOperator, stringOperator, togglePredicate],
   );
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export const P9PredicatePickerTableScreen: FunctionComponent<P9PredicatePickerTa
       canReset={canReset}
       expression={expression}
       onExpressionChange={setExpression}
-      onReset={handleReset}
+      onReset={reset}
       onSelection={handleSelection}
       options={catalogs}
       selection={selection}

@@ -10,28 +10,28 @@ import { P9LogicalOperatorToggle } from '../logical-operator-toggle/logical-oper
 
 export interface P9PickerPredicateEditorProps {
   id: ID;
-  onLogicalOperatorToggle?(id: ID, logicalOperator: P9LogicalOperator): void;
-  predicate?: P9Predicate<{ value: string; selected: boolean }>;
-  remove?(id: ID): void;
+  onLogicalOperatorToggle(id: ID, logicalOperator: P9LogicalOperator): void;
+  onRemove(id: ID): void;
+  predicate: P9Predicate<string>;
 }
 
 export const P9PickerPredicateEditor: FunctionComponent<P9PickerPredicateEditorProps> = ({
   id,
   onLogicalOperatorToggle,
   predicate,
-  remove,
+  onRemove,
 }) => {
   const handleChangeLogicalOperator = (logicalOperator: P9LogicalOperator) =>
     onLogicalOperatorToggle?.(id, logicalOperator);
 
-  const handleRemove = () => remove?.(id);
+  const handleRemove = () => onRemove?.(id);
 
   return (
     <>
       <P9ItemSeparator marginLeft={15} />
       <View style={P9PickerPredicateEditorTheme.container}>
-        <P9LogicalOperatorToggle onChange={handleChangeLogicalOperator} value={predicate?.logicalOperator} />
-        <Text style={[P9PickerPredicateEditorTheme.title]}>{predicate?.expression}</Text>
+        <P9LogicalOperatorToggle onChange={handleChangeLogicalOperator} value={predicate.logicalOperator} />
+        <Text style={[P9PickerPredicateEditorTheme.title]}>{predicate.expression}</Text>
         <Icon name={'minus-circle-outline'} type={'material-community'} size={15} onPress={handleRemove} />
       </View>
     </>
