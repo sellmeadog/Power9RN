@@ -4,9 +4,9 @@ import { v1 } from 'uuid';
 
 import { arrayAdd, EntityState, EntityStore, isArray } from '@datorama/akita';
 
-import { P9AttributePredicate, P9LogicalOperator, P9Predicate, P9StringOperator } from '../model/predicate';
+import { P9LogicalOperator, P9Predicate, P9PredicateAttributeGroup, P9StringOperator } from '../model/predicate';
 
-export interface P9MagicCardFilterState extends EntityState<P9AttributePredicate, string> {}
+export interface P9MagicCardFilterState extends EntityState<P9PredicateAttributeGroup, string> {}
 
 @singleton()
 export class P9MagicCardFilterStore extends EntityStore<P9MagicCardFilterState> {
@@ -22,7 +22,7 @@ export class P9MagicCardFilterStore extends EntityStore<P9MagicCardFilterState> 
       .filter(Boolean)
       .map(makeStringPredicate(attribute, stringOperator));
 
-    this.update(attribute, (state: P9AttributePredicate<string>) => {
+    this.update(attribute, (state: P9PredicateAttributeGroup<string>) => {
       if (isArray(state.predicates)) {
         state.predicates = arrayAdd(state.predicates, predicates);
       } else {

@@ -11,44 +11,40 @@ import {
   P9LogicalOperator,
   P9Predicate,
   P9PredicateAttributeGroup,
+  P9PredicateAttributeGroupState,
+  P9PredicateExpression,
   P9StringOperator,
 } from '../model/predicate';
 import { P9MagicCardFilterService } from '../state/magic-card-filter.service';
 
-export type P9PredicateAttributeGroupState<E extends number | string> = {
-  canReset: boolean;
-  predicates: P9Predicate<E>[];
-  selection: HashMap<boolean>;
-};
+// export function usePredicateAttributeGroupState<E extends number | string>(
+//   attribute: string,
+// ): P9PredicateAttributeGroupState<E> {
+//   const service = useDependency(P9MagicCardFilterService);
+//   const predicates$ = useObservable(() => service.selectAttributePredicates(attribute));
+//   const canReset$ = useObservable(() => predicates$.pipe(toBoolean()));
+//   const selection$ = useObservable(() => predicates$.pipe(toSelection()));
 
-export function usePredicateAttributeGroupState<E extends number | string>(
-  attribute: string,
-): P9PredicateAttributeGroupState<E> {
-  const service = useDependency(P9MagicCardFilterService);
-  const predicates$ = useObservable(() => service.selectAttributePredicates(attribute));
-  const canReset$ = useObservable(() => predicates$.pipe(toBoolean()));
-  const selection$ = useObservable(() => predicates$.pipe(toSelection()));
+//   return {
+//     canReset: useObservableState(canReset$, false),
+//     predicates: useObservableState(predicates$, []),
+//     selection: useObservableState(selection$, {}),
+//   };
+// }
 
-  return {
-    canReset: useObservableState(canReset$, false),
-    predicates: useObservableState(predicates$, []),
-    selection: useObservableState(selection$, {}),
-  };
-}
-
-export type P9PredicateAttributeGroupActions<E extends number | string> = {
+export type P9PredicateAttributeGroupActions<E extends P9PredicateExpression, S> = {
   parseExpression: (expression: E) => void;
   reset: () => void;
   togglePredicate: (predicate: P9Predicate<E>) => void;
-  update: (patch: Partial<P9PredicateAttributeGroup<E>>) => void;
+  update: (patch: Partial<P9PredicateAttributeGroup<E, S>>) => void;
 };
 
-export type P9PredicateActions<E extends number | string> = {
+export type P9PredicateActions<E extends P9PredicateExpression> = {
   removePredicate: (id: ID) => void;
   updatePredicate: (id: ID, patch: Partial<P9Predicate<E>>) => void;
 };
 
-export function usePredicateAttributeGroupFacade<E extends number | string>(
+export function usePredicateAttributeGroupFacade<E extends P9PredicateExpression = any, S = any>(
   attribute: string,
   options: {
     comparisonOperator?: P9ComparisonOperator;
@@ -56,18 +52,21 @@ export function usePredicateAttributeGroupFacade<E extends number | string>(
     stringOperator?: P9StringOperator;
   } = { logicalOperator: P9LogicalOperator.And },
 ): [
-  state: P9PredicateAttributeGroupState<E>,
-  groupActions: P9PredicateAttributeGroupActions<E>,
+  state: P9PredicateAttributeGroupState<E, S>,
+  groupActions: P9PredicateAttributeGroupActions<E, S>,
   predicateActions: P9PredicateActions<E>,
 ] {
   const { comparisonOperator, logicalOperator, stringOperator } = options;
   const service = useDependency(P9MagicCardFilterService);
 
-  const predicates$ = useObservable(() => service.selectAttributePredicates(attribute));
+  const group$ = useObservable(() => service.selectAttributeGroup(attribute));
+  const predicates$ = useObservable(() => group$.pipe(map(({ predicates }) => predicates as P9Predicate<E>[])));
   const canReset$ = useObservable(() => predicates$.pipe(toBoolean()));
   const selection$ = useObservable(() => predicates$.pipe(toSelection()));
   const state$ = useObservable(() =>
-    combineLatest({ canReset: canReset$, predicates: predicates$, selection: selection$ }),
+    combineLatest([canReset$, group$, selection$]).pipe(
+      map(([canReset, entity, selection]) => ({ canReset, ...entity, selection })),
+    ),
   );
 
   const togglePredicate = useCallback(
@@ -99,7 +98,7 @@ export function usePredicateAttributeGroupFacade<E extends number | string>(
   );
 
   const update = useCallback(
-    (patch: Partial<P9PredicateAttributeGroupState<E>>) => {
+    (patch: Partial<P9PredicateAttributeGroupState<E, S>>) => {
       service.updateAttributeGroup(attribute, patch);
     },
     [attribute, service],
@@ -110,7 +109,7 @@ export function usePredicateAttributeGroupFacade<E extends number | string>(
   }, [attribute, service]);
 
   return [
-    useObservableState(state$, { canReset: false, predicates: [], selection: {} }),
+    useObservableState(state$, { attribute: '', canReset: false, predicates: [], selection: {} }),
     useMemo(
       () => ({
         parseExpression,

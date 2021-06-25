@@ -1,7 +1,7 @@
-import { useObservable, useObservableState } from 'observable-hooks';
+import { useObservableState } from 'observable-hooks';
 import { useCallback } from 'react';
 import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { singleton } from 'tsyringe';
 import { v1 } from 'uuid';
 
@@ -9,11 +9,12 @@ import { arrayAdd, arrayRemove, arrayToggle, arrayUpdate, ID } from '@datorama/a
 import { useNavigation } from '@react-navigation/core';
 
 import { useDependency } from '../../../core/di';
+import { whenDefined } from '../../../core/operators';
 import {
-  P9ColorPredicateExpression,
   P9LogicalOperator,
   P9Predicate,
   P9PredicateAttributeGroup,
+  P9PredicateExpression,
   P9StringOperator,
 } from '../model/predicate';
 import { P9MagicCardFilterQuery } from './magic-card-filter.query';
@@ -23,12 +24,11 @@ import { P9MagicCardFilterStore } from './magic-card-filter.store';
 export class P9MagicCardFilterService {
   constructor(private store: P9MagicCardFilterStore, private query: P9MagicCardFilterQuery) {}
 
-  selectAttributePredicates = <E = any>(attribute: string): Observable<P9Predicate<E>[]> =>
-    this.query.attributePredicates(attribute);
+  selectAttributeGroup = <E extends P9PredicateExpression = any, S = any>(
+    attribute: string,
+  ): Observable<P9PredicateAttributeGroup<E, S>> => this.query.selectEntity(attribute).pipe(whenDefined());
 
-  selectAttributeSelection = (attribute: string) => this.query.attributeSelection(attribute);
-
-  parseExpression = <E extends number | string>(attribute: string, expression: E) => {
+  parseExpression = <E extends P9PredicateExpression>(attribute: string, expression: E) => {
     const expressionType = typeof expression;
 
     switch (expressionType) {
@@ -65,34 +65,44 @@ export class P9MagicCardFilterService {
     });
   };
 
-  resetAll = () => {
-    this.store.reset();
-  };
+  // resetAll = () => {
+  //   this.store.reset();
+  // };
 
   resetAttribute = (attribute: string) => {
     this.store.resetAttribute(attribute);
   };
 
-  togglePredicate = <E = any>(attribute: string, predicate: P9Predicate<E>) => {
+  togglePredicate = <E extends P9PredicateExpression = any>(attribute: string, predicate: P9Predicate<E>) => {
     this.store.update(attribute, (draft) => {
       draft.predicates = arrayToggle(draft.predicates, predicate, ({ expression: a }, { expression: b }) => a === b);
     });
   };
 
-  updatePredicate = <E = any>(attribute: string, id: ID, patch: Partial<P9Predicate<E>>) => {
+  updatePredicate = <E extends P9PredicateExpression = any>(
+    attribute: string,
+    id: ID,
+    patch: Partial<P9Predicate<E>>,
+  ) => {
     this.store.update(attribute, (draft) => {
       draft.predicates = arrayUpdate(draft.predicates, id, patch);
     });
   };
 
-  updateAttributeGroup = <E extends number | string = any>(
+  updateAttributeGroup = <E extends P9PredicateExpression = any, S = any>(
     attribute: string,
-    patch: Partial<P9PredicateAttributeGroup<E>>,
+    patch: Partial<P9PredicateAttributeGroup<E, S>>,
   ) => {
     this.store.update(attribute, (draft) => {
-      Object.entries(patch).forEach(([key, value]) => {
-        draft[key] = value;
-      });
+      if (patch.metadata) {
+        if (draft.metadata) {
+          Object.entries(patch.metadata).forEach(([key, value]) => {
+            draft.metadata[key] = value;
+          });
+        } else {
+          draft.metadata = patch.metadata;
+        }
+      }
     });
   };
 }
@@ -101,58 +111,58 @@ export function useMagicCardFilterQuery() {
   return useDependency(P9MagicCardFilterQuery);
 }
 
-export function useMagicCardColorPredicateBuilder(): [
-  expression: P9ColorPredicateExpression | undefined,
-  update: (patch: Partial<P9ColorPredicateExpression>) => void,
-] {
-  const store = useDependency(P9MagicCardFilterStore);
-  const query = useDependency(P9MagicCardFilterQuery);
+// export function useMagicCardColorPredicateBuilder(): [
+//   expression: P9ColorPredicateExpression | undefined,
+//   update: (patch: Partial<P9ColorPredicateExpression>) => void,
+// ] {
+//   const store = useDependency(P9MagicCardFilterStore);
+//   const query = useDependency(P9MagicCardFilterQuery);
 
-  const [expression] = useObservableState(
-    () => query.colorPredicate$,
-    () => ({ fuzziness: 0, selection: {} }),
-  );
+//   const [expression] = useObservableState(
+//     () => query.colorPredicate$,
+//     () => ({ fuzziness: 0, selection: {} }),
+//   );
 
-  const update = useCallback(
-    ({ selection, ...rest }: Partial<P9ColorPredicateExpression>) => {
-      store.update('card_faces.colors', (draft) => {
-        if (selection) {
-          draft.predicates.selection = selection;
-        }
-        draft.predicates = { ...draft.predicates, ...rest };
-      });
-    },
-    [store],
-  );
+//   const update = useCallback(
+//     ({ selection, ...rest }: Partial<P9ColorPredicateExpression>) => {
+//       store.update('card_faces.colors', (draft) => {
+//         if (selection) {
+//           draft.predicates.selection = selection;
+//         }
+//         draft.predicates = { ...draft.predicates, ...rest };
+//       });
+//     },
+//     [store],
+//   );
 
-  return [expression, update];
-}
+//   return [expression, update];
+// }
 
-export function useMagicCardStringPredicateBuilder(
-  attribute: string,
-): [
-  predicates: P9Predicate<string>[] | undefined,
-  parser: (expression: string, stringOperator: P9StringOperator) => void,
-  reset: () => void,
-] {
-  const store = useDependency(P9MagicCardFilterStore);
-  const query = useDependency(P9MagicCardFilterQuery);
+// export function useMagicCardStringPredicateBuilder(
+//   attribute: string,
+// ): [
+//   predicates: P9Predicate<string>[] | undefined,
+//   parser: (expression: string, stringOperator: P9StringOperator) => void,
+//   reset: () => void,
+// ] {
+//   const store = useDependency(P9MagicCardFilterStore);
+//   const query = useDependency(P9MagicCardFilterQuery);
 
-  return [
-    useObservableState(
-      useObservable(
-        (attribute$) => attribute$.pipe(switchMap(([attribute_]) => query.predicateArray(attribute_))),
-        [attribute],
-      ),
-    ),
-    useCallback(
-      (expression: string, stringOperator: P9StringOperator) =>
-        store.parseStringExpression(attribute, expression, stringOperator),
-      [attribute, store],
-    ),
-    useCallback(() => store.resetAttribute(attribute), [attribute, store]),
-  ];
-}
+//   return [
+//     useObservableState(
+//       useObservable(
+//         (attribute$) => attribute$.pipe(switchMap(([attribute_]) => query.predicateArray(attribute_))),
+//         [attribute],
+//       ),
+//     ),
+//     useCallback(
+//       (expression: string, stringOperator: P9StringOperator) =>
+//         store.parseStringExpression(attribute, expression, stringOperator),
+//       [attribute, store],
+//     ),
+//     useCallback(() => store.resetAttribute(attribute), [attribute, store]),
+//   ];
+// }
 
 export function useMagicCardStringPredicateEditor({
   attribute,
