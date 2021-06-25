@@ -1,3 +1,5 @@
+import { v1 } from 'uuid';
+
 import { serializeColorPredicate } from './serialization';
 
 describe('Predicate Serialization', () => {
@@ -7,7 +9,11 @@ describe('Predicate Serialization', () => {
 
     const actual = serializeColorPredicate({
       attribute: 'card_faces.colors',
-      predicates: { fuzziness: 0, selection: { W: true, U: true } },
+      metadata: { fuzziness: 0 },
+      predicates: [
+        { attribute: 'card_faces.colors', expression: 'W', id: v1() },
+        { attribute: 'card_faces.colors', expression: 'U', id: v1() },
+      ],
     });
 
     expect(actual).toEqual(expected);
@@ -18,7 +24,11 @@ describe('Predicate Serialization', () => {
 
     const actual = serializeColorPredicate({
       attribute: 'card_faces.colors',
-      predicates: { fuzziness: 1, selection: { W: true, U: true } },
+      metadata: { fuzziness: 1 },
+      predicates: [
+        { attribute: 'card_faces.colors', expression: 'W', id: v1() },
+        { attribute: 'card_faces.colors', expression: 'U', id: v1() },
+      ],
     });
 
     expect(actual).toEqual(expected);
@@ -30,7 +40,11 @@ describe('Predicate Serialization', () => {
 
     const actual = serializeColorPredicate({
       attribute: 'card_faces.colors',
-      predicates: { fuzziness: 2, selection: { W: true, U: true } },
+      metadata: { fuzziness: 2 },
+      predicates: [
+        { attribute: 'card_faces.colors', expression: 'W', id: v1() },
+        { attribute: 'card_faces.colors', expression: 'U', id: v1() },
+      ],
     });
 
     expect(actual).toEqual(expected);
@@ -40,7 +54,8 @@ describe('Predicate Serialization', () => {
     const expected = '';
     const actual = serializeColorPredicate({
       attribute: 'card_faces.colors',
-      predicates: { fuzziness: 2, selection: { W: false, U: false, B: false, R: false, G: false, C: false } },
+      metadata: { fuzziness: 2 },
+      predicates: [],
     });
 
     expect(actual).toEqual(expected);

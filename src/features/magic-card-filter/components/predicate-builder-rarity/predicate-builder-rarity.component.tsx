@@ -1,14 +1,26 @@
 import React, { FunctionComponent } from 'react';
 import { StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
+import { v1 } from 'uuid';
 
-import { P9MagicCardRarityToggleButtonGroup, P9RowView } from '../../../../components';
-import { useMagicCardRarityPredicateBuilderFacade } from './predicate-builder-rarity.facade';
+import { P9MagicCardRarity, P9MagicCardRarityToggleButtonGroup, P9RowView } from '../../../../components';
+import { usePredicateAttributeGroupFacade } from '../../facades/predicate-attribute-group.facade';
+import { P9LogicalOperator, P9StringOperator } from '../../model/predicate';
 
 export interface P9MagicCardRarityPredicateBuilderProps {}
 
 export const P9MagicCardRarityPredicateBuilder: FunctionComponent<P9MagicCardRarityPredicateBuilderProps> = () => {
-  const [{ selection }, handleToggle] = useMagicCardRarityPredicateBuilderFacade();
+  const [{ selection }, { togglePredicate }] = usePredicateAttributeGroupFacade('rarity');
+
+  const handleToggle = (expression: P9MagicCardRarity) => {
+    togglePredicate({
+      attribute: 'rarity',
+      expression,
+      id: v1(),
+      logicalOperator: P9LogicalOperator.Or,
+      stringOperator: P9StringOperator.Equals,
+    });
+  };
 
   return (
     <P9RowView style={[P9MagicCardRarityPredicateBuilderTheme.container]}>

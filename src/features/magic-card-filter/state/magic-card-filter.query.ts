@@ -21,11 +21,15 @@ const MAGIC_CARD_FILTER_ATTRIBUTES = [
   'card_faces.types',
   'cmc',
   'legalities',
-  // 'rarity',
+  'rarity',
 ];
 
 @singleton()
 export class P9MagicCardFilterQuery extends QueryEntity<P9MagicCardFilterState> {
+  canReset$: Observable<boolean> = this.selectAll({ filterBy: ({ predicates }) => Boolean(predicates.length) }).pipe(
+    map(({ length }) => Boolean(length)),
+  );
+
   predicate$: Observable<string> = combineLatest(
     MAGIC_CARD_FILTER_ATTRIBUTES.map((attribute) =>
       this.selectEntity(attribute).pipe(

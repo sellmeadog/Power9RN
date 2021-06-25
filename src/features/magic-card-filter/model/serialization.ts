@@ -1,13 +1,5 @@
-import { HashMap, isArray } from '@datorama/akita';
-
 import { P9GameSymbolType } from '../../../components';
-import {
-  P9ComparisonOperator,
-  P9LogicalOperator,
-  P9Predicate,
-  P9PredicateAttributeGroup,
-  P9StringOperator,
-} from './predicate';
+import { P9LogicalOperator, P9Predicate, P9PredicateAttributeGroup } from './predicate';
 
 export function serializeColorPredicate({
   attribute,
@@ -76,22 +68,6 @@ export function serializeColorPredicate({
   return predicate ? `(${predicate.replace(/^(AND\s?|OR)\s+/, '')})` : '';
 }
 
-export function serializePickerPredicate(
-  predicate: P9AttributePredicate<P9PickerPredicateExpression>,
-  serializeFn = defaultPickerSerializeFn,
-) {
-  const predicates = Object.values(predicate.predicates as HashMap<P9Predicate<P9PickerPredicateExpression>>);
-
-  const serialization = predicates
-    .filter(({ expression }) => expression.selected)
-    .sort(byLogicalOperator)
-    .map(serializeFn)
-    .join(' ')
-    .replace(/^(AND\s?|OR)\s+/, '');
-
-  return serialization ? `(${serialization})` : undefined;
-}
-
 export function serializeLegalityPredicate({ predicates }: P9PredicateAttributeGroup<string>) {
   const serialization = predicates
     .filter(({ expression }) => Boolean(expression))
@@ -102,96 +78,6 @@ export function serializeLegalityPredicate({ predicates }: P9PredicateAttributeG
 
   return serialization ? `(${serialization})` : '';
 }
-
-export function serializeStringPredicate({ predicates }: P9AttributePredicate<string>) {
-  if (isArray(predicates)) {
-    const predicate = predicates
-      .filter(({ expression }) => Boolean(expression))
-      .sort(byLogicalOperator)
-      .map(
-        (
-          {
-            attribute,
-            expression,
-            logicalOperator = P9LogicalOperator.And,
-            stringOperator = P9StringOperator.BeginsWith,
-          },
-          index,
-        ) =>
-          [
-            index === 0 ? (logicalOperator === P9LogicalOperator.Not ? 'NOT' : '') : logicalOperator,
-            attribute,
-            stringOperator,
-            `"${expression.trim()}"`,
-          ]
-            .join(' ')
-            .trim(),
-      )
-      .join(' ');
-
-    return predicate ? `(${predicate})` : undefined;
-  } else {
-    throw new Error('serializeStringPredicate was called for an attribute predicate whose body is not an array.');
-  }
-}
-
-export function serializeNumericPredicate({ predicates }: P9AttributePredicate<number>) {
-  if (isArray(predicates)) {
-    const predicate = predicates
-      .filter(({ expression }) => Number.isInteger(expression))
-      .sort(byLogicalOperator)
-      .map(
-        (
-          {
-            attribute,
-            comparisonOperator = P9ComparisonOperator.Equal,
-            expression,
-            logicalOperator = P9LogicalOperator.And,
-          },
-          index,
-        ) =>
-          [
-            index === 0 ? (logicalOperator === P9LogicalOperator.Not ? 'NOT' : '') : logicalOperator,
-            attribute,
-            comparisonOperator,
-            expression,
-          ]
-            .join(' ')
-            .trim(),
-      )
-      .join(' ');
-
-    return predicate ? `(${predicate})` : undefined;
-  } else {
-    throw new Error('serializeNumericPredicate was called for an attribute predicate whose body is not an array.');
-  }
-}
-
-export function serialize(predicate: P9AttributePredicate) {
-  switch (predicate.attribute) {
-    case 'card_faces.artist':
-    case 'card_faces.types':
-      return serializePickerPredicate(predicate);
-
-    case 'legalities':
-      return serializeLegalityPredicate(predicate);
-
-    case 'card_faces.colors':
-      return serializeColorPredicate(predicate);
-
-    case 'gameplay.stats':
-      return serializeNumericPredicate(predicate);
-
-    case 'rarity':
-      return serializePickerPredicate(predicate);
-
-    default:
-      return serializeStringPredicate(predicate);
-  }
-}
-
-const defaultPickerSerializeFn = ({ attribute, expression, logicalOperator }: P9Predicate<string>): string =>
-  [logicalOperator, attribute, '=[c]', `"${expression}"`].join(' ').trim();
 
 const legalitySerializeFn = ({ attribute, expression, logicalOperator }: P9Predicate<string>): string => {
   if (logicalOperator === P9LogicalOperator.Not) {
