@@ -21,16 +21,13 @@ export const P9StringPredicateBuilder: FunctionComponent<P9StringPredicateBuilde
   stringOperator = P9StringOperator.BeginsWith,
 }) => {
   const [{ canReset, predicates }, { parseExpression, reset }, { removePredicate, updatePredicate }] =
-    usePredicateAttributeGroupFacade<string>(attribute, {
-      logicalOperator,
-      stringOperator,
-    });
+    usePredicateAttributeGroupFacade<string>(attribute);
   const [expression, setExpression] = useState('');
 
   const handleBlur = useCallback(() => {
-    parseExpression(expression);
+    parseExpression(expression, { logicalOperator, stringOperator });
     setExpression('');
-  }, [parseExpression, expression]);
+  }, [parseExpression, expression, logicalOperator, stringOperator]);
 
   return (
     <>

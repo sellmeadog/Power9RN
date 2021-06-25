@@ -44,3 +44,9 @@ export interface P9Predicate<E extends P9PredicateExpression = any> {
   logicalOperator?: P9LogicalOperator;
   stringOperator?: P9StringOperator;
 }
+
+export type P9PredicateOptions = {
+  comparisonOperator?: P9ComparisonOperator;
+  logicalOperator?: P9LogicalOperator;
+  stringOperator?: P9StringOperator;
+};

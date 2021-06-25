@@ -14,6 +14,7 @@ import {
   P9Predicate,
   P9PredicateAttributeGroup,
   P9PredicateExpression,
+  P9PredicateOptions,
   P9StringOperator,
 } from '../model/predicate';
 import { P9MagicCardFilterQuery } from './magic-card-filter.query';
@@ -27,35 +28,21 @@ export class P9MagicCardFilterService {
     attribute: string,
   ): Observable<P9PredicateAttributeGroup<E, S>> => this.query.selectEntity(attribute).pipe(whenDefined());
 
-  parseExpression = <E extends P9PredicateExpression>(attribute: string, expression: E) => {
+  parseExpression = <E extends P9PredicateExpression>(
+    attribute: string,
+    expression: E,
+    options: P9PredicateOptions,
+  ) => {
     const expressionType = typeof expression;
 
     switch (expressionType) {
       case 'string':
-        this.parseStringExpression(attribute, expression as string);
+        this.parseStringExpression(attribute, expression as string, options);
         break;
 
       default:
         throw new Error(`Cannot parse an expression of type ${expressionType}`);
     }
-  };
-
-  parseStringExpression = (
-    attribute: string,
-    expression: string,
-    logicalOperator = P9LogicalOperator.And,
-    stringOperator = P9StringOperator.BeginsWith,
-  ) => {
-    this.store.update(attribute, (draft) => {
-      draft.predicates = arrayAdd(
-        draft.predicates,
-        expression
-          .trim()
-          .split(' ')
-          .filter(Boolean)
-          .map(makeStringPredicate(attribute, logicalOperator, stringOperator)),
-      );
-    });
   };
 
   removePredicate = (attribute: string, id: ID) => {
@@ -98,6 +85,23 @@ export class P9MagicCardFilterService {
           draft.metadata = patch.metadata;
         }
       }
+    });
+  };
+
+  private parseStringExpression = (
+    attribute: string,
+    expression: string,
+    { logicalOperator = P9LogicalOperator.And, stringOperator = P9StringOperator.BeginsWith }: P9PredicateOptions,
+  ) => {
+    this.store.update(attribute, (draft) => {
+      draft.predicates = arrayAdd(
+        draft.predicates,
+        expression
+          .trim()
+          .split(' ')
+          .filter(Boolean)
+          .map(makeStringPredicate(attribute, logicalOperator, stringOperator)),
+      );
     });
   };
 }

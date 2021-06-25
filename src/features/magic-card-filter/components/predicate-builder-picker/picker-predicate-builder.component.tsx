@@ -40,14 +40,7 @@ export const P9PickerPredicateBuilder: FunctionComponent<P9PickerPredicateBuilde
 }) => {
   const { navigate } = useNavigation();
   const [{ colors }] = usePower9Theme();
-  const [{ predicates }, _, { removePredicate, updatePredicate }] = usePredicateAttributeGroupFacade<string>(
-    attribute,
-    {
-      comparisonOperator,
-      logicalOperator,
-      stringOperator,
-    },
-  );
+  const [{ predicates }, _, { removePredicate, updatePredicate }] = usePredicateAttributeGroupFacade<string>(attribute);
   const animated = useSharedValue(colors!.background!);
 
   const pressedStyle = useAnimatedStyle(() => {

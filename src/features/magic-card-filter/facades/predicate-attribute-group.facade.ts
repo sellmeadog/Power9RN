@@ -7,18 +7,16 @@ import { HashMap, ID } from '@datorama/akita';
 
 import { useDependency } from '../../../core/di';
 import {
-  P9ComparisonOperator,
-  P9LogicalOperator,
   P9Predicate,
   P9PredicateAttributeGroup,
   P9PredicateAttributeGroupState,
   P9PredicateExpression,
-  P9StringOperator,
+  P9PredicateOptions,
 } from '../model/predicate';
 import { P9MagicCardFilterService } from '../state/magic-card-filter.service';
 
 export type P9PredicateAttributeGroupActions<E extends P9PredicateExpression, S> = {
-  parseExpression: (expression: E) => void;
+  parseExpression: (expression: E, options: P9PredicateOptions) => void;
   reset: () => void;
   togglePredicate: (predicate: P9Predicate<E>) => void;
   update: (patch: Partial<P9PredicateAttributeGroup<E, S>>) => void;
@@ -29,12 +27,6 @@ export type P9PredicateActions<E extends P9PredicateExpression> = {
   updatePredicate: (id: ID, patch: Partial<P9Predicate<E>>) => void;
 };
 
-export type P9PredicateAttributeGroupOptions = {
-  comparisonOperator?: P9ComparisonOperator;
-  logicalOperator?: P9LogicalOperator;
-  stringOperator?: P9StringOperator;
-};
-
 export type P9PredicateAttributeGroupTuple<E extends P9PredicateExpression, S> = [
   state: P9PredicateAttributeGroupState<E, S>,
   groupActions: P9PredicateAttributeGroupActions<E, S>,
@@ -43,9 +35,7 @@ export type P9PredicateAttributeGroupTuple<E extends P9PredicateExpression, S> =
 
 export function usePredicateAttributeGroupFacade<E extends P9PredicateExpression = any, S = any>(
   attribute: string,
-  options: P9PredicateAttributeGroupOptions = { logicalOperator: P9LogicalOperator.And },
 ): P9PredicateAttributeGroupTuple<E, S> {
-  const { comparisonOperator, logicalOperator, stringOperator } = options;
   const service = useDependency(P9MagicCardFilterService);
 
   const group$ = useObservable((attribute$) => attribute$.pipe(selectPredicateGroup(service)), [attribute]);
@@ -80,8 +70,8 @@ export function usePredicateAttributeGroupFacade<E extends P9PredicateExpression
   );
 
   const parseExpression = useCallback(
-    (expression: E) => {
-      service.parseExpression(attribute, expression);
+    (expression: E, options: P9PredicateOptions) => {
+      service.parseExpression(attribute, expression, options);
     },
     [attribute, service],
   );
