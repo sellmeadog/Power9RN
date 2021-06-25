@@ -11,7 +11,6 @@ import { P9ScryfallCatalogState, P9ScryfallCatalogStore } from './scryfall-catal
 @singleton()
 export class P9ScryfallCatalogQuery extends QueryEntity<P9ScryfallCatalogState> {
   expression$ = this.select((state) => state.expression).pipe(
-    debounceTime(50),
     map((expression) => expression?.trim()),
     distinctUntilChanged(),
   );
@@ -19,7 +18,7 @@ export class P9ScryfallCatalogQuery extends QueryEntity<P9ScryfallCatalogState> 
   artists$: Observable<P9ScryfallCatalog[]> = this.selectEntity('artist-names').pipe(map(groupArtistNames));
   visibleArtists$: Observable<P9ScryfallCatalog[]> = combineLatest([
     this.artists$.pipe(whenDefined()),
-    this.expression$,
+    this.expression$.pipe(debounceTime(50)),
   ]).pipe(map(filterCatalogs));
 
   gameFormats$ = this.selectAll({ filterBy: ({ id }) => id.includes('game-formats') }).pipe(whenDefined());
@@ -28,7 +27,9 @@ export class P9ScryfallCatalogQuery extends QueryEntity<P9ScryfallCatalogState> 
     filterBy: ({ id }) => id.includes('-types'),
   });
 
-  visibleTypes$ = combineLatest([this.types$.pipe(whenDefined()), this.expression$]).pipe(map(filterCatalogs));
+  visibleTypes$ = combineLatest([this.types$.pipe(whenDefined()), this.expression$.pipe(debounceTime(50))]).pipe(
+    map(filterCatalogs),
+  );
 
   constructor(store: P9ScryfallCatalogStore) {
     super(store);

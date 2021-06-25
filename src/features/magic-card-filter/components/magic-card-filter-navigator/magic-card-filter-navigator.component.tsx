@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { P9ComparisonOperator, P9LogicalOperator, P9StringOperator } from '../../model/predicate';
 import { P9MagicCardFilterScreen } from '../magic-card-filter-screen/magic-card-filter-screen.component';
-import { P9PredicatePickerTableScreen } from '../predicate-builder-picker-table-screen/magic-card-type-picker-screen.component';
+import { P9PredicatePickerTableScreen } from '../predicate-builder-picker-table-screen/predicate-builder-picker-table-screen.component';
 
 export type P9MagicCardFilterNavigatorParamList = {
   'P9:Modal:MagicCardFilter:Home': {};
