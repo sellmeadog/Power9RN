@@ -2,23 +2,27 @@ import { HashMap, isArray } from '@datorama/akita';
 
 import { P9GameSymbolType } from '../../../components';
 import {
-  P9AttributePredicate,
-  P9ColorPredicateExpression,
   P9ComparisonOperator,
   P9LogicalOperator,
-  P9PickerPredicateExpression,
   P9Predicate,
+  P9PredicateAttributeGroup,
   P9StringOperator,
 } from './predicate';
 
-export function serializeColorPredicate({ attribute, predicates }: P9AttributePredicate<P9ColorPredicateExpression>) {
-  const { enforceIdentity, fuzziness = 0, selection } = predicates as P9ColorPredicateExpression;
+export function serializeColorPredicate({
+  attribute,
+  metadata: { enforceIdentity = false, fuzziness = 0 } = {},
+  predicates,
+}: P9PredicateAttributeGroup<P9GameSymbolType, { enforceIdentity?: boolean; fuzziness?: number }>) {
   const attribute_ = enforceIdentity ? 'color_identity' : attribute;
-  const colors: P9GameSymbolType[] = ['W', 'U', 'B', 'R', 'G', 'C'];
-  const selectionTuples = colors.map((color): [color: P9GameSymbolType, value: boolean] => [
+  const colorSymbols: P9GameSymbolType[] = ['W', 'U', 'B', 'R', 'G', 'C'];
+  const selectedSymbols: P9GameSymbolType[] = predicates.map(({ expression }) => expression);
+
+  const selectionTuples = colorSymbols.map((color): [color: P9GameSymbolType, value: boolean] => [
     color,
-    Boolean(selection?.[color]),
+    selectedSymbols.includes(color),
   ]);
+
   let predicate = '';
 
   if (selectionTuples.every(([_, value]) => !value)) {
@@ -69,7 +73,7 @@ export function serializeColorPredicate({ attribute, predicates }: P9AttributePr
       break;
   }
 
-  return predicate ? `(${predicate.replace(/^(AND\s?|OR)\s+/, '')})` : undefined;
+  return predicate ? `(${predicate.replace(/^(AND\s?|OR)\s+/, '')})` : '';
 }
 
 export function serializePickerPredicate(
@@ -88,17 +92,15 @@ export function serializePickerPredicate(
   return serialization ? `(${serialization})` : undefined;
 }
 
-export function serializeLegalityPredicate(predicate: P9AttributePredicate<P9PickerPredicateExpression>) {
-  const predicates = Object.values(predicate.predicates as HashMap<P9Predicate<P9PickerPredicateExpression>>);
-
+export function serializeLegalityPredicate({ predicates }: P9PredicateAttributeGroup<string>) {
   const serialization = predicates
-    .filter(({ expression }) => expression.selected)
+    .filter(({ expression }) => Boolean(expression))
     .sort(byLogicalOperator)
     .map(legalitySerializeFn)
     .join(' ')
     .replace(/^(AND\s?|OR)\s+/, '');
 
-  return serialization ? `(${serialization})` : undefined;
+  return serialization ? `(${serialization})` : '';
 }
 
 export function serializeStringPredicate({ predicates }: P9AttributePredicate<string>) {
@@ -188,23 +190,15 @@ export function serialize(predicate: P9AttributePredicate) {
   }
 }
 
-const defaultPickerSerializeFn = ({
-  attribute,
-  expression,
-  logicalOperator,
-}: P9Predicate<P9PickerPredicateExpression>): string =>
-  [logicalOperator, attribute, '=[c]', `"${expression.value}"`].join(' ').trim();
+const defaultPickerSerializeFn = ({ attribute, expression, logicalOperator }: P9Predicate<string>): string =>
+  [logicalOperator, attribute, '=[c]', `"${expression}"`].join(' ').trim();
 
-const legalitySerializeFn = ({
-  attribute,
-  expression,
-  logicalOperator,
-}: P9Predicate<P9PickerPredicateExpression>): string => {
+const legalitySerializeFn = ({ attribute, expression, logicalOperator }: P9Predicate<string>): string => {
   if (logicalOperator === P9LogicalOperator.Not) {
-    return `${P9LogicalOperator.And} (${attribute} =[c] "${expression.value}:banned")`;
+    return `${P9LogicalOperator.And} (${attribute} =[c] "${expression}:banned")`;
   } else {
     return `${logicalOperator} (${['legal', 'restricted']
-      .map((status) => [attribute, '=[c]', `"${expression.value}:${status}"`].join(' ').trim())
+      .map((status) => [attribute, '=[c]', `"${expression}:${status}"`].join(' ').trim())
       .join(' OR ')})`;
   }
 };

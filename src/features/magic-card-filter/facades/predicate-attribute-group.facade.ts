@@ -1,7 +1,7 @@
 import { useObservable, useObservableState } from 'observable-hooks';
 import { useCallback, useMemo } from 'react';
 import { combineLatest, OperatorFunction } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 import { HashMap, ID } from '@datorama/akita';
 
@@ -17,21 +17,6 @@ import {
 } from '../model/predicate';
 import { P9MagicCardFilterService } from '../state/magic-card-filter.service';
 
-// export function usePredicateAttributeGroupState<E extends number | string>(
-//   attribute: string,
-// ): P9PredicateAttributeGroupState<E> {
-//   const service = useDependency(P9MagicCardFilterService);
-//   const predicates$ = useObservable(() => service.selectAttributePredicates(attribute));
-//   const canReset$ = useObservable(() => predicates$.pipe(toBoolean()));
-//   const selection$ = useObservable(() => predicates$.pipe(toSelection()));
-
-//   return {
-//     canReset: useObservableState(canReset$, false),
-//     predicates: useObservableState(predicates$, []),
-//     selection: useObservableState(selection$, {}),
-//   };
-// }
-
 export type P9PredicateAttributeGroupActions<E extends P9PredicateExpression, S> = {
   parseExpression: (expression: E) => void;
   reset: () => void;
@@ -44,22 +29,26 @@ export type P9PredicateActions<E extends P9PredicateExpression> = {
   updatePredicate: (id: ID, patch: Partial<P9Predicate<E>>) => void;
 };
 
-export function usePredicateAttributeGroupFacade<E extends P9PredicateExpression = any, S = any>(
-  attribute: string,
-  options: {
-    comparisonOperator?: P9ComparisonOperator;
-    logicalOperator?: P9LogicalOperator;
-    stringOperator?: P9StringOperator;
-  } = { logicalOperator: P9LogicalOperator.And },
-): [
+export type P9PredicateAttributeGroupOptions = {
+  comparisonOperator?: P9ComparisonOperator;
+  logicalOperator?: P9LogicalOperator;
+  stringOperator?: P9StringOperator;
+};
+
+export type P9PredicateAttributeGroupTuple<E extends P9PredicateExpression, S> = [
   state: P9PredicateAttributeGroupState<E, S>,
   groupActions: P9PredicateAttributeGroupActions<E, S>,
   predicateActions: P9PredicateActions<E>,
-] {
+];
+
+export function usePredicateAttributeGroupFacade<E extends P9PredicateExpression = any, S = any>(
+  attribute: string,
+  options: P9PredicateAttributeGroupOptions = { logicalOperator: P9LogicalOperator.And },
+): P9PredicateAttributeGroupTuple<E, S> {
   const { comparisonOperator, logicalOperator, stringOperator } = options;
   const service = useDependency(P9MagicCardFilterService);
 
-  const group$ = useObservable(() => service.selectAttributeGroup(attribute));
+  const group$ = useObservable((attribute$) => attribute$.pipe(selectPredicateGroup(service)), [attribute]);
   const predicates$ = useObservable(() => group$.pipe(map(({ predicates }) => predicates as P9Predicate<E>[])));
   const canReset$ = useObservable(() => predicates$.pipe(toBoolean()));
   const selection$ = useObservable(() => predicates$.pipe(toSelection()));
@@ -121,6 +110,12 @@ export function usePredicateAttributeGroupFacade<E extends P9PredicateExpression
     ),
     useMemo(() => ({ removePredicate, updatePredicate }), [removePredicate, updatePredicate]),
   ];
+}
+
+function selectPredicateGroup(
+  service: P9MagicCardFilterService,
+): OperatorFunction<[string], P9PredicateAttributeGroup<any, any>> {
+  return switchMap(([attribute]) => service.selectAttributeGroup(attribute));
 }
 
 function toBoolean(): OperatorFunction<P9Predicate<any>[], boolean> {
