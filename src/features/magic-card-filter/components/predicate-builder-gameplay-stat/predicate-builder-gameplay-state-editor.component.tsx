@@ -20,9 +20,7 @@ export const P9GameplayStatePredicateEditor: FunctionComponent<P9GameplayStatePr
   onRemove,
 }) => {
   const title = useMemo(() => {
-    const { attribute } = predicate;
-
-    switch (attribute) {
+    switch (predicate.attribute) {
       case 'cmc':
         return 'mana value';
 
@@ -38,7 +36,7 @@ export const P9GameplayStatePredicateEditor: FunctionComponent<P9GameplayStatePr
       default:
         return '';
     }
-  }, [predicate]);
+  }, [predicate.attribute]);
 
   const handleComparisonOperatorChange = (comparisonOperator: P9ComparisonOperator) => {
     onUpdate?.(predicate.id, { comparisonOperator });
@@ -85,7 +83,7 @@ const P9GameplayStatePredicateEditorTheme = StyleSheet.create({
     alignItems: 'center',
     paddingLeft: 15,
     paddingRight: 10,
-    height: 34,
+    height: 44,
   },
 
   attribute: {
@@ -99,6 +97,6 @@ const P9GameplayStatePredicateEditorTheme = StyleSheet.create({
   },
 
   text: {
-    fontSize: 15,
+    fontSize: 17,
   },
 });

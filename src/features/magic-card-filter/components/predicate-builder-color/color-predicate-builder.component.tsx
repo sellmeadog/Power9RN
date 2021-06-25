@@ -2,10 +2,22 @@ import React, { FunctionComponent } from 'react';
 import { Switch } from 'react-native';
 import { Text } from 'react-native-elements';
 
-import { P9GameSymbolToggleButtonGroup, P9GameSymbolType, P9ItemSeparator, P9RowView } from '../../../../components';
+import {
+  P9CarouselToggleButton,
+  P9GameSymbolToggleButtonGroup,
+  P9GameSymbolType,
+  P9ItemSeparator,
+  P9RowView,
+} from '../../../../components';
 import { usePredicateAttributeGroupFacade } from '../../facades/predicate-attribute-group.facade';
 import { P9ColorPredicateBuilderTheme } from './color-predicate-builder.theme';
-import { P9ColorPredicateFuzzinessToggle } from './color-predicate-toggle-fuzziness.component';
+
+const FUZZINESS_OPTIONS = [
+  { value: 0, title: 'match exactly' },
+  { value: 1, title: 'must include' },
+  { value: 2, title: 'include at most' },
+  { value: 3, title: 'exclude' },
+];
 
 export interface P9ColorPredicateBuilderProps {
   symbols?: P9GameSymbolType[];
@@ -27,7 +39,7 @@ export const P9ColorPredicateBuilder: FunctionComponent<P9ColorPredicateBuilderP
   return (
     <>
       <P9RowView style={[P9ColorPredicateBuilderTheme.container]}>
-        <P9ColorPredicateFuzzinessToggle onChange={handleFuzziness} value={metadata?.fuzziness} />
+        <P9CarouselToggleButton onToggle={handleFuzziness} options={FUZZINESS_OPTIONS} value={metadata?.fuzziness} />
         <P9GameSymbolToggleButtonGroup options={symbols} selection={selection} onToggle={handleToggle} />
       </P9RowView>
       <P9ItemSeparator />

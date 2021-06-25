@@ -1,10 +1,10 @@
 import React, { FunctionComponent, useCallback, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Icon } from 'react-native-elements';
 
 import { P9TextInput } from '../../../../components';
 import { usePredicateAttributeGroupFacade } from '../../facades/predicate-attribute-group.facade';
 import { P9LogicalOperator, P9StringOperator } from '../../model/predicate';
+import { P9PredicateResetButton } from '../predicate-button-reset/predicate-button-reset.component';
 import { P9StringPredicateEditor } from './string-predicate-editor.component';
 
 export interface P9StringPredicateBuilderProps {
@@ -39,9 +39,7 @@ export const P9StringPredicateBuilder: FunctionComponent<P9StringPredicateBuilde
           style={[P9TextAttributePredicateBuilderTheme.input]}
           value={expression}
         />
-        {canReset && (
-          <Icon name={'minus-circle-multiple-outline'} onPress={reset} type={'material-community'} size={15} />
-        )}
+        <P9PredicateResetButton canReset={canReset} onPress={reset} type={'group'} />
       </View>
       {predicates?.map((predicate) => (
         <P9StringPredicateEditor
@@ -61,7 +59,6 @@ const P9TextAttributePredicateBuilderTheme = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 10,
-    paddingRight: 10,
   },
 
   input: {

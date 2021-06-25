@@ -37,10 +37,11 @@ export const P9LogicalOperatorToggle: FunctionComponent<P9LogicalOperatorToggleP
 
 const P9LogicalOperatorToggleTheme = StyleSheet.create({
   button: {
+    height: 40,
     paddingVertical: 0,
   },
 
   title: {
-    fontSize: 15,
+    fontSize: 17,
   },
 });

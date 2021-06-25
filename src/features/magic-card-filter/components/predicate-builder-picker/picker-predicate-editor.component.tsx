@@ -1,12 +1,13 @@
 import React, { FunctionComponent } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Icon, Text } from 'react-native-elements';
+import { Text } from 'react-native-elements';
 
 import { ID } from '@datorama/akita';
 
 import { P9ItemSeparator } from '../../../../components';
 import { P9LogicalOperator, P9Predicate } from '../../model/predicate';
 import { P9LogicalOperatorToggle } from '../logical-operator-toggle/logical-operator-toggle';
+import { P9PredicateResetButton } from '../predicate-button-reset/predicate-button-reset.component';
 
 export interface P9PickerPredicateEditorProps {
   id: ID;
@@ -32,7 +33,7 @@ export const P9PickerPredicateEditor: FunctionComponent<P9PickerPredicateEditorP
       <View style={P9PickerPredicateEditorTheme.container}>
         <P9LogicalOperatorToggle onChange={handleChangeLogicalOperator} value={predicate.logicalOperator} />
         <Text style={[P9PickerPredicateEditorTheme.title]}>{predicate.expression}</Text>
-        <Icon name={'minus-circle-outline'} type={'material-community'} size={15} onPress={handleRemove} />
+        <P9PredicateResetButton onPress={handleRemove} />
       </View>
     </>
   );
@@ -43,12 +44,11 @@ const P9PickerPredicateEditorTheme = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 15,
-    paddingRight: 10,
-    height: 34,
+    height: 44,
   },
 
   title: {
     flex: 1,
-    fontSize: 15,
+    fontSize: 17,
   },
 });

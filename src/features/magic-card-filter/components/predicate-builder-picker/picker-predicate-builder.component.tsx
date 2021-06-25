@@ -40,7 +40,9 @@ export const P9PickerPredicateBuilder: FunctionComponent<P9PickerPredicateBuilde
 }) => {
   const { navigate } = useNavigation();
   const [{ colors }] = usePower9Theme();
-  const [{ predicates }, _, { removePredicate, updatePredicate }] = usePredicateAttributeGroupFacade<string>(attribute);
+  const [{ predicates }, { reset }, { removePredicate, updatePredicate }] =
+    usePredicateAttributeGroupFacade<string>(attribute);
+
   const animated = useSharedValue(colors!.background!);
 
   const pressedStyle = useAnimatedStyle(() => {
@@ -53,6 +55,8 @@ export const P9PickerPredicateBuilder: FunctionComponent<P9PickerPredicateBuilde
     (id: string, value: P9LogicalOperator) => updatePredicate(id, { logicalOperator: value }),
     [updatePredicate],
   );
+
+  const handleLongPress = useCallback(() => reset(), [reset]);
 
   const handlePress = useCallback(
     () =>
@@ -69,6 +73,7 @@ export const P9PickerPredicateBuilder: FunctionComponent<P9PickerPredicateBuilde
   return (
     <>
       <Pressable
+        onLongPress={handleLongPress}
         onPress={handlePress}
         onPressIn={() => (animated.value = colors!.grey0!)}
         onPressOut={() => (animated.value = colors!.background!)}

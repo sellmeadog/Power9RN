@@ -1,12 +1,12 @@
 import React, { FunctionComponent, useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Icon } from 'react-native-elements';
 
 import { ID } from '@datorama/akita';
 
 import { P9ItemSeparator, P9TextInput } from '../../../../components';
 import { P9LogicalOperator, P9Predicate } from '../../model/predicate';
 import { P9LogicalOperatorToggle } from '../logical-operator-toggle/logical-operator-toggle';
+import { P9PredicateResetButton } from '../predicate-button-reset/predicate-button-reset.component';
 
 export interface P9StringPredicateEditorProps {
   id: ID;
@@ -40,7 +40,7 @@ export const P9StringPredicateEditor: FunctionComponent<P9StringPredicateEditorP
           style={[P9StringPredicateEditorTheme.textInput]}
           value={predicate.expression}
         />
-        <Icon name={'minus-circle-outline'} type={'material-community'} size={15} onPress={handleRemove} />
+        <P9PredicateResetButton onPress={handleRemove} />
       </View>
     </>
   );
@@ -51,12 +51,11 @@ const P9StringPredicateEditorTheme = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 15,
-    paddingRight: 10,
   },
 
   textInput: {
     flex: 1,
-    fontSize: 15,
+    fontSize: 17,
     height: 34,
   },
 });

@@ -43,6 +43,7 @@ export function P9CarouselToggleButton<T = any>({
 
 const P9CarouselToggleTheme = StyleSheet.create({
   button: {
+    minHeight: 40,
     paddingHorizontal: 0,
     paddingVertical: 0,
   },
