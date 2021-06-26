@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements';
 
-import { P9LogicalOperator } from '../../model/predicate';
+import { P9LogicalOperator } from '../../model';
 
 export interface P9LogicalOperatorToggleProps {
   value: P9LogicalOperator | undefined;

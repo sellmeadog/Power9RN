@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/core';
 
 import { usePower9Theme } from '../../../../core/theme';
 import { usePredicateAttributeGroupFacade } from '../../facades/predicate-attribute-group.facade';
-import { P9ComparisonOperator, P9LogicalOperator, P9StringOperator } from '../../model/predicate';
+import { P9ComparisonOperator, P9LogicalOperator, P9StringOperator } from '../../model';
 import { P9PickerPredicateEditor } from './picker-predicate-editor.component';
 
 export type P9PredicateBuilderNavigationParams = {

@@ -5,7 +5,7 @@ import { v1 } from 'uuid';
 
 import { P9MagicCardRarity, P9MagicCardRarityToggleButtonGroup, P9RowView } from '../../../../components';
 import { usePredicateAttributeGroupFacade } from '../../facades/predicate-attribute-group.facade';
-import { P9LogicalOperator, P9StringOperator } from '../../model/predicate';
+import { P9LogicalOperator, P9StringOperator } from '../../model';
 
 export interface P9MagicCardRarityPredicateBuilderProps {}
 

@@ -12,7 +12,7 @@ import {
   P9PredicateExpression,
   P9PredicateOptions,
   P9StringOperator,
-} from '../../model/predicate';
+} from '../../model';
 import { P9MagicCardFilterQuery } from './magic-card-filter.query';
 import { P9MagicCardFilterStore } from './magic-card-filter.store';
 

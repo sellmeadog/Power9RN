@@ -1,13 +1,13 @@
 import { v1 } from 'uuid';
 
-import { serializeColorPredicate } from './serialization';
+import { serializeColorPredicateGroup } from './serialization';
 
 describe('Predicate Serialization', () => {
   it('should serialize exact color predicate expression', () => {
     const expected =
       '(card_faces.colors =[c] "W" AND card_faces.colors =[c] "U" AND NOT card_faces.colors =[c] "B" AND NOT card_faces.colors =[c] "R" AND NOT card_faces.colors =[c] "G" AND NOT card_faces.colors =[c] "C")';
 
-    const actual = serializeColorPredicate({
+    const actual = serializeColorPredicateGroup({
       attribute: 'card_faces.colors',
       metadata: { fuzziness: 0 },
       predicates: [
@@ -22,7 +22,7 @@ describe('Predicate Serialization', () => {
   it('should serialize include color predicate expression', () => {
     const expected = '(card_faces.colors =[c] "W" AND card_faces.colors =[c] "U")';
 
-    const actual = serializeColorPredicate({
+    const actual = serializeColorPredicateGroup({
       attribute: 'card_faces.colors',
       metadata: { fuzziness: 1 },
       predicates: [
@@ -38,7 +38,7 @@ describe('Predicate Serialization', () => {
     const expected =
       '(card_faces.colors =[c] "W" OR card_faces.colors =[c] "U" OR card_faces.colors.@count == 0 AND NOT card_faces.colors =[c] "B" AND NOT card_faces.colors =[c] "R" AND NOT card_faces.colors =[c] "G" AND NOT card_faces.colors =[c] "C")';
 
-    const actual = serializeColorPredicate({
+    const actual = serializeColorPredicateGroup({
       attribute: 'card_faces.colors',
       metadata: { fuzziness: 2 },
       predicates: [
@@ -52,7 +52,7 @@ describe('Predicate Serialization', () => {
 
   it('should ignore an empty selection', () => {
     const expected = '';
-    const actual = serializeColorPredicate({
+    const actual = serializeColorPredicateGroup({
       attribute: 'card_faces.colors',
       metadata: { fuzziness: 2 },
       predicates: [],

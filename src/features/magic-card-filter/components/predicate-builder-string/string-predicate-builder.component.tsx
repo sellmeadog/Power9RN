@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { P9TextInput } from '../../../../components';
 import { usePredicateAttributeGroupFacade } from '../../facades/predicate-attribute-group.facade';
-import { P9LogicalOperator, P9StringOperator } from '../../model/predicate';
+import { P9LogicalOperator, P9StringOperator } from '../../model';
 import { P9PredicateResetButton } from '../predicate-button-reset/predicate-button-reset.component';
 import { P9StringPredicateEditor } from './string-predicate-editor.component';
 

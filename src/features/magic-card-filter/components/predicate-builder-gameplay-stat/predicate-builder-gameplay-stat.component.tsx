@@ -3,7 +3,7 @@ import { v1 } from 'uuid';
 
 import { P9GameSymbolType } from '../../../../components';
 import { usePredicateAttributeGroupFacade } from '../../facades/predicate-attribute-group.facade';
-import { P9ComparisonOperator, P9LogicalOperator } from '../../model/predicate';
+import { P9ComparisonOperator, P9LogicalOperator } from '../../model';
 import { P9SymbolPickerPredicateBuilder } from '../predicate-builder-picker-symbol/symbol-picker-predicate-builder.component';
 import { P9GameplayStatePredicateEditor } from './predicate-builder-gameplay-state-editor.component';
 

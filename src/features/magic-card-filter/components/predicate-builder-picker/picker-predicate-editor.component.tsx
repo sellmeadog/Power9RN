@@ -5,7 +5,7 @@ import { Text } from 'react-native-elements';
 import { ID } from '@datorama/akita';
 
 import { P9ItemSeparator } from '../../../../components';
-import { P9LogicalOperator, P9Predicate } from '../../model/predicate';
+import { P9LogicalOperator, P9Predicate } from '../../model';
 import { P9LogicalOperatorToggle } from '../logical-operator-toggle/logical-operator-toggle';
 import { P9PredicateResetButton } from '../predicate-button-reset/predicate-button-reset.component';
 

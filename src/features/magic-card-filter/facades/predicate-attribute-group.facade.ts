@@ -12,7 +12,7 @@ import {
   P9PredicateAttributeGroupState,
   P9PredicateExpression,
   P9PredicateOptions,
-} from '../model/predicate';
+} from '../model';
 import { P9MagicCardFilterService } from '../state/magic-card-filter/magic-card-filter.service';
 
 export type P9PredicateAttributeGroupActions<E extends P9PredicateExpression, S> = {

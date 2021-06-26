@@ -1,7 +1,17 @@
 import { P9GameSymbolType } from '../../../components';
 import { P9LogicalOperator, P9Predicate, P9PredicateAttributeGroup } from './predicate';
 
-export function serializeColorPredicate({
+const byLogicalOperator = (
+  { logicalOperator: a = P9LogicalOperator.And }: P9Predicate,
+  { logicalOperator: b = P9LogicalOperator.And }: P9Predicate,
+) => {
+  const charA = a[a.length - 1];
+  const charB = b[b.length - 1];
+
+  return charA > charB ? 1 : charA < charB ? -1 : 0;
+};
+
+export function serializeColorPredicateGroup({
   attribute,
   metadata: { enforceIdentity = false, fuzziness = 0 } = {},
   predicates,
@@ -68,7 +78,17 @@ export function serializeColorPredicate({
   return predicate ? `(${predicate.replace(/^(AND\s?|OR)\s+/, '')})` : '';
 }
 
-export function serializeLegalityPredicate({ predicates }: P9PredicateAttributeGroup<string>) {
+export function serializeLegalityPredicateGroup({ predicates }: P9PredicateAttributeGroup<string>) {
+  const legalitySerializeFn = ({ attribute, expression, logicalOperator }: P9Predicate<string>): string => {
+    if (logicalOperator === P9LogicalOperator.Not) {
+      return `${P9LogicalOperator.And} (${attribute} =[c] "${expression}:banned")`;
+    } else {
+      return `${logicalOperator} (${['legal', 'restricted']
+        .map((status) => [attribute, '=[c]', `"${expression}:${status}"`].join(' ').trim())
+        .join(' OR ')})`;
+    }
+  };
+
   const serialization = predicates
     .filter(({ expression }) => Boolean(expression))
     .sort(byLogicalOperator)
@@ -79,22 +99,30 @@ export function serializeLegalityPredicate({ predicates }: P9PredicateAttributeG
   return serialization ? `(${serialization})` : '';
 }
 
-const legalitySerializeFn = ({ attribute, expression, logicalOperator }: P9Predicate<string>): string => {
-  if (logicalOperator === P9LogicalOperator.Not) {
-    return `${P9LogicalOperator.And} (${attribute} =[c] "${expression}:banned")`;
-  } else {
-    return `${logicalOperator} (${['legal', 'restricted']
-      .map((status) => [attribute, '=[c]', `"${expression}:${status}"`].join(' ').trim())
-      .join(' OR ')})`;
+export function serializePredicateGroup({ predicates }: P9PredicateAttributeGroup) {
+  return predicates
+    .filter(({ expression }) => (typeof expression === 'string' ? Boolean(expression) : true))
+    .sort(byLogicalOperator)
+    .map(({ attribute, comparisonOperator, logicalOperator, stringOperator, expression }) =>
+      [
+        logicalOperator,
+        attribute,
+        comparisonOperator || stringOperator,
+        typeof expression === 'string' ? `"${expression.trim()}"` : expression,
+      ].join(' '),
+    )
+    .join(' ');
+}
+
+export function serialize(predicateGroup: P9PredicateAttributeGroup) {
+  switch (predicateGroup.attribute) {
+    case 'card_faces.colors':
+      return serializeColorPredicateGroup(predicateGroup);
+
+    case 'legalities':
+      return serializeLegalityPredicateGroup(predicateGroup);
+
+    default:
+      return serializePredicateGroup(predicateGroup);
   }
-};
-
-const byLogicalOperator = (
-  { logicalOperator: a = P9LogicalOperator.And }: P9Predicate,
-  { logicalOperator: b = P9LogicalOperator.And }: P9Predicate,
-) => {
-  const charA = a[a.length - 1];
-  const charB = b[b.length - 1];
-
-  return charA > charB ? 1 : charA < charB ? -1 : 0;
-};
+}
