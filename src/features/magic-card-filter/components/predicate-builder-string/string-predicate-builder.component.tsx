@@ -1,30 +1,33 @@
 import React, { FunctionComponent, useCallback, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Icon } from 'react-native-elements';
 
 import { P9TextInput } from '../../../../components';
-import { P9StringOperator } from '../../model/predicate';
-import { useMagicCardStringPredicateBuilder } from '../../state/magic-card-filter.service';
+import { usePredicateAttributeGroupFacade } from '../../facades/predicate-attribute-group.facade';
+import { P9LogicalOperator, P9StringOperator } from '../../model';
+import { P9PredicateResetButton } from '../predicate-button-reset/predicate-button-reset.component';
 import { P9StringPredicateEditor } from './string-predicate-editor.component';
 
 export interface P9StringPredicateBuilderProps {
   attribute: string;
+  logicalOperator?: P9LogicalOperator;
   placeholder: string;
   stringOperator?: P9StringOperator;
 }
 
 export const P9StringPredicateBuilder: FunctionComponent<P9StringPredicateBuilderProps> = ({
   attribute,
+  logicalOperator = P9LogicalOperator.And,
   placeholder,
   stringOperator = P9StringOperator.BeginsWith,
 }) => {
-  const [predicates, parseExpression, reset] = useMagicCardStringPredicateBuilder(attribute);
+  const [{ canReset, predicates }, { parseExpression, reset }, { removePredicate, updatePredicate }] =
+    usePredicateAttributeGroupFacade<string>(attribute);
   const [expression, setExpression] = useState('');
 
   const handleBlur = useCallback(() => {
-    parseExpression(expression, stringOperator);
+    parseExpression(expression, { logicalOperator, stringOperator });
     setExpression('');
-  }, [parseExpression, expression, stringOperator]);
+  }, [parseExpression, expression, logicalOperator, stringOperator]);
 
   return (
     <>
@@ -36,12 +39,16 @@ export const P9StringPredicateBuilder: FunctionComponent<P9StringPredicateBuilde
           style={[P9TextAttributePredicateBuilderTheme.input]}
           value={expression}
         />
-        {Boolean(predicates?.length) && (
-          <Icon name={'minus-circle-multiple-outline'} onPress={reset} type={'material-community'} size={15} />
-        )}
+        <P9PredicateResetButton canReset={canReset} onPress={reset} type={'group'} />
       </View>
-      {predicates?.map(({ id }, index) => (
-        <P9StringPredicateEditor key={index} id={id} />
+      {predicates?.map((predicate) => (
+        <P9StringPredicateEditor
+          id={predicate.id}
+          key={predicate.id}
+          onRemove={removePredicate}
+          onUpdate={updatePredicate}
+          predicate={predicate}
+        />
       ))}
     </>
   );
@@ -52,7 +59,6 @@ const P9TextAttributePredicateBuilderTheme = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 10,
-    paddingRight: 10,
   },
 
   input: {

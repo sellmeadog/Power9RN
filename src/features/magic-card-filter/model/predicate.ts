@@ -1,4 +1,4 @@
-import { P9GameSymbolType } from '../../../components';
+import { HashMap, ID } from '@datorama/akita';
 
 export enum P9ComparisonOperator {
   Equal = '==',
@@ -18,18 +18,35 @@ export enum P9StringOperator {
   BeginsWith = 'BEGINSWITH[c]',
   Contains = 'CONTAINS[c]',
   EndsWith = 'ENDSWITH[c]',
+  Equals = '=[c]',
   Like = 'LIKE[c]',
 }
 
-export interface P9Predicate<E = any> {
+export type P9PredicateExpression = number | string;
+
+export interface P9PredicateAttributeGroup<E extends P9PredicateExpression = any, S = any> {
+  attribute: string;
+  predicates: P9Predicate<E>[];
+  metadata?: S;
+}
+
+export interface P9PredicateAttributeGroupState<E extends P9PredicateExpression = any, S = any>
+  extends P9PredicateAttributeGroup<E, S> {
+  canReset: boolean;
+  selection: HashMap<boolean>;
+}
+
+export interface P9Predicate<E extends P9PredicateExpression = any> {
   attribute: string;
   comparisonOperator?: P9ComparisonOperator;
   expression: E;
-  id: string;
+  id: ID;
   logicalOperator?: P9LogicalOperator;
   stringOperator?: P9StringOperator;
 }
 
-export type P9ColorPredicateExpression<K extends P9GameSymbolType = P9GameSymbolType> = {
-  [key in K]?: boolean;
-} & { enforceIdentity?: boolean; fuzziness?: number };
+export type P9PredicateOptions = {
+  comparisonOperator?: P9ComparisonOperator;
+  logicalOperator?: P9LogicalOperator;
+  stringOperator?: P9StringOperator;
+};

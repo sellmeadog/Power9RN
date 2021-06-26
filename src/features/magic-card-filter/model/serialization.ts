@@ -1,33 +1,53 @@
 import { P9GameSymbolType } from '../../../components';
-import { P9ColorPredicateExpression, P9LogicalOperator, P9Predicate, P9StringOperator } from './predicate';
+import { P9LogicalOperator, P9Predicate, P9PredicateAttributeGroup } from './predicate';
 
-export function serializeColorPredicate({
+const byLogicalOperator = (
+  { logicalOperator: a = P9LogicalOperator.And }: P9Predicate,
+  { logicalOperator: b = P9LogicalOperator.And }: P9Predicate,
+) => {
+  const charA = a[a.length - 1];
+  const charB = b[b.length - 1];
+
+  return charA > charB ? 1 : charA < charB ? -1 : 0;
+};
+
+export function serializeColorPredicateGroup({
   attribute,
-  expression: { enforceIdentity, fuzziness = 0, ...rest },
-}: P9Predicate<P9ColorPredicateExpression>) {
+  metadata: { enforceIdentity = false, fuzziness = 0 } = {},
+  predicates,
+}: P9PredicateAttributeGroup<P9GameSymbolType, { enforceIdentity?: boolean; fuzziness?: number }>) {
   const attribute_ = enforceIdentity ? 'color_identity' : attribute;
-  const colors: P9GameSymbolType[] = ['W', 'U', 'B', 'R', 'G', 'C'];
-  const selection = colors.map((color): [color: P9GameSymbolType, value: boolean] => [color, Boolean(rest[color])]);
+  const colorSymbols: P9GameSymbolType[] = ['W', 'U', 'B', 'R', 'G', 'C'];
+  const selectedSymbols: P9GameSymbolType[] = predicates.map(({ expression }) => expression);
 
-  if (selection.every(([_, value]) => !value)) {
-    return '';
+  const selectionTuples = colorSymbols.map((color): [color: P9GameSymbolType, value: boolean] => [
+    color,
+    selectedSymbols.includes(color),
+  ]);
+
+  let predicate = '';
+
+  if (selectionTuples.every(([_, value]) => !value)) {
+    return predicate;
   }
 
   switch (fuzziness) {
     case 0:
-      return selection
+      predicate = selectionTuples
         .sort(([_, a], [__, b]) => Number(b) - Number(a))
         .map(([color, value]) => `${value ? 'AND' : 'AND NOT'} ${attribute_} =[c] "${color}"`)
         .join(' ');
+      break;
 
     case 1:
-      return selection
+      predicate = selectionTuples
         .filter(([_, value]) => value)
         .map(([color]) => `AND ${attribute_} =[c] "${color}"`)
         .join(' ');
+      break;
 
     case 2:
-      const include = selection
+      const include = selectionTuples
         .filter(([_, value]) => value)
         .map(([color]) => `${attribute_} =[c] "${color}"`)
         .reduceRight(
@@ -36,51 +56,73 @@ export function serializeColorPredicate({
         )
         .join(' OR ');
 
-      const exclude = selection
+      const exclude = selectionTuples
         .filter(([_, value]) => !value)
         .map(([color]) => `NOT ${attribute_} =[c] "${color}"`)
         .join(' AND ');
 
-      return ['', include, exclude]
-        .filter((value, index) => (index === 0 ? true : Boolean(value)))
-        .map((predicate, index) => (index === 0 ? '' : `(${predicate})`))
+      predicate = [include, exclude]
+        .filter((value) => Boolean(value))
         .join(' AND ')
         .trim();
+      break;
 
     case 3:
-      return selection
+      predicate = selectionTuples
         .filter(([_, value]) => value)
         .map(([color]) => `AND NOT ${attribute_} =[c] "${color}"`)
         .join(' ');
-
-    default:
-      return '';
-  }
-}
-
-export function serializeStringPredicate(predicate: P9Predicate<string>) {
-  const {
-    attribute,
-    expression,
-    logicalOperator = P9LogicalOperator.And,
-    stringOperator = P9StringOperator.BeginsWith,
-  } = predicate;
-
-  const expression_ = expression?.trim();
-
-  if (expression_) {
-    return [logicalOperator, attribute, stringOperator, `"${expression_}"`].join(' ');
+      break;
   }
 
-  return undefined;
+  return predicate ? `(${predicate.replace(/^(AND\s?|OR)\s+/, '')})` : '';
 }
 
-export function serialize(predicate: P9Predicate) {
-  switch (predicate.attribute) {
+export function serializeLegalityPredicateGroup({ predicates }: P9PredicateAttributeGroup<string>) {
+  const legalitySerializeFn = ({ attribute, expression, logicalOperator }: P9Predicate<string>): string => {
+    if (logicalOperator === P9LogicalOperator.Not) {
+      return `${P9LogicalOperator.And} (${attribute} =[c] "${expression}:banned")`;
+    } else {
+      return `${logicalOperator} (${['legal', 'restricted']
+        .map((status) => [attribute, '=[c]', `"${expression}:${status}"`].join(' ').trim())
+        .join(' OR ')})`;
+    }
+  };
+
+  const serialization = predicates
+    .filter(({ expression }) => Boolean(expression))
+    .sort(byLogicalOperator)
+    .map(legalitySerializeFn)
+    .join(' ')
+    .replace(/^(AND\s?|OR)\s+/, '');
+
+  return serialization ? `(${serialization})` : '';
+}
+
+export function serializePredicateGroup({ predicates }: P9PredicateAttributeGroup) {
+  return predicates
+    .filter(({ expression }) => (typeof expression === 'string' ? Boolean(expression) : true))
+    .sort(byLogicalOperator)
+    .map(({ attribute, comparisonOperator, logicalOperator, stringOperator, expression }) =>
+      [
+        logicalOperator,
+        attribute,
+        comparisonOperator || stringOperator,
+        typeof expression === 'string' ? `"${expression.trim()}"` : expression,
+      ].join(' '),
+    )
+    .join(' ');
+}
+
+export function serialize(predicateGroup: P9PredicateAttributeGroup) {
+  switch (predicateGroup.attribute) {
     case 'card_faces.colors':
-      return serializeColorPredicate(predicate);
+      return serializeColorPredicateGroup(predicateGroup);
+
+    case 'legalities':
+      return serializeLegalityPredicateGroup(predicateGroup);
 
     default:
-      return serializeStringPredicate(predicate);
+      return serializePredicateGroup(predicateGroup);
   }
 }

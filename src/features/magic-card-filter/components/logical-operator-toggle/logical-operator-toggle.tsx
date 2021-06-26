@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements';
 
-import { P9LogicalOperator } from '../../model/predicate';
+import { P9LogicalOperator } from '../../model';
 
 export interface P9LogicalOperatorToggleProps {
   value: P9LogicalOperator | undefined;
@@ -37,10 +37,11 @@ export const P9LogicalOperatorToggle: FunctionComponent<P9LogicalOperatorToggleP
 
 const P9LogicalOperatorToggleTheme = StyleSheet.create({
   button: {
+    height: 40,
     paddingVertical: 0,
   },
 
   title: {
-    fontSize: 15,
+    fontSize: 17,
   },
 });

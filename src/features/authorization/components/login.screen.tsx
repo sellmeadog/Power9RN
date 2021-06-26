@@ -57,7 +57,8 @@ export const P9LoginScreen: FunctionComponent<P9LoginScreenProps> = () => {
           }}
           resizeMode={'cover'}
           imageStyle={[P9LoginScreenTheme.backgroundImage]}
-          style={[P9LoginScreenTheme.container]}>
+          style={[P9LoginScreenTheme.container]}
+        >
           <View style={[P9LoginScreenTheme.container]} />
           <LinearGradient
             colors={['transparent', colors!.grey0!]}

@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Dimensions, Platform, StyleSheet } from 'react-native';
+import { Dimensions, Platform, ScrollViewProps, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Results } from 'realm';
 import { LayoutProvider, RecyclerListView } from 'recyclerlistview';
 
@@ -51,6 +52,8 @@ export const P9MagicCardGallery: FunctionComponent<P9MagicCardGalleryProps> = ({
     }
   }, [currentIndex]);
 
+  const { bottom } = useSafeAreaInsets();
+
   if (dataProvider.getSize()) {
     return (
       <RecyclerListView
@@ -59,10 +62,13 @@ export const P9MagicCardGallery: FunctionComponent<P9MagicCardGalleryProps> = ({
         layoutProvider={layoutProvider}
         rowRenderer={renderItem}
         style={P9MagicCardGalleryTheme.container}
-        scrollViewProps={{
-          keyboardDismissMode: Platform.select({ android: 'on-drag', ios: 'interactive' }),
-          keyboardShouldPersistTaps: 'handled',
-        }}
+        scrollViewProps={
+          {
+            contentContainerStyle: { paddingBottom: bottom || 10 },
+            keyboardDismissMode: Platform.select({ android: 'on-drag', ios: 'interactive' }),
+            keyboardShouldPersistTaps: 'handled',
+          } as ScrollViewProps
+        }
       />
     );
   }
@@ -74,5 +80,6 @@ const P9MagicCardGalleryTheme = StyleSheet.create({
   container: {
     paddingLeft: 10,
     paddingTop: 10,
+    paddingBottom: 10,
   },
 });

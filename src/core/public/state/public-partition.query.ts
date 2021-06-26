@@ -26,8 +26,6 @@ export function watchCollection<T>(): MonoTypeOperatorFunction<Results<T> | unde
             results?.addListener(callback);
 
             return () => {
-              console.debug('Removing P9MagicCard change callback');
-
               subscriber.next(undefined);
               results?.removeListener(callback);
             };

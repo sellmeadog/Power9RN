@@ -1,9 +1,9 @@
 import React, { FunctionComponent, useCallback } from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
-import { useNavigation } from '@react-navigation/core';
-
-import { P9ToggleButton } from '../button/toggle-button';
+import { usePower9Theme } from '../../core/theme';
+import { useMagicCardFilterFacade } from '../../features/magic-card-filter';
+import { P9ToggleButton } from '../button-toggle/toggle-button';
 import { P9SearchBox } from '../search-box/search-box';
 
 export interface P9SearchBarProps {
@@ -21,8 +21,14 @@ export const P9SearchBar: FunctionComponent<P9SearchBarProps> = ({
   searchBoxContainerStyle,
   toggleButtonContainerStyle,
 }) => {
-  const { navigate } = useNavigation();
-  const handlePress = useCallback(() => navigate('P9:MagicCardFilter'), [navigate]);
+  const [{ colors }] = usePower9Theme();
+  const [{ canReset }, reset, handlePress] = useMagicCardFilterFacade();
+
+  const handleLongPress = useCallback(() => {
+    if (canReset) {
+      reset();
+    }
+  }, [canReset, reset]);
 
   return (
     <View style={[P9SearchBarTheme.container, containerStyle]}>
@@ -32,8 +38,13 @@ export const P9SearchBar: FunctionComponent<P9SearchBarProps> = ({
         onExpressionChange={onExpressionChange}
       />
       <P9ToggleButton
+        active={canReset}
+        activeBackgroundColor={colors?.primary}
+        activeTintColor={colors?.black}
         containerStyle={[P9SearchBarTheme.toggleButtonContainer, toggleButtonContainerStyle]}
         iconProps={{ name: 'tune' }}
+        inactiveOpacity={1}
+        onLongPress={handleLongPress}
         onPress={handlePress}
       />
     </View>
