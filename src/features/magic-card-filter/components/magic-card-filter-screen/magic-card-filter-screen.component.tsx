@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { KeyboardAvoidingView } from 'react-native';
-import { Header, Text } from 'react-native-elements';
+import { Header } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import { useNavigation } from '@react-navigation/core';
@@ -18,7 +18,7 @@ export interface P9MagicCardFilterScreenProps {}
 
 export const P9MagicCardFilterScreen: FunctionComponent<P9MagicCardFilterScreenProps> = () => {
   const { goBack } = useNavigation();
-  const [{ canReset, predicate }, reset] = useMagicCardFilterFacade();
+  const [{ canReset }, reset] = useMagicCardFilterFacade();
 
   return (
     <>
@@ -71,7 +71,6 @@ export const P9MagicCardFilterScreen: FunctionComponent<P9MagicCardFilterScreenP
             stringOperator={P9StringOperator.Contains}
           />
           <P9ItemSeparator />
-          <Text>{predicate}</Text>
         </ScrollView>
       </KeyboardAvoidingView>
     </>
