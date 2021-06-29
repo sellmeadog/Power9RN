@@ -1,7 +1,8 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import FastImage, { ImageStyle } from 'react-native-fast-image';
 
+import { P9ImageFunctionComponent } from '../../../../core/types';
 import { P9MagicCardImagePlaceholder } from './magic-card-image-placeholder.component';
 import { P9MagicCardImageTheme } from './magic-card-image.theme';
 
@@ -12,7 +13,7 @@ export interface P9MagicCardImageProps {
   imageStyle?: StyleProp<ImageStyle>;
 }
 
-export const P9MagicCardImage: FunctionComponent<P9MagicCardImageProps> = ({
+export const P9MagicCardImage: P9ImageFunctionComponent<P9MagicCardImageProps> = ({
   sourceUri,
   containerStyle,
   imageContainerStyle,
@@ -33,3 +34,5 @@ export const P9MagicCardImage: FunctionComponent<P9MagicCardImageProps> = ({
     </View>
   );
 };
+
+P9MagicCardImage.ASPECT_RATIO = 0.71794871794;

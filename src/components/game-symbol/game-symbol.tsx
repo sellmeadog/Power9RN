@@ -149,13 +149,13 @@ export const P9GameSymbolSource: P9GameSymbolSourceMap = {
   X: require('../../assets/images/X.png'),
 };
 
-export function getGameSymbolSource(token: P9GameSymbolType): number {
+export function getGameSymbolSource(token: string): number {
   let key: P9GameSymbolType;
 
   if (token.match(/{(.*?)}/i)) {
     key = token.replace(/{|}/gi, '') as P9GameSymbolType;
   } else {
-    key = token;
+    key = token as P9GameSymbolType;
   }
 
   return P9GameSymbolSource[key];

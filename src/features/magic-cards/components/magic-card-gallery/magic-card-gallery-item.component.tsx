@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useCallback } from 'react';
-import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import { Pressable, StyleProp, StyleSheet, ViewStyle } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
 import { P9MagicCardFace } from '../../../../core/public';
 import { P9MagicCardImage } from '../magic-card-image/magic-card-image.component';
@@ -18,21 +19,26 @@ export const P9MagicCardGalleryItem: FunctionComponent<P9MagicCardGalleryItemPro
   index,
   onPress,
 }) => {
+  const pressed = useSharedValue(1);
+  const scaleStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: withSpring(pressed.value, { stiffness: 300 }) }],
+  }));
+
   const handlePress = useCallback(() => onPress?.(index), [index, onPress]);
 
   if (card_faces.length === 1) {
     return (
-      <Pressable onPress={handlePress}>
-        <View style={[P9MagicCardGalleryItemStyle.container, containerStyle]}>
+      <Pressable onPressIn={() => (pressed.value = 0.95)} onPressOut={() => (pressed.value = 1)} onPress={handlePress}>
+        <Animated.View style={[P9MagicCardGalleryItemStyle.container, containerStyle, scaleStyle]}>
           <P9MagicCardImage sourceUri={card_faces[0].image_uris?.large as string | undefined} />
-        </View>
+        </Animated.View>
       </Pressable>
     );
   }
 
   return (
-    <Pressable onPress={handlePress}>
-      <View style={[P9MagicCardGalleryItemStyle.container, containerStyle]}>
+    <Pressable onPressIn={() => (pressed.value = 0.95)} onPressOut={() => (pressed.value = 1)} onPress={handlePress}>
+      <Animated.View style={[P9MagicCardGalleryItemStyle.container, containerStyle, scaleStyle]}>
         {card_faces.map(({ image_uris }, key) => (
           <P9MagicCardImage
             key={key}
@@ -40,7 +46,7 @@ export const P9MagicCardGalleryItem: FunctionComponent<P9MagicCardGalleryItemPro
             sourceUri={image_uris?.large as string | undefined}
           />
         ))}
-      </View>
+      </Animated.View>
     </Pressable>
   );
 };
@@ -48,7 +54,7 @@ export const P9MagicCardGalleryItem: FunctionComponent<P9MagicCardGalleryItemPro
 const P9MagicCardGalleryItemStyle = StyleSheet.create({
   container: {
     aspectRatio: 0.71794871794,
-    flexGrow: 1,
+    // flexGrow: 1,
     paddingRight: 10,
     shadowColor: 'black',
     shadowOffset: { height: 4, width: 0 },
