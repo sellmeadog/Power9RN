@@ -1,15 +1,30 @@
 import React, { FunctionComponent, useMemo } from 'react';
-import { StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { NativeSafeAreaViewProps, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { usePower9Theme } from '../../core/theme';
 
-export interface P9ViewSurfaceProps extends NativeSafeAreaViewProps {}
+export interface P9ViewSurfaceProps extends NativeSafeAreaViewProps {
+  containerStyle?: StyleProp<ViewStyle>;
+  paddingBottom?: number;
+  paddingHorizontal?: number;
+  paddingLeft?: number;
+  paddingRight?: number;
+  paddingTop?: number;
+  paddingVertical?: number;
+}
 
 export const P9ViewSurface: FunctionComponent<P9ViewSurfaceProps> = ({
   children,
-  edges = ['bottom'],
+  containerStyle,
+  edges,
+  paddingBottom,
+  paddingHorizontal,
+  paddingLeft,
+  paddingRight,
+  paddingTop,
+  paddingVertical,
   style,
   ...rest
 }) => {
@@ -17,23 +32,34 @@ export const P9ViewSurface: FunctionComponent<P9ViewSurfaceProps> = ({
   const insets = useSafeAreaInsets();
 
   const safeAreaStyle: StyleProp<ViewStyle> = useMemo(() => {
-    let paddingBottom: number | undefined;
-    let paddingTop: number | undefined;
+    let paddingBottom_: number | undefined;
+    let paddingTop_: number | undefined;
 
     if (edges?.includes('bottom')) {
-      paddingBottom = insets.bottom;
+      paddingBottom_ = insets.bottom;
     }
 
     if (edges?.includes('top')) {
-      paddingTop = insets.top;
+      paddingTop_ = insets.top;
     }
 
-    return { paddingBottom, paddingTop };
+    return { paddingBottom: paddingBottom_, paddingTop: paddingTop_ };
   }, [edges, insets]);
+
+  const containerStyle_: StyleProp<ViewStyle> = useMemo(() => {
+    return {
+      paddingBottom,
+      paddingHorizontal,
+      paddingLeft,
+      paddingRight,
+      paddingTop,
+      paddingVertical,
+    };
+  }, [paddingBottom, paddingHorizontal, paddingLeft, paddingRight, paddingTop, paddingVertical]);
 
   return (
     <Animated.View style={[{ backgroundColor: colors?.background }, style, safeAreaStyle]} {...rest}>
-      {children}
+      <View style={[containerStyle_, containerStyle]}>{children}</View>
     </Animated.View>
   );
 };

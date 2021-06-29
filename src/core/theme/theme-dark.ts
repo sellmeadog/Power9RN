@@ -98,7 +98,7 @@ export const P9_THEME_DARK: Partial<FullTheme> = {
   },
 
   TextTitle: {
-    style: [{ color: colors?.white, fontFamily: 'Beleren2016-Bold', fontSize: 22, fontWeight: 'bold' }],
+    style: [{ color: colors?.white, fontFamily: 'Beleren2016SmallCaps-Bold', fontSize: 17, fontWeight: 'bold' }],
   },
 
   TextFootnote: {

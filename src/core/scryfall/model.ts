@@ -167,5 +167,15 @@ export interface ScryfallCardFace extends ScryfallObject {
   watermark?: string;
 }
 
+export type ScryfallRulingSource = 'wotc' | 'scryfall' | string;
+
+export interface ScryfallRuling extends ScryfallObject {
+  oracle_id: string;
+  source: ScryfallRulingSource;
+  published_at: Date;
+  comment: string;
+}
+
+export type ScryfallRulingList = ScryfallObjectList<ScryfallRuling>;
 export type ScryfallSetList = ScryfallObjectList<ScryfallSet>;
 export type ScryfallCardList = ScryfallObjectList<ScryfallCard>;
