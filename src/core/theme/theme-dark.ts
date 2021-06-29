@@ -38,25 +38,31 @@ export const P9_THEME_DARK: Partial<FullTheme> = {
     centerComponent: {
       style: [{ color: colors?.white, fontFamily: 'Beleren2016-Bold', fontSize: 19, fontWeight: 'bold' }],
     },
-    leftContainerStyle: {
-      minHeight: 24,
-      justifyContent: 'center',
-    },
-    centerContainerStyle: {
-      minHeight: 24,
-      justifyContent: 'center',
-    },
-    rightContainerStyle: {
-      minHeight: 24,
-      justifyContent: 'center',
-    },
+    leftContainerStyle: [
+      {
+        minHeight: 24,
+        justifyContent: 'center',
+      },
+    ],
+    centerContainerStyle: [
+      {
+        minHeight: 24,
+        justifyContent: 'center',
+      },
+    ],
+    rightContainerStyle: [
+      {
+        minHeight: 24,
+        justifyContent: 'center',
+      },
+    ],
     containerStyle: [
       {
         borderBottomColor: colors.background,
       },
     ],
-    rightComponent: { style: { fontSize: 17, color: colors.primary } },
-    leftComponent: { style: { fontSize: 17, color: colors.primary } },
+    rightComponent: { style: [{ fontSize: 17, color: colors.primary }] },
+    leftComponent: { style: [{ fontSize: 17, color: colors.primary }] },
   },
 
   Icon: {
