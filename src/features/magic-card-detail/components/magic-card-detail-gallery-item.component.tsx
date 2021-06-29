@@ -12,6 +12,7 @@ import { P9MagicCardDetailLegality } from './magic-card-detail-legality';
 import { P9MagicCardDetailOracleText } from './magic-card-detail-oracle-text';
 import { P9MagicCardDetailParallaxBackground } from './magic-card-detail-parallax-background';
 import { P9MagicCardDetailParallaxForeground } from './magic-card-detail-parallax-foreground';
+import { P9MagicCardDetailPricing } from './magic-card-detail-pricing';
 import { P9MagicCardDetailRuling } from './magic-card-detail-rulings';
 
 const { width } = Dimensions.get('window');
@@ -55,7 +56,7 @@ export const P9MagicCardDetailGalleryItem: FunctionComponent<P9MagicCardDetailGa
           />
         </View>
         <P9MagicCardPrintingIndicator collector_number={collector_number} magic_set={magic_set} rarity={rarity} />
-        {/* <P9MagicCardDetailPricing id={_id} />*/}
+        <P9MagicCardDetailPricing id={_id} />
         <P9MagicCardDetailOracleText card_faces={card_faces} />
         <P9MagicCardDetailLegality legalities={legalities} />
         <P9MagicCardDetailRuling rulings_uri={rulings_uri} />
