@@ -2,6 +2,7 @@ import { useObservableState } from 'observable-hooks';
 import React, { createContext, FunctionComponent, useCallback, useContext, useEffect, useMemo, useRef } from 'react';
 import { Results } from 'realm';
 
+import { P9UserDataPartitionService } from '../../../core/data-user/state/user-data-partition.service';
 import { useDependency } from '../../../core/di';
 import { P9MagicCard } from '../../../core/public';
 import { makePublicPartitionService } from '../../../core/public/state/public-partition.service';
@@ -17,17 +18,22 @@ export const P9PartitionProvider: FunctionComponent<P9PartitionProviderProps> = 
   const [{ user }] = useAuthorizationFacade();
   const serviceRef = useRef(makePublicPartitionService());
   const galleryRef = useRef(makeMagicCardGalleryStore(serviceRef.current[0], useDependency(P9MagicCardFilterQuery)));
+  const userDataRef = useRef(useDependency(P9UserDataPartitionService));
 
   useEffect(() => {
     if (!user || !user.isLoggedIn) {
       return;
     }
 
-    const [_, service] = serviceRef.current;
-    service.open(user);
+    const [_, publicDataService] = serviceRef.current;
+    const userDataService = userDataRef.current;
+
+    publicDataService.open(user);
+    userDataService.open(user);
 
     return () => {
-      service.close();
+      publicDataService.close();
+      userDataService.close();
     };
   }, [user]);
 
