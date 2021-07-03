@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { P9DecklistExplorerHomeScreen } from './components/decklist-explorer-screen-home/decklist-explorer-screen-home.component';
+import { P9DecklistExplorerHomeScreen } from './components/decklist-explorer-screen-home/screen-home/screen-home.component';
 
 const { Navigator, Screen } = createStackNavigator<P9DecklistExplorerNavigatorParamList>();
 

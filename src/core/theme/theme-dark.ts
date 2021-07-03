@@ -118,7 +118,7 @@ export const P9_THEME_DARK: Partial<FullTheme> = {
       {
         color: colors.white,
         fontSize: 17,
-        height: 44,
+        minHeight: 44,
       },
     ],
   },

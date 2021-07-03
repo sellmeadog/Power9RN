@@ -1,0 +1,133 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`parseTextEntries should gracefully handle bad input 1`] = `Array []`;
+
+exports[`parseTextEntries should parse standard format text entries 1`] = `
+Array [
+  Object {
+    "cardName": "Gravecrawler",
+    "collectorNumber": undefined,
+    "count": "4",
+    "expansionCode": undefined,
+    "type": "maindeck",
+  },
+  Object {
+    "cardName": "geralfs messenger",
+    "collectorNumber": undefined,
+    "count": "4",
+    "expansionCode": undefined,
+    "type": "maindeck",
+  },
+  Object {
+    "cardName": "damping sphere",
+    "collectorNumber": undefined,
+    "count": "3",
+    "expansionCode": undefined,
+    "type": "maindeck",
+  },
+]
+`;
+
+exports[`parseTextEntries should parse standard format text entries regardless of bad input 1`] = `
+Array [
+  Object {
+    "cardName": "Gravecrawler",
+    "collectorNumber": undefined,
+    "count": "4",
+    "expansionCode": undefined,
+    "type": "maindeck",
+  },
+  Object {
+    "cardName": "geralfs messenger",
+    "collectorNumber": undefined,
+    "count": "4",
+    "expansionCode": undefined,
+    "type": "maindeck",
+  },
+  Object {
+    "cardName": "damping sphere",
+    "collectorNumber": undefined,
+    "count": "3",
+    "expansionCode": undefined,
+    "type": "sideboard",
+  },
+]
+`;
+
+exports[`parseTextEntries should parse standard format text entries with Sideboard line and extra whitespace 1`] = `
+Array [
+  Object {
+    "cardName": "Gravecrawler",
+    "collectorNumber": undefined,
+    "count": "4",
+    "expansionCode": undefined,
+    "type": "maindeck",
+  },
+  Object {
+    "cardName": "geralfs messenger",
+    "collectorNumber": undefined,
+    "count": "4",
+    "expansionCode": undefined,
+    "type": "maindeck",
+  },
+  Object {
+    "cardName": "damping sphere",
+    "collectorNumber": undefined,
+    "count": "3",
+    "expansionCode": undefined,
+    "type": "sideboard",
+  },
+]
+`;
+
+exports[`parseTextEntries should parse standard format text entries with Sideboard line divider 1`] = `
+Array [
+  Object {
+    "cardName": "Gravecrawler",
+    "collectorNumber": undefined,
+    "count": "4",
+    "expansionCode": undefined,
+    "type": "maindeck",
+  },
+  Object {
+    "cardName": "geralfs messenger",
+    "collectorNumber": undefined,
+    "count": "4",
+    "expansionCode": undefined,
+    "type": "maindeck",
+  },
+  Object {
+    "cardName": "damping sphere",
+    "collectorNumber": undefined,
+    "count": "3",
+    "expansionCode": undefined,
+    "type": "sideboard",
+  },
+]
+`;
+
+exports[`parseTextEntries should parse standard format text entries with empty line divider 1`] = `
+Array [
+  Object {
+    "cardName": "Gravecrawler",
+    "collectorNumber": undefined,
+    "count": "4",
+    "expansionCode": undefined,
+    "type": "maindeck",
+  },
+  Object {
+    "cardName": "geralfs messenger",
+    "collectorNumber": undefined,
+    "count": "4",
+    "expansionCode": undefined,
+    "type": "maindeck",
+  },
+  Object {
+    "cardName": "damping sphere",
+    "collectorNumber": undefined,
+    "count": "3",
+    "expansionCode": undefined,
+    "type": "sideboard",
+  },
+]
+`;

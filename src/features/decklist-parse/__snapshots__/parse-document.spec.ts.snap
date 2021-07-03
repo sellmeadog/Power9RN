@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`parseDocument should parse a CSV document 1`] = `
+Object {
+  "manualEntries": "4 Angel of Serenity (Return to Ravnica) 1
+1 Ashen Rider (Theros) 187
+1 Anax and Cymede (Theros) 186",
+  "name": "We Will Rock You - Davis",
+  "parsedEntries": Array [
+    Object {
+      "cardName": "Angel of Serenity",
+      "collectorNumber": "1",
+      "count": "4",
+      "expansionCode": "Return to Ravnica",
+      "type": "maindeck",
+    },
+    Object {
+      "cardName": "Ashen Rider",
+      "collectorNumber": "187",
+      "count": "1",
+      "expansionCode": "Theros",
+      "type": "maindeck",
+    },
+    Object {
+      "cardName": "Anax and Cymede",
+      "collectorNumber": "186",
+      "count": "1",
+      "expansionCode": "Theros",
+      "type": "maindeck",
+    },
+  ],
+}
+`;
+
+exports[`parseDocument should parse a TXT document 1`] = `
+Object {
+  "manualEntries": "4 Gravecrawler
+4 geralfs messenger
+
+3 damping sphere
+",
+  "name": "Another One Bites The Dust - Davis",
+  "parsedEntries": Array [
+    Object {
+      "cardName": "Gravecrawler",
+      "collectorNumber": undefined,
+      "count": "4",
+      "expansionCode": undefined,
+      "type": "maindeck",
+    },
+    Object {
+      "cardName": "geralfs messenger",
+      "collectorNumber": undefined,
+      "count": "4",
+      "expansionCode": undefined,
+      "type": "maindeck",
+    },
+    Object {
+      "cardName": "damping sphere",
+      "collectorNumber": undefined,
+      "count": "3",
+      "expansionCode": undefined,
+      "type": "sideboard",
+    },
+  ],
+}
+`;

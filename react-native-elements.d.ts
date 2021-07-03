@@ -1,6 +1,8 @@
+import { TextInputProps } from 'react-native';
+import { TextProps } from 'react-native-elements';
+
 import { DefaultNavigatorOptions } from '@react-navigation/native';
 import { StackNavigationOptions } from '@react-navigation/stack';
-import { TextInputProps } from 'react-native';
 
 type RecursivePartial<T> = { [P in keyof T]?: RecursivePartial<T[P]> };
 

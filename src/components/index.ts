@@ -26,4 +26,8 @@ export * from './search-bar/search-bar';
 export * from './search-box/search-box';
 export * from './separator/item-separator.component';
 export * from './svg/artist-nib.component';
+export * from './table-view/table-view-item-document-picker.component';
+export * from './table-view/table-view-item-input.component';
+export * from './table-view/table-view-item-picker.component';
+export * from './table-view/table-view-item.component';
 export * from './text/text.component';
