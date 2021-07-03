@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent } from 'react';
 import { KeyboardAvoidingView, ScrollView } from 'react-native';
 import { Header } from 'react-native-elements';
 
@@ -11,27 +11,23 @@ import {
   P9TableViewInputItem,
   P9TableViewPickerItem,
 } from '../../../../components';
-import { useImportDecklistEntries } from '../../../decklist-import/state/use-decklist-entry-import';
-import { useCreateDecklistState } from './screen-create.state';
+import { useCreateDecklistFacade } from './screen-create.facade';
 
 export interface P9CreateDecklistScreenProps {}
 
 export const P9CreateDecklistScreen: FunctionComponent<P9CreateDecklistScreenProps> = () => {
   const { goBack } = useNavigation();
-  const [dispatch, { decklistInfo, isValid }] = useCreateDecklistState();
-  const [{ importResult }, parseDocumentInfo] = useImportDecklistEntries();
-
-  useEffect(() => {
-    if (importResult) {
-      dispatch('manualEntries', importResult.manualEntries);
-      dispatch('name', importResult.name);
-    }
-  }, [dispatch, importResult]);
+  const [{ decklistInfo, isValid }, dispatch, parseDocumentInfo] = useCreateDecklistFacade();
 
   return (
     <>
       <Header
-        leftComponent={{ text: 'Cancel', onPress: goBack }}
+        leftComponent={{
+          text: 'Cancel',
+          onPress: () => {
+            goBack();
+          },
+        }}
         centerComponent={{ text: decklistInfo.name || 'New Decklist' }}
         rightComponent={{ text: 'Create', disabled: !isValid, onPress: goBack }}
       />
@@ -70,9 +66,9 @@ export const P9CreateDecklistScreen: FunctionComponent<P9CreateDecklistScreenPro
           <P9ItemSeparator />
           <P9TableViewInputItem
             multiline
-            placeholder={'Already have a decklist? Paste or type it here.'}
-            onChangeText={(value) => dispatch('manualEntries', value)}
-            value={decklistInfo?.manualEntries}
+            placeholder={'Already have a decklistInfo Paste or type it here.'}
+            onChangeText={(text) => dispatch('manualEntries', text)}
+            value={decklistInfo.manualEntries}
           />
           <P9TableDivider />
           <P9TableViewInputItem
@@ -80,7 +76,7 @@ export const P9CreateDecklistScreen: FunctionComponent<P9CreateDecklistScreenPro
             placeholder={'Quickly describe the theme of your deck, general strategy, and win conditions.'}
             onChangeText={(value) => dispatch('description', value)}
             title={'Description'}
-            value={decklistInfo?.description}
+            value={decklistInfo.description}
           />
         </ScrollView>
       </KeyboardAvoidingView>

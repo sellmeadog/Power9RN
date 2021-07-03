@@ -1,5 +1,7 @@
-import { Reducer, useCallback, useReducer } from 'react';
+import { Reducer, useCallback, useEffect, useReducer } from 'react';
 
+import { P9DocumentInfo } from '../../../../core/data-user';
+import { useImportDecklistEntries } from '../../../decklist-import/state/use-decklist-entry-import';
 import { P9CreateDecklistInfo, parseTextEntries } from '../../../decklist-parse';
 
 type P9DispatchFn = (type: keyof P9CreateDecklistInfo, value: any) => void;
@@ -24,8 +26,13 @@ export const createDecklistReducer: Reducer<P9CreateDecklistState, P9CreateDeckl
   }
 };
 
-export function useCreateDecklistState(): [P9DispatchFn, { decklistInfo: P9CreateDecklistInfo; isValid: boolean }] {
+export function useCreateDecklistFacade(): [
+  state: { decklistInfo: P9CreateDecklistInfo; isValid: boolean },
+  dispatch: P9DispatchFn,
+  parseDocumentInfo: (documentInfo?: P9DocumentInfo) => void,
+] {
   const [decklistInfo, dispatch] = useReducer(createDecklistReducer, { name: '', formatId: 'casual' });
+  const [{ importResult }, parseDocumentInfo] = useImportDecklistEntries();
 
   const dispatchFn: P9DispatchFn = useCallback(
     (type: keyof P9CreateDecklistInfo, value: any) => {
@@ -38,5 +45,12 @@ export function useCreateDecklistState(): [P9DispatchFn, { decklistInfo: P9Creat
     return !!decklistInfo.name;
   };
 
-  return [dispatchFn, { decklistInfo, isValid: isValid() }];
+  useEffect(() => {
+    if (importResult) {
+      dispatchFn('manualEntries', importResult.manualEntries);
+      dispatchFn('name', importResult.name);
+    }
+  }, [dispatchFn, importResult]);
+
+  return [{ decklistInfo, isValid: isValid() }, dispatchFn, parseDocumentInfo];
 }
