@@ -40,13 +40,14 @@ export const P9TableViewInputItemTheme = StyleSheet.create({
   },
 
   multilineContainer: {
+    alignItems: 'flex-start',
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'flex-start',
     justifyContent: 'flex-start',
     maxHeight: 300,
     minHeight: 250,
     paddingBottom: 10,
+    paddingTop: 5,
   },
 
   multilineInput: {
@@ -58,11 +59,10 @@ export const P9TableViewInputItemTheme = StyleSheet.create({
   },
 
   multilineTitle: {
-    fontSize: 13,
+    fontSize: 15,
     fontWeight: '500',
     textTransform: 'uppercase',
     paddingHorizontal: 10,
     paddingTop: 10,
-    paddingBottom: 5,
   },
 });

@@ -27,7 +27,9 @@ export const P9TableViewDocumentPickerItem: FunctionComponent<P9TableViewDocumen
 
   return (
     <P9TableViewItem onPress={() => pickDocumentAsync()}>
-      <Text style={[P9TableViewDocumentPickerItemTheme.container]}>Import a File</Text>
+      <Text style={[P9TableViewDocumentPickerItemTheme.container, P9TableViewDocumentPickerItemTheme.title]}>
+        Import a File
+      </Text>
       <Icon name={'file-download'} size={20} containerStyle={[P9TableViewDocumentPickerItemTheme.container]} />
     </P9TableViewItem>
   );
@@ -36,5 +38,11 @@ export const P9TableViewDocumentPickerItem: FunctionComponent<P9TableViewDocumen
 const P9TableViewDocumentPickerItemTheme = StyleSheet.create({
   container: {
     paddingHorizontal: 10,
+  },
+
+  title: {
+    fontSize: 15,
+    paddingHorizontal: 10,
+    textTransform: 'uppercase',
   },
 });

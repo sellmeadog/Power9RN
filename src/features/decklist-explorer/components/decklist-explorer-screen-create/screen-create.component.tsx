@@ -29,7 +29,7 @@ export const P9CreateDecklistScreen: FunctionComponent<P9CreateDecklistScreenPro
           },
         }}
         centerComponent={{ text: decklistInfo.name || 'New Decklist' }}
-        rightComponent={{ text: 'Create', disabled: !isValid, onPress: goBack }}
+        rightComponent={isValid ? { text: 'Create', onPress: goBack } : undefined}
       />
       <KeyboardAvoidingView behavior={'padding'}>
         <ScrollView keyboardShouldPersistTaps={'always'}>
@@ -66,15 +66,15 @@ export const P9CreateDecklistScreen: FunctionComponent<P9CreateDecklistScreenPro
           <P9ItemSeparator />
           <P9TableViewInputItem
             multiline
-            placeholder={'Already have a decklistInfo Paste or type it here.'}
-            onChangeText={(text) => dispatch('manualEntries', text)}
+            placeholder={'Already have a decklist? Import, paste or type it here.'}
+            onChangeText={dispatch.bind(undefined, 'manualEntries')}
             value={decklistInfo.manualEntries}
           />
           <P9TableDivider />
           <P9TableViewInputItem
             multiline
             placeholder={'Quickly describe the theme of your deck, general strategy, and win conditions.'}
-            onChangeText={(value) => dispatch('description', value)}
+            onChangeText={dispatch.bind(undefined, 'description')}
             title={'Description'}
             value={decklistInfo.description}
           />

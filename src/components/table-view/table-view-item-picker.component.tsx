@@ -1,15 +1,9 @@
 import { useObservable, useSubscription } from 'observable-hooks';
-import React, { useEffect, useState } from 'react';
-import { ColorValue, Keyboard, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
+import React, { useState } from 'react';
+import { Keyboard, StyleSheet } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import { Text } from 'react-native-elements';
-import Animated, {
-  interpolate,
-  interpolateColor,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, { Easing, useSharedValue, withTiming } from 'react-native-reanimated';
 import { fromEvent } from 'rxjs';
 import { map, mapTo } from 'rxjs/operators';
 
@@ -36,50 +30,29 @@ export function P9TableViewPickerItem<T>({
   const [{ colors }] = usePower9Theme();
   const [collapsed, setCollapsed] = useState(true);
 
-  const textStyle = useAnimatedStyle(
-    (): TextStyle => ({
-      color: interpolateColor(animated.value, [0, 1], [colors!.white!, colors!.primary!], 'RGB') as ColorValue,
-    }),
-  );
-
   useSubscription(
     useObservable(() => fromEvent(Keyboard, 'keyboardWillShow').pipe(mapTo(true))),
     setCollapsed,
   );
 
-  // useSubscription(
-  //   useObservable((collapsed$) => collapsed$, [collapsed]),
-  //   (value) => {
-  //     if (!value) {
-  //       Keyboard.dismiss();
-  //       animated.value = 0;
-  //     }
-  //   },
-  // );
+  useSubscription(
+    useObservable((collapsed$) => collapsed$.pipe(map(([value]) => Number(value))), [collapsed]),
+    (value) => {
+      if (!value) {
+        Keyboard.dismiss();
+      }
 
-  // useEffect(() => {
-  //   const subscription = Keyboard.addListener('keyboardWillShow', () => {
-  //     setCollapsed(true);
-  //   });
-
-  //   return () => {
-  //     subscription.remove();
-  //   };
-  // }, []);
-
-  useEffect(() => {
-    if (!collapsed) {
-      Keyboard.dismiss();
-    }
-
-    animated.value = withTiming(collapsed ? 0 : 1, { duration: 250 });
-  }, [animated, collapsed]);
+      animated.value = withTiming(value, { duration: 250, easing: Easing.bezier(0.1, 0.76, 0.55, 0.9) });
+    },
+  );
 
   return (
     <>
       <P9TableViewItem onPress={() => setCollapsed((value) => !value)}>
         <Text style={[P9TableViewPickerItemTheme.title]}>{title || selectedValue}</Text>
-        <Animated.Text style={[P9TableViewPickerItemTheme.value, textStyle]}>{selectedValue}</Animated.Text>
+        <Animated.Text style={[P9TableViewPickerItemTheme.value, { color: colors?.primary }]}>
+          {selectedValue}
+        </Animated.Text>
       </P9TableViewItem>
       <P9ItemSeparator />
       <Collapsible collapsed={collapsed} collapsedHeight={0}>
@@ -99,8 +72,9 @@ const P9TableViewPickerItemTheme = StyleSheet.create({
   },
 
   title: {
-    fontSize: 17,
+    fontSize: 15,
     paddingHorizontal: 10,
+    textTransform: 'uppercase',
   },
 
   value: {

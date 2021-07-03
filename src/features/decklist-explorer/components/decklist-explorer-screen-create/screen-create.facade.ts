@@ -1,3 +1,5 @@
+import { produce } from 'immer';
+import { WritableDraft } from 'immer/dist/internal';
 import { Reducer, useCallback, useEffect, useReducer } from 'react';
 
 import { P9DocumentInfo } from '../../../../core/data-user';
@@ -9,22 +11,24 @@ type P9DispatchFn = (type: keyof P9CreateDecklistInfo, value: any) => void;
 export type P9CreateDecklistAction = { type: keyof P9CreateDecklistInfo; value: any };
 export interface P9CreateDecklistState extends P9CreateDecklistInfo {}
 
-export const createDecklistReducer: Reducer<P9CreateDecklistState, P9CreateDecklistAction> = (state, action) => {
-  switch (action.type) {
-    case 'manualEntries':
-      return {
-        ...state,
-        [action.type]: action.value,
-        parsedEntries: parseTextEntries(action.value),
-      };
+export const createDecklistReducer: Reducer<P9CreateDecklistState, P9CreateDecklistAction> = produce(
+  (draft, action) => {
+    switch (action.type) {
+      case 'manualEntries':
+        patch(draft, action);
+        draft.parsedEntries = parseTextEntries(action.value);
+        break;
 
-    default:
-      return {
-        ...state,
-        [action.type]: action.value,
-      };
-  }
-};
+      default:
+        patch(draft, action);
+        break;
+    }
+  },
+);
+
+function patch(draft: WritableDraft<P9CreateDecklistState>, { type, value }: P9CreateDecklistAction) {
+  draft[type] = value;
+}
 
 export function useCreateDecklistFacade(): [
   state: { decklistInfo: P9CreateDecklistInfo; isValid: boolean },
