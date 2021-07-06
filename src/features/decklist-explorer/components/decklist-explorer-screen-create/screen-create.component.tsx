@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useCallback } from 'react';
 import { KeyboardAvoidingView, ScrollView } from 'react-native';
 import { Header } from 'react-native-elements';
 
@@ -17,7 +17,12 @@ export interface P9CreateDecklistScreenProps {}
 
 export const P9CreateDecklistScreen: FunctionComponent<P9CreateDecklistScreenProps> = () => {
   const { goBack } = useNavigation();
-  const [{ decklistInfo, isValid }, dispatch, parseDocumentInfo] = useCreateDecklistFacade();
+  const [{ decklistInfo, isValid }, dispatch, parseDocumentInfo, onCreate] = useCreateDecklistFacade();
+
+  const handleCreate = useCallback(() => {
+    onCreate();
+    goBack();
+  }, [goBack, onCreate]);
 
   return (
     <>
@@ -28,8 +33,8 @@ export const P9CreateDecklistScreen: FunctionComponent<P9CreateDecklistScreenPro
             goBack();
           },
         }}
-        centerComponent={{ text: decklistInfo.name || 'New Decklist' }}
-        rightComponent={isValid ? { text: 'Create', onPress: goBack } : undefined}
+        centerComponent={{ text: decklistInfo?.name || 'New Decklist' }}
+        rightComponent={isValid ? { text: 'Create', onPress: handleCreate } : undefined}
       />
       <KeyboardAvoidingView behavior={'padding'}>
         <ScrollView keyboardShouldPersistTaps={'always'}>
@@ -37,9 +42,9 @@ export const P9CreateDecklistScreen: FunctionComponent<P9CreateDecklistScreenPro
           <P9TableViewInputItem
             autoCapitalize={'words'}
             autoCorrect={false}
-            onChangeText={dispatch.bind(undefined, 'name')}
+            onChangeText={(value) => dispatch('name', value)}
             placeholder={'Name'}
-            value={decklistInfo.name}
+            value={decklistInfo?.name}
           />
           <P9ItemSeparator />
           <P9TableViewPickerItem
@@ -57,8 +62,8 @@ export const P9CreateDecklistScreen: FunctionComponent<P9CreateDecklistScreenPro
               { id: 'commander', name: 'Commander' },
               { id: 'oathbreaker', name: 'Oathbreaker' },
             ]}
-            onValueChange={dispatch.bind(undefined, 'formatId')}
-            selectedValue={decklistInfo.formatId}
+            onValueChange={(value) => dispatch('formatId', value.toString())}
+            selectedValue={decklistInfo?.formatId}
             title={'Format'}
           />
           <P9TableDivider />
@@ -67,16 +72,16 @@ export const P9CreateDecklistScreen: FunctionComponent<P9CreateDecklistScreenPro
           <P9TableViewInputItem
             multiline
             placeholder={'Already have a decklist? Import, paste or type it here.'}
-            onChangeText={dispatch.bind(undefined, 'manualEntries')}
-            value={decklistInfo.manualEntries}
+            onChangeText={(value) => dispatch('manualEntries', value)}
+            value={decklistInfo?.manualEntries}
           />
           <P9TableDivider />
           <P9TableViewInputItem
             multiline
             placeholder={'Quickly describe the theme of your deck, general strategy, and win conditions.'}
-            onChangeText={dispatch.bind(undefined, 'description')}
+            onChangeText={(value) => dispatch('description', value)}
             title={'Description'}
-            value={decklistInfo.description}
+            value={decklistInfo?.description}
           />
         </ScrollView>
       </KeyboardAvoidingView>

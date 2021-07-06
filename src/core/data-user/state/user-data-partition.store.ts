@@ -10,7 +10,7 @@ export interface P9UserDataPartitionState {
 }
 
 @singleton()
-export class P9UserPartitionStore
+export class P9UserDataPartitionStore
   extends Store<P9UserDataPartitionState>
   implements Observer<Partial<P9UserDataPartitionState>>
 {

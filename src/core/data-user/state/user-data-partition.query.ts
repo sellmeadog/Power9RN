@@ -5,13 +5,14 @@ import { injectable } from 'tsyringe';
 
 import { Query } from '@datorama/akita';
 
-import { P9UserDataPartitionState, P9UserPartitionStore } from './user-data-partition.store';
+import { P9UserDataPartitionState, P9UserDataPartitionStore } from './user-data-partition.store';
 
 @injectable()
 export class P9UserDataPartitionQuery extends Query<P9UserDataPartitionState> {
+  partition$ = this.select(({ partition }) => partition);
   decklists$ = this.select(({ decklists }) => decklists).pipe(watchCollection());
 
-  constructor(store: P9UserPartitionStore) {
+  constructor(store: P9UserDataPartitionStore) {
     super(store);
   }
 }

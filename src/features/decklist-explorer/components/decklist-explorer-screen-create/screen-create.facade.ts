@@ -1,60 +1,62 @@
-import { produce } from 'immer';
-import { WritableDraft } from 'immer/dist/internal';
-import { Reducer, useCallback, useEffect, useReducer } from 'react';
+import { useObservable, useObservableState } from 'observable-hooks';
+import { useCallback, useEffect } from 'react';
+import { Alert } from 'react-native';
+import { combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { P9DocumentInfo } from '../../../../core/data-user';
-import { useImportDecklistEntries } from '../../../decklist-import/state/use-decklist-entry-import';
-import { P9CreateDecklistInfo, parseTextEntries } from '../../../decklist-parse';
+import { useAuthorizationFacade } from '../../../authorization';
+import { P9CreateDecklistInfo, parseDocument } from '../../../decklist-parse';
+import { useUserDecklistFeatureService } from '../../state';
 
-type P9DispatchFn = (type: keyof P9CreateDecklistInfo, value: any) => void;
-
-export type P9CreateDecklistAction = { type: keyof P9CreateDecklistInfo; value: any };
-export interface P9CreateDecklistState extends P9CreateDecklistInfo {}
-
-export const createDecklistReducer: Reducer<P9CreateDecklistState, P9CreateDecklistAction> = produce(
-  (draft, action) => {
-    switch (action.type) {
-      case 'manualEntries':
-        patch(draft, action);
-        draft.parsedEntries = parseTextEntries(action.value);
-        break;
-
-      default:
-        patch(draft, action);
-        break;
-    }
-  },
-);
-
-function patch(draft: WritableDraft<P9CreateDecklistState>, { type, value }: P9CreateDecklistAction) {
-  draft[type] = value;
-}
+type UpdateFn = <K extends keyof P9CreateDecklistInfo>(key: K, value: P9CreateDecklistInfo[K]) => void;
 
 export function useCreateDecklistFacade(): [
-  state: { decklistInfo: P9CreateDecklistInfo; isValid: boolean },
-  dispatch: P9DispatchFn,
+  state: { decklistInfo: P9CreateDecklistInfo | undefined; isValid: boolean },
+  dispatch: UpdateFn,
   parseDocumentInfo: (documentInfo?: P9DocumentInfo) => void,
+  createFn: () => Promise<void>,
 ] {
-  const [decklistInfo, dispatch] = useReducer(createDecklistReducer, { name: '', formatId: 'casual' });
-  const [{ importResult }, parseDocumentInfo] = useImportDecklistEntries();
+  const [{ user }] = useAuthorizationFacade();
+  const service = useUserDecklistFeatureService();
 
-  const dispatchFn: P9DispatchFn = useCallback(
-    (type: keyof P9CreateDecklistInfo, value: any) => {
-      dispatch({ type, value });
-    },
-    [dispatch],
+  const state = useObservableState(
+    useObservable(() =>
+      combineLatest({
+        decklistInfo: service.createDecklistUIState,
+        isValid: service.createDecklistUIState.pipe(map((info) => Boolean(info?.name))),
+      }),
+    ),
+    { decklistInfo: { name: '', formatId: 'casual' }, isValid: false },
   );
 
-  const isValid = () => {
-    return !!decklistInfo.name;
-  };
+  const dispatchFn: UpdateFn = useCallback(
+    <K extends keyof P9CreateDecklistInfo>(key: K, value: P9CreateDecklistInfo[K]) =>
+      service.updateCreateDecklistUI(key, value),
+    [service],
+  );
 
-  useEffect(() => {
-    if (importResult) {
-      dispatchFn('manualEntries', importResult.manualEntries);
-      dispatchFn('name', importResult.name);
+  useEffect(() => service.initCreateDecklistUI(), [service]);
+
+  const parseDocumentInfo = useCallback(
+    async (documentInfo: P9DocumentInfo | undefined) => {
+      if (documentInfo) {
+        const { manualEntries, name } = await parseDocument(documentInfo);
+
+        dispatchFn('manualEntries', manualEntries);
+        dispatchFn('name', name);
+      }
+    },
+    [dispatchFn],
+  );
+
+  const createFn = useCallback(async () => {
+    try {
+      await service.createDecklist(user);
+    } catch (error) {
+      Alert.alert('Decklist Error', error.message);
     }
-  }, [dispatchFn, importResult]);
+  }, [service, user]);
 
-  return [{ decklistInfo, isValid: isValid() }, dispatchFn, parseDocumentInfo];
+  return [state, dispatchFn, parseDocumentInfo, createFn];
 }
