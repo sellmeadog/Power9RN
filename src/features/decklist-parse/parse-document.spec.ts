@@ -1,4 +1,4 @@
-import { P9DocumentInfo } from '../../core';
+import { P9DocumentInfo } from '../../core/device';
 import { parseDocument } from './parse-document';
 
 describe('parseDocument', () => {
@@ -11,7 +11,7 @@ describe('parseDocument', () => {
 4 geralfs messenger
 
 3 damping sphere
-`
+`,
       ),
       type: 'text/plain',
       uri: 'file://test.txt',
@@ -33,7 +33,7 @@ describe('parseDocument', () => {
 4,4,Angel of Serenity,Return to Ravnica,1,Near Mint,English,,,,,,,,
 1,1,Ashen Rider,Theros,187,Near Mint,English,,,,,,,,
 1,0,Anax and Cymede,Theros,186,Near Mint,English,foil,,,,,,,
-`
+`,
       ),
       type: 'text/csv',
       uri: 'file://test.csv',
