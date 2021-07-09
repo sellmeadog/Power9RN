@@ -5,7 +5,7 @@ export type P9MagicSet = {
   block: NullableString;
   block_code: NullableString;
   card_count: NullableNumber;
-  code: NullableString;
+  code: string;
   digital: NullableBoolean;
   foil_only: NullableBoolean;
   icon_svg_uri: NullableString;
