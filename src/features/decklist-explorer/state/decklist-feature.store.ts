@@ -1,14 +1,16 @@
 import { produce } from 'immer';
 import { singleton } from 'tsyringe';
 
-import { EntityState, EntityStore } from '@datorama/akita';
+import { ActiveState, EntityState, EntityStore, ID } from '@datorama/akita';
 
 import { P9UserDecklist } from '../../../core/data-user';
 import { P9CreateDecklistInfo } from '../../decklist-parse';
+import { P9DecklistEditorUIState } from './decklist-feature.model';
 
-export interface P9UserDecklistFeatureState extends EntityState<P9UserDecklist> {
+export interface P9UserDecklistFeatureState extends EntityState<P9UserDecklist, ID>, ActiveState {
   ui: {
     decklistInfo?: P9CreateDecklistInfo;
+    decklistEditorState?: P9DecklistEditorUIState;
   };
 }
 

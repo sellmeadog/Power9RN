@@ -2,8 +2,6 @@ import React, { FunctionComponent } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { Icon, Text } from 'react-native-elements';
 
-import { useNavigation } from '@react-navigation/core';
-
 import { P9DrawerNavigatorHeader, P9ItemSeparator, P9TableViewItem } from '../../../../../components';
 import { P9DecklistExplorerActionButton } from './screen-home-action-button.component';
 import { useHomeScreenFacade } from './screen-home.facade';
@@ -11,10 +9,7 @@ import { useHomeScreenFacade } from './screen-home.facade';
 export interface P9DecklistExplorerHomeScreenProps {}
 
 export const P9DecklistExplorerHomeScreen: FunctionComponent<P9DecklistExplorerHomeScreenProps> = () => {
-  const [{ data }, onRemove] = useHomeScreenFacade();
-  const { navigate } = useNavigation();
-
-  console.log('P9DecklistExplorerHomeScreen', data);
+  const [{ data }, onActivate, onRemove] = useHomeScreenFacade();
 
   return (
     <>
@@ -24,7 +19,7 @@ export const P9DecklistExplorerHomeScreen: FunctionComponent<P9DecklistExplorerH
         keyExtractor={(item) => item._id}
         ItemSeparatorComponent={P9ItemSeparator}
         renderItem={({ item }) => (
-          <P9TableViewItem onPress={() => navigate('P9:Modal:DecklistExplorer:Editor')}>
+          <P9TableViewItem onPress={() => onActivate(item._id)}>
             <Text style={[P9DecklistExplorerHomeScreenTheme.container]}>
               {item.name} ({item.formatId})
             </Text>

@@ -4,11 +4,11 @@ import { P9DecklistEntryType } from './user-decklist';
  * Defines an individual card entry in a decklist
  */
 
-export interface P9UserDecklistEntry {
+type P9UserDecklistEntryTypeMap = { [key in P9DecklistEntryType]: number };
+
+export interface P9UserDecklistEntry extends P9UserDecklistEntryTypeMap {
   id: string;
   cardId: string;
-  count: number;
-  type: P9DecklistEntryType;
 }
 
 export const P9UserDecklistEntrySchema: Realm.ObjectSchema = {
@@ -17,7 +17,7 @@ export const P9UserDecklistEntrySchema: Realm.ObjectSchema = {
   properties: {
     id: 'string',
     cardId: 'string',
-    count: 'int',
-    type: 'string',
+    maindeck: 'int',
+    sideboard: 'int',
   },
 };

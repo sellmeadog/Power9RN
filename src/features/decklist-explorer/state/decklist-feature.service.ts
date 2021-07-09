@@ -4,6 +4,8 @@ import { switchMap } from 'rxjs/operators';
 import { singleton } from 'tsyringe';
 import { v1 } from 'uuid';
 
+import { ID } from '@datorama/akita';
+
 import { P9UserDecklist, P9UserDecklistSchema } from '../../../core/data-user';
 import { P9UserDataPartitionQuery } from '../../../core/data-user/state/user-data-partition.query';
 import { P9UserDataPartitionService } from '../../../core/data-user/state/user-data-partition.service';
@@ -64,6 +66,10 @@ export class P9UserDecklistFeatureService {
         }),
       );
     }
+  };
+
+  activateDecklist = (id: ID) => {
+    this.store.setActive(id);
   };
 
   removeDecklist = (entity: P9UserDecklist) => {
