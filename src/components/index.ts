@@ -18,6 +18,7 @@ export * from './layout/row.component';
 export * from './layout/surface.component';
 export * from './list/list-item-empty';
 export * from './list/list-item';
+export * from './list/list.component';
 export * from './magic-set-symbol/magic-set-symbol.component';
 export * from './parsed-text/parsed-text';
 export * from './picker-table-screen/picker-table-screen.template';
