@@ -1,5 +1,7 @@
 import Realm, { Results, User } from 'realm';
+import { singleton } from 'tsyringe';
 
+import { etl_scryfall } from '../../etl';
 import { P9MagicCard, P9MagicCardSchema } from '../schema/magic-card';
 import { P9MagicCardFaceSchema } from '../schema/magic-card-face';
 import { P9MagicCardImageMapSchema } from '../schema/magic-card-image-map';
@@ -8,7 +10,7 @@ import { P9MagicCardPreviewSchema } from '../schema/magic-card-preview';
 import { P9MagicSetSchema } from '../schema/magic-set';
 import { P9UserHandleSchema } from '../schema/user-handle';
 import { P9PublicPartitionQuery } from './public-partition.query';
-import { makePublicPartitionStore, P9PublicPartitionStore } from './public-partition.store';
+import { P9PublicPartitionStore } from './public-partition.store';
 
 export const P9_PUBLIC_SCHEMA = [
   P9MagicCardFaceSchema,
@@ -20,6 +22,7 @@ export const P9_PUBLIC_SCHEMA = [
   P9UserHandleSchema,
 ];
 
+@singleton()
 export class P9PublicPartitionService {
   #partition: Realm | undefined;
   #magic_cards: Results<P9MagicCard> | undefined;
@@ -50,12 +53,20 @@ export class P9PublicPartitionService {
     partition?.close();
     console.debug('PUBLIC partition closed.');
   };
+
+  etl = () => {
+    etl_scryfall().forEach((batch) => {
+      try {
+        this.#partition?.beginTransaction();
+        batch.forEach((entity) => this.#partition?.create(P9MagicCardSchema.name, entity, Realm.UpdateMode.All));
+        this.#partition?.commitTransaction();
+        console.log(`Wrote ${batch.length} magic cards in batch`);
+      } catch (error) {
+        console.log(error);
+        this.#partition?.cancelTransaction();
+      }
+    });
+  };
 }
 
 export type P9PartitionServiceTuple = [query: P9PublicPartitionQuery, service: P9PublicPartitionService];
-
-export function makePublicPartitionService(): P9PartitionServiceTuple {
-  const [store, query] = makePublicPartitionStore();
-
-  return [query, new P9PublicPartitionService(store)];
-}

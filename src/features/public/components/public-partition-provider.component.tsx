@@ -5,7 +5,8 @@ import { Results } from 'realm';
 import { P9UserDataPartitionService } from '../../../core/data-user/state/user-data-partition.service';
 import { useDependency } from '../../../core/di';
 import { P9MagicCard } from '../../../core/public';
-import { makePublicPartitionService } from '../../../core/public/state/public-partition.service';
+import { P9PublicPartitionQuery } from '../../../core/public/state/public-partition.query';
+import { P9PublicPartitionService } from '../../../core/public/state/public-partition.service';
 import { useAuthorizationFacade } from '../../authorization';
 import { P9MagicCardFilterQuery } from '../../magic-card-filter/state/magic-card-filter/magic-card-filter.query';
 import { makeMagicCardGalleryStore, P9MagicCardGalleryStateTuple } from '../../magic-cards/state/magic-card.store';
@@ -16,17 +17,16 @@ export interface P9PartitionProviderProps {}
 
 export const P9PartitionProvider: FunctionComponent<P9PartitionProviderProps> = ({ children }) => {
   const [{ user }] = useAuthorizationFacade();
-  const serviceRef = useRef(makePublicPartitionService());
-  const galleryRef = useRef(makeMagicCardGalleryStore(serviceRef.current[0], useDependency(P9MagicCardFilterQuery)));
-  const userDataRef = useRef(useDependency(P9UserDataPartitionService));
+  const publicDataService = useDependency(P9PublicPartitionService);
+  const galleryRef = useRef(
+    makeMagicCardGalleryStore(useDependency(P9PublicPartitionQuery), useDependency(P9MagicCardFilterQuery)),
+  );
+  const userDataService = useDependency(P9UserDataPartitionService);
 
   useEffect(() => {
     if (!user || !user.isLoggedIn) {
       return;
     }
-
-    const [_, publicDataService] = serviceRef.current;
-    const userDataService = userDataRef.current;
 
     publicDataService.open(user);
     userDataService.open(user);
@@ -35,7 +35,7 @@ export const P9PartitionProvider: FunctionComponent<P9PartitionProviderProps> = 
       publicDataService.close();
       userDataService.close();
     };
-  }, [user]);
+  }, [publicDataService, user, userDataService]);
 
   const state = useMemo(() => ({ magicCardGallery: galleryRef.current }), []);
 
