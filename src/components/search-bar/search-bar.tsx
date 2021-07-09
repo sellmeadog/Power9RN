@@ -10,6 +10,7 @@ export interface P9SearchBarProps {
   containerStyle?: StyleProp<ViewStyle>;
   expression?: string;
   onExpressionChange?(value?: string): void;
+  placeholder?: string;
   searchBoxContainerStyle?: StyleProp<ViewStyle>;
   toggleButtonContainerStyle?: StyleProp<ViewStyle>;
 }
@@ -18,6 +19,7 @@ export const P9SearchBar: FunctionComponent<P9SearchBarProps> = ({
   containerStyle,
   expression,
   onExpressionChange,
+  placeholder,
   searchBoxContainerStyle,
   toggleButtonContainerStyle,
 }) => {
@@ -36,6 +38,7 @@ export const P9SearchBar: FunctionComponent<P9SearchBarProps> = ({
         containerStyle={[P9SearchBarTheme.searchBoxContainer, searchBoxContainerStyle]}
         expression={expression}
         onExpressionChange={onExpressionChange}
+        placeholder={placeholder}
       />
       <P9ToggleButton
         active={canReset}
