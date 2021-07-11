@@ -1,6 +1,7 @@
 import { TextInputProps } from 'react-native';
 import { TextProps } from 'react-native-elements';
 
+import { BottomSheetTextInputProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetTextInput';
 import { DefaultNavigatorOptions } from '@react-navigation/native';
 import { StackNavigationOptions } from '@react-navigation/stack';
 
@@ -19,10 +20,11 @@ declare module 'react-native-elements' {
 
   export interface FullTheme {
     colors: RecursivePartial<Colors>;
+    BottomSheetTextInput: Partial<BottomSheetTextInputProps>;
     StackNavigator: Partial<DefaultNavigatorOptions<StackNavigationOptions>>;
-    TextInput: Partial<TextInputProps>;
     TextCaption: Partial<TextProps>;
-    TextTitle: Partial<TextProps>;
     TextFootnote: Partial<TextProps>;
+    TextInput: Partial<TextInputProps>;
+    TextTitle: Partial<TextProps>;
   }
 }
