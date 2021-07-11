@@ -24,7 +24,7 @@ export * from './parsed-text/parsed-text';
 export * from './picker-table-screen/picker-table-screen.template';
 export * from './pressable-spring/pressable-spring.component';
 export * from './search-bar/search-bar';
-export * from './search-box/search-box';
+export * from './search-box/search-box-bottom-sheet.component';
 export * from './separator/item-separator.component';
 export * from './svg/artist-nib.component';
 export * from './table-view/table-view-item-document-picker.component';
