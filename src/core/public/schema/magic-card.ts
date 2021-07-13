@@ -1,9 +1,8 @@
-import { Nullable, NullableArray, NullableBoolean, NullableNumber, NullableString } from './nullable-types';
-
 import { P9MagicCardFace } from './magic-card-face';
 import { P9MagicCardPart } from './magic-card-part';
 import { P9MagicCardPreview } from './magic-card-preview';
 import { P9MagicSet } from './magic-set';
+import { Nullable, NullableArray, NullableBoolean, NullableNumber, NullableString } from './nullable-types';
 
 export interface P9MagicCard {
   _id: string;
@@ -32,7 +31,7 @@ export interface P9MagicCard {
   name: NullableString;
   name_simple: NullableString;
   nonfoil: NullableBoolean;
-  oracle_id: NullableString;
+  oracle_id: string;
   oversized: NullableBoolean;
   preview: P9MagicCardPreview;
   produced_mana: NullableArray<string>;
