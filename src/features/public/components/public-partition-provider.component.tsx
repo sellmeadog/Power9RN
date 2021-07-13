@@ -5,11 +5,10 @@ import { Results } from 'realm';
 import { P9UserDataPartitionService } from '../../../core/data-user/state/user-data-partition.service';
 import { useDependency } from '../../../core/di';
 import { P9MagicCard } from '../../../core/public';
-import { P9PublicPartitionQuery } from '../../../core/public/state/public-partition.query';
 import { P9PublicPartitionService } from '../../../core/public/state/public-partition.service';
 import { useAuthorizationFacade } from '../../authorization';
-import { P9MagicCardFilterQuery } from '../../magic-card-filter/state/magic-card-filter/magic-card-filter.query';
-import { makeMagicCardGalleryStore, P9MagicCardGalleryStateTuple } from '../../magic-cards/state/magic-card.store';
+import { P9MagicCardGalleryQuery } from '../../magic-cards/state/magic-card.query';
+import { P9MagicCardGalleryStateTuple, P9MagicCardGalleryStore } from '../../magic-cards/state/magic-card.store';
 
 const P9PartitionContext = createContext<{ magicCardGallery: P9MagicCardGalleryStateTuple } | undefined>(undefined);
 
@@ -18,9 +17,10 @@ export interface P9PartitionProviderProps {}
 export const P9PartitionProvider: FunctionComponent<P9PartitionProviderProps> = ({ children }) => {
   const [{ user }] = useAuthorizationFacade();
   const publicDataService = useDependency(P9PublicPartitionService);
-  const galleryRef = useRef(
-    makeMagicCardGalleryStore(useDependency(P9PublicPartitionQuery), useDependency(P9MagicCardFilterQuery)),
-  );
+  const galleryRef = useRef<P9MagicCardGalleryStateTuple>([
+    useDependency(P9MagicCardGalleryStore),
+    useDependency(P9MagicCardGalleryQuery),
+  ]);
   const userDataService = useDependency(P9UserDataPartitionService);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export const P9PartitionProvider: FunctionComponent<P9PartitionProviderProps> = 
 };
 
 export function useMagicCardGalleryFacade(): [
-  state: { keywordExpression?: string; visibleResults?: Results<P9MagicCard> },
+  state: { keywordExpression?: string; visibleResults?: Results<P9MagicCard & Realm.Object> },
   setKeywordExpression: (expression: string) => void,
 ] {
   const context = useContext(P9PartitionContext);
@@ -56,7 +56,10 @@ export function useMagicCardGalleryFacade(): [
     magicCardGallery: [store, query],
   } = context;
   const keywordExpression = useObservableState(query.keywordExpression$, undefined);
-  const visibleResults = useObservableState(query.visibleResults$, undefined);
+  const visibleResults = useObservableState(
+    query.visibleResults$,
+    [] as unknown as Results<P9MagicCard & Realm.Object>,
+  );
 
   const setKeywordExpression = useCallback(
     (expression: string) => store.update((state) => ({ ...state, keywordExpression: expression })),

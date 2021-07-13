@@ -1,6 +1,7 @@
 import { Results } from 'realm';
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { singleton } from 'tsyringe';
 
 import { Query } from '@datorama/akita';
 
@@ -9,6 +10,7 @@ import { P9PublicPartitionQuery } from '../../../core/public/state/public-partit
 import { P9MagicCardFilterQuery } from '../../magic-card-filter';
 import { P9MagicCardGalleryState, P9MagicCardGalleryStore } from './magic-card.store';
 
+@singleton()
 export class P9MagicCardGalleryQuery extends Query<P9MagicCardGalleryState> {
   #keywordPredicate$ = this.select(selectKeywordPredicate());
 
@@ -18,7 +20,7 @@ export class P9MagicCardGalleryQuery extends Query<P9MagicCardGalleryState> {
     this.filterQuery.predicate$,
     this.#keywordPredicate$,
   ]).pipe(
-    map(([results, filterPredicate, keywordPredicate]): [Results<P9MagicCard> | undefined, string] => [
+    map(([results, filterPredicate, keywordPredicate]): [Results<P9MagicCard & Realm.Object> | undefined, string] => [
       results,
       [filterPredicate, keywordPredicate]
         .join(' AND ')

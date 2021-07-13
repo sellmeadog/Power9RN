@@ -1,10 +1,10 @@
 import React, { FunctionComponent, useCallback } from 'react';
-import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, TextInputProps, View, ViewStyle } from 'react-native';
 
 import { usePower9Theme } from '../../core/theme';
 import { useMagicCardFilterFacade } from '../../features/magic-card-filter';
 import { P9ToggleButton } from '../button-toggle/toggle-button';
-import { P9SearchBox } from '../search-box/search-box';
+import { P9SearchBox } from '../search-box/search-box-bottom-sheet.component';
 
 export interface P9SearchBarProps {
   containerStyle?: StyleProp<ViewStyle>;
@@ -13,6 +13,7 @@ export interface P9SearchBarProps {
   placeholder?: string;
   searchBoxContainerStyle?: StyleProp<ViewStyle>;
   toggleButtonContainerStyle?: StyleProp<ViewStyle>;
+  textInputProps?: Partial<TextInputProps>;
 }
 
 export const P9SearchBar: FunctionComponent<P9SearchBarProps> = ({
@@ -22,6 +23,7 @@ export const P9SearchBar: FunctionComponent<P9SearchBarProps> = ({
   placeholder,
   searchBoxContainerStyle,
   toggleButtonContainerStyle,
+  textInputProps,
 }) => {
   const [{ colors }] = usePower9Theme();
   const [{ canReset }, reset, handlePress] = useMagicCardFilterFacade();
@@ -39,6 +41,7 @@ export const P9SearchBar: FunctionComponent<P9SearchBarProps> = ({
         expression={expression}
         onExpressionChange={onExpressionChange}
         placeholder={placeholder}
+        {...textInputProps}
       />
       <P9ToggleButton
         active={canReset}
@@ -62,10 +65,8 @@ const P9SearchBarTheme = StyleSheet.create({
   },
 
   searchBoxContainer: {
-    marginLeft: 5,
+    flexGrow: 1,
   },
 
-  toggleButtonContainer: {
-    marginLeft: 5,
-  },
+  toggleButtonContainer: {},
 });

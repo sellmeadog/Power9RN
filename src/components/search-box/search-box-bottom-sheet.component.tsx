@@ -68,6 +68,7 @@ const P9SearchBoxTheme = StyleSheet.create({
     flexBasis: 44,
     justifyContent: 'center',
     overflow: 'hidden',
+    paddingHorizontal: 5,
   },
 
   borderContainer: {

@@ -8,7 +8,7 @@ import { P9MagicCard } from '../schema/magic-card';
 
 export interface P9PublicPartitionState {
   partition?: Realm;
-  magicCards?: Results<P9MagicCard>;
+  magicCards?: Results<P9MagicCard & Realm.Object>;
 }
 
 @singleton()
