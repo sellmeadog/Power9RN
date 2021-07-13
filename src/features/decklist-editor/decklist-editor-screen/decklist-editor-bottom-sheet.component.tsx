@@ -4,13 +4,12 @@ import Animated, { interpolateColor, useAnimatedStyle } from 'react-native-reani
 
 import BottomSheet, {
   BottomSheetBackgroundProps,
-  BottomSheetFlatList,
   BottomSheetHandleProps,
   BottomSheetTextInput,
 } from '@gorhom/bottom-sheet';
 
 import { usePower9Theme } from '../../../core/theme';
-import { P9MagicCardGallery, P9MagicCardImage, P9MagicCardSearchBar } from '../../magic-cards';
+import { P9MagicCardGallery, P9MagicCardSearchBar } from '../../magic-cards';
 import { useMagicCardGalleryFacade } from '../../public/components';
 import { useDecklistEditorFacade } from '../state/decklist-editor.service';
 
@@ -18,7 +17,7 @@ export interface P9DecklistEditorBottomSheetProps {}
 
 export const P9DecklistEditorBottomSheet: FunctionComponent<P9DecklistEditorBottomSheetProps> = () => {
   const [{ visibleResults }] = useMagicCardGalleryFacade();
-  const [_, __, addCard] = useDecklistEditorFacade();
+  const [{ activeEntryType = 'maindeck' }, __, upsertEntry] = useDecklistEditorFacade();
 
   return (
     <BottomSheet
@@ -27,13 +26,7 @@ export const P9DecklistEditorBottomSheet: FunctionComponent<P9DecklistEditorBott
       keyboardBehavior={'interactive'}
       snapPoints={[76, 300]}
     >
-      {/* <BottomSheetFlatList
-        data={visibleResults}
-        horizontal={true}
-        keyExtractor={({ _id }) => _id}
-        renderItem={({ item }) => <P9MagicCardImage sourceUri={item.card_faces[0].image_uris?.small} />}
-      /> */}
-      <P9MagicCardGallery data={visibleResults} onPress={(___, id) => addCard(id)} />
+      <P9MagicCardGallery data={visibleResults} onPress={(magicCard) => upsertEntry(magicCard, activeEntryType)} />
     </BottomSheet>
   );
 };

@@ -1,11 +1,12 @@
 import { useObservableState } from 'observable-hooks';
 import { useCallback, useEffect } from 'react';
 import { singleton } from 'tsyringe';
-import { v1 } from 'uuid';
 
 import { arrayUpsert } from '@datorama/akita';
 
+import { P9DecklistEntryType } from '../../../core/data-user';
 import { useDependency } from '../../../core/di';
+import { P9MagicCard } from '../../../core/public';
 import { P9UserDecklistFeatureStore } from '../../decklist-explorer/state';
 import { P9DecklistEditorUIState } from '../../decklist-explorer/state/decklist-feature.model';
 import { P9DecklistEditorState } from '../decklist-editor.model';
@@ -33,16 +34,11 @@ export class P9DecklistEditorService {
     });
   };
 
-  upsertEntry = (id: string) => {
+  upsertEntry = (id: string, cardId: string, entryType: P9DecklistEntryType) => {
     this.store.updateActive((draft) => {
       const entry = draft.entries.find((item) => item.id === id);
 
-      draft.entries = arrayUpsert(
-        draft.entries,
-        entry?.id ?? v1(),
-        { id, cardId: id, commander: 0, maindeck: (entry?.maindeck ?? 0) + 1, sideboard: 0 },
-        'id',
-      );
+      draft.entries = arrayUpsert(draft.entries, id, { id, cardId, [entryType]: (entry?.[entryType] ?? 0) + 1 }, 'id');
     });
   };
 }
@@ -50,7 +46,7 @@ export class P9DecklistEditorService {
 export function useDecklistEditorFacade(): [
   state: P9DecklistEditorState,
   updateFn: <K extends keyof P9DecklistEditorUIState>(key: K, value: P9DecklistEditorUIState[K]) => void,
-  addCardFn: (id: string) => void,
+  upsertEntryFn: (magicCard: P9MagicCard, entryType: P9DecklistEntryType) => void,
 ] {
   const service = useDependency(P9DecklistEditorService);
 
@@ -64,6 +60,10 @@ export function useDecklistEditorFacade(): [
       },
       [service],
     ),
-    useCallback((id: string) => service.upsertEntry(id), [service]),
+    useCallback(
+      ({ _id, oracle_id }: P9MagicCard, entryType: P9DecklistEntryType) =>
+        service.upsertEntry(oracle_id, _id, entryType),
+      [service],
+    ),
   ];
 }

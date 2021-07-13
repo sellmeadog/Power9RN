@@ -12,8 +12,8 @@ const { width: WIDTH } = Dimensions.get('screen');
 
 export interface P9MagicCardGalleryProps {
   currentIndex?: number;
-  data: Results<P9MagicCard & Realm.Object>;
-  onPress?(index: number, id: string): void;
+  data: Results<P9MagicCard & Realm.Object> | undefined;
+  onPress?(magicCard: P9MagicCard, index: number): void;
 }
 
 export const P9MagicCardGallery: FunctionComponent<P9MagicCardGalleryProps> = ({ currentIndex, data, onPress }) => {
@@ -39,13 +39,7 @@ export const P9MagicCardGallery: FunctionComponent<P9MagicCardGalleryProps> = ({
 
   const renderItem = useCallback(
     (_: string | number, item: P9MagicCard, index: number) => (
-      <P9MagicCardGalleryItem
-        booster={item.booster}
-        card_faces={item.card_faces}
-        id={item._id}
-        index={index}
-        onPress={onPress}
-      />
+      <P9MagicCardGalleryItem index={index} magicCard={item} onPress={onPress} />
     ),
     [onPress],
   );
