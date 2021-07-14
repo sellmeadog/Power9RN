@@ -5,7 +5,7 @@ export interface P9CreateDecklistInfo {
   formatId: string;
   manualEntries?: string;
   parsedEntries?: P9CreateDecklistEntryInfo[];
-  description?: string;
+  description: string | null;
 }
 
 export interface P9CreateDecklistEntryInfo {

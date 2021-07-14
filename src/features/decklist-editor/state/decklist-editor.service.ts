@@ -1,10 +1,13 @@
+import { DateTime } from 'luxon';
 import { useObservableState } from 'observable-hooks';
 import { useCallback, useEffect } from 'react';
+import { debounceTime, tap } from 'rxjs/operators';
 import { singleton } from 'tsyringe';
 
 import { arrayUpsert } from '@datorama/akita';
 
-import { P9DecklistEntryType } from '../../../core/data-user';
+import { P9DecklistEntryType, P9UserDecklistSchema } from '../../../core/data-user';
+import { P9UserDataPartitionService } from '../../../core/data-user/state/user-data-partition.service';
 import { useDependency } from '../../../core/di';
 import { P9MagicCard } from '../../../core/public';
 import { P9UserDecklistFeatureStore } from '../../decklist-explorer/state';
@@ -14,7 +17,19 @@ import { P9DecklistEditorQuery } from './decklist-editor.query';
 
 @singleton()
 export class P9DecklistEditorService {
-  constructor(private store: P9UserDecklistFeatureStore, public query: P9DecklistEditorQuery) {}
+  constructor(
+    private store: P9UserDecklistFeatureStore,
+    public query: P9DecklistEditorQuery,
+    private dataService: P9UserDataPartitionService,
+  ) {
+    this.query
+      .selectActive()
+      .pipe(
+        debounceTime(1000),
+        tap((entity) => this.dataService.createObject(P9UserDecklistSchema, entity)),
+      )
+      .subscribe(console.log);
+  }
 
   initializeEditorUIState = () => {
     this.store.update((draft) => {
@@ -22,6 +37,7 @@ export class P9DecklistEditorService {
     });
 
     return () => {
+      this.store.removeActive(this.query.getActiveId());
       this.store.update((draft) => {
         draft.ui.decklistEditorState = undefined;
       });
@@ -39,6 +55,7 @@ export class P9DecklistEditorService {
       const entry = draft.entries.find((item) => item.id === id);
 
       draft.entries = arrayUpsert(draft.entries, id, { id, cardId, [entryType]: (entry?.[entryType] ?? 0) + 1 }, 'id');
+      draft.modifiedOn = DateTime.local().toSeconds();
     });
   };
 }

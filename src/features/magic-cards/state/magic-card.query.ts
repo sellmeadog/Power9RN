@@ -1,6 +1,6 @@
 import { Results } from 'realm';
 import { combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { debounceTime, map } from 'rxjs/operators';
 import { singleton } from 'tsyringe';
 
 import { Query } from '@datorama/akita';
@@ -17,8 +17,8 @@ export class P9MagicCardGalleryQuery extends Query<P9MagicCardGalleryState> {
   keywordExpression$ = this.select(({ keywordExpression: keyword }) => keyword);
   visibleResults$ = combineLatest([
     this.partitionQuery.magicCards$,
-    this.filterQuery.predicate$,
-    this.#keywordPredicate$,
+    this.filterQuery.predicate$.pipe(debounceTime(250)),
+    this.#keywordPredicate$.pipe(debounceTime(50)),
   ]).pipe(
     map(([results, filterPredicate, keywordPredicate]): [Results<P9MagicCard & Realm.Object> | undefined, string] => [
       results,
@@ -38,6 +38,10 @@ export class P9MagicCardGalleryQuery extends Query<P9MagicCardGalleryState> {
   ) {
     super(store);
   }
+
+  magicCard = (id: string) => {
+    return this.partitionQuery.magicCardById(id);
+  };
 }
 
 function selectKeywordPredicate(): (store: P9MagicCardGalleryState) => string | undefined {

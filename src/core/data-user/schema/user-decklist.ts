@@ -18,15 +18,15 @@ export interface P9UserDecklist {
   _partition: string;
   name: string;
   formatId?: string;
-  description?: string;
+  description: string | null;
   entries: P9UserDecklistEntry[];
-  isPublic?: boolean;
+  isPublic: boolean | null;
   createdAt: number;
   modifiedOn: number;
 }
 
 export const P9UserDecklistSchema: Realm.ObjectSchema = {
-  name: 'user_decklist',
+  name: 'user_decklist_2',
   primaryKey: '_id',
   properties: {
     _id: 'string',

@@ -23,7 +23,7 @@ export type P9MagicCardFace = {
   toughness_numeric: Nullable<number>;
   toughness: Nullable<string>;
   type_line: Nullable<string>;
-  types: Nullable<string[]>;
+  types: string[];
   watermark: Nullable<string>;
 };
 
@@ -53,7 +53,7 @@ export const P9MagicCardFaceSchema: Realm.ObjectSchema = {
     toughness_numeric: 'double?',
     toughness: 'string?',
     type_line: 'string',
-    types: { type: 'string[]' },
+    types: 'string[]',
     watermark: 'string?',
   },
 };

@@ -60,8 +60,9 @@ export class P9UserDecklistFeatureService {
           _id: v1(),
           _partition: user.id,
           ...rest,
-          entries: [],
           createdAt: now,
+          entries: [],
+          isPublic: false,
           modifiedOn: now,
         }),
       );
@@ -74,12 +75,12 @@ export class P9UserDecklistFeatureService {
 
   removeDecklist = (entity: P9UserDecklist) => {
     this.store.remove(entity._id);
-    this.dataService.removeObject(entity);
+    this.dataService.removeObject(P9UserDecklistSchema, entity._id);
   };
 
   initCreateDecklistUI = () => {
     this.store.update((draft) => {
-      draft.ui.decklistInfo = { name: '', formatId: 'casual' };
+      draft.ui.decklistInfo = { name: '', formatId: 'casual', description: '' };
     });
 
     return () => {

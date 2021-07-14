@@ -27,7 +27,16 @@ export class P9UserDataPartitionService {
 
     if (!this.#partition || this.#partition.isClosed) {
       console.debug(`Opening USER partition for ${user.id}...`);
-      this.#partition = new Realm({ schema: P9_USER_DATA_SCHEMA, sync: { partitionValue: user.id, user } });
+      this.#partition = new Realm({
+        schema: P9_USER_DATA_SCHEMA,
+        sync: {
+          partitionValue: user.id,
+          user,
+          error: (_, error) => {
+            console.log(error);
+          },
+        },
+      });
       this.#decklists = this.#partition.objects<P9UserDecklist>(P9UserDecklistSchema.name).sorted([['name', false]]);
 
       this.store.next({ partition: this.#partition, decklists: this.#decklists });
@@ -55,14 +64,13 @@ export class P9UserDataPartitionService {
         return reject(new Error('An open and writable partition is not available.'));
       }
 
-      try {
-        this.#partition.beginTransaction();
-        resolve(this.#partition.create(name, entity, Realm.UpdateMode.All));
-        this.#partition.commitTransaction();
-      } catch (error) {
-        this.#partition.cancelTransaction();
-        reject(error);
-      }
+      this.#partition.write(() => {
+        try {
+          resolve(this.#partition!.create(name, entity, Realm.UpdateMode.All));
+        } catch (error) {
+          reject(error);
+        }
+      });
     });
   };
 
@@ -70,13 +78,13 @@ export class P9UserDataPartitionService {
     return this.createObject(P9UserDecklistSchema, entity);
   };
 
-  removeObject = <T>(entity: T) => {
-    try {
-      this.#partition?.beginTransaction();
-      this.#partition?.delete(entity);
-      this.#partition?.commitTransaction();
-    } catch {
-      this.#partition?.cancelTransaction();
+  removeObject = <T>({ name }: ObjectSchema, id: string) => {
+    if (!this.#partition) {
+      throw new Error('An open and writable partition is not available.');
     }
+
+    this.#partition?.write(() => {
+      this.#partition?.delete(this.#partition.objectForPrimaryKey(name, id));
+    });
   };
 }

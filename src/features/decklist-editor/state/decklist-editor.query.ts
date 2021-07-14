@@ -11,8 +11,8 @@ import { P9DecklistEditorState } from '../decklist-editor.model';
 export class P9DecklistEditorQuery extends QueryEntity<P9UserDecklistFeatureState> {
   editorState$: Observable<P9DecklistEditorState> = combineLatest({
     activeEntryType: this.select(({ ui }) => ui.decklistEditorState?.activeEntryType),
-    name: this.selectActive(({ name }) => name),
     entries: this.selectActive(({ entries }) => entries),
+    name: this.selectActive(({ name }) => name),
   });
 
   constructor(store: P9UserDecklistFeatureStore, private magicCardQuery: P9MagicCardGalleryQuery) {

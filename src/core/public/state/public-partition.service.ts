@@ -25,7 +25,7 @@ export const P9_PUBLIC_SCHEMA = [
 @singleton()
 export class P9PublicPartitionService {
   #partition: Realm | undefined;
-  #magic_cards: Results<P9MagicCard> | undefined;
+  #magic_cards: Results<P9MagicCard & Realm.Object> | undefined;
 
   constructor(private store: P9PublicPartitionStore) {}
 
@@ -66,6 +66,10 @@ export class P9PublicPartitionService {
         this.#partition?.cancelTransaction();
       }
     });
+  };
+
+  magicCardById = (id: string): P9MagicCard | undefined => {
+    return this.#partition?.objectForPrimaryKey<P9MagicCard>(P9MagicCardSchema.name, id);
   };
 }
 

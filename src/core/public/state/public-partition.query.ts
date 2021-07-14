@@ -5,15 +5,20 @@ import { singleton } from 'tsyringe';
 
 import { Query } from '@datorama/akita';
 
+import { P9MagicCard, P9MagicCardSchema } from '../schema/magic-card';
 import { P9PublicPartitionState, P9PublicPartitionStore } from './public-partition.store';
 
 @singleton()
 export class P9PublicPartitionQuery extends Query<P9PublicPartitionState> {
+  partition$ = this.select(({ partition }) => partition);
   magicCards$ = this.select(({ magicCards }) => magicCards).pipe(watchCollection());
 
   constructor(store: P9PublicPartitionStore) {
     super(store);
   }
+
+  magicCardById = (id: string) =>
+    this.getValue().partition?.objectForPrimaryKey<P9MagicCard>(P9MagicCardSchema.name, id);
 }
 
 export function watchCollection<T>(): MonoTypeOperatorFunction<Results<T> | undefined> {
