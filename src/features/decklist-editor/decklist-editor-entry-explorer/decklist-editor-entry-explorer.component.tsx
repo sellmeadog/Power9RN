@@ -11,9 +11,13 @@ import { P9DecklistEditorEntryExplorerItem } from './decklist-editor-entry-explo
 
 export interface P9DecklistEditorEntryExplorerProps {
   entryType: P9DecklistEntryType;
+  onPress?(entry: P9DecklistEditorEntry): void;
 }
 
-export const P9DecklistEditorEntryExplorer: FunctionComponent<P9DecklistEditorEntryExplorerProps> = ({ entryType }) => {
+export const P9DecklistEditorEntryExplorer: FunctionComponent<P9DecklistEditorEntryExplorerProps> = ({
+  entryType,
+  onPress,
+}) => {
   const [{ entries = [] }] = useDecklistEditorFacade();
   const editorEntries = useDecklistEditorEntries(entries, entryType);
 
@@ -22,7 +26,9 @@ export const P9DecklistEditorEntryExplorer: FunctionComponent<P9DecklistEditorEn
       ItemSeparatorComponent={P9ItemSeparator}
       data={editorEntries}
       keyExtractor={(item) => item.id}
-      renderItem={({ item }) => <P9DecklistEditorEntryExplorerItem entry={item} entryType={entryType} />}
+      renderItem={({ item }) => (
+        <P9DecklistEditorEntryExplorerItem entry={item} entryType={entryType} onPress={onPress} />
+      )}
     />
   );
 };
@@ -33,16 +39,16 @@ export interface P9DecklistEditorEntry extends P9UserDecklistEntry {
   magicCard?: P9MagicCard;
 }
 
-function useDecklistEditorEntries(
-  entries: P9UserDecklistEntry[],
-  entryType: P9DecklistEntryType,
+export function useDecklistEditorEntries(
+  entries: P9UserDecklistEntry[] = [],
+  entryType?: P9DecklistEntryType,
 ): P9DecklistEditorEntry[] {
   const query = useDependency(P9MagicCardGalleryQuery);
 
   return useMemo(
     () =>
       entries
-        .filter((entry) => Boolean(entry[entryType]))
+        .filter((entry) => (entryType ? Boolean(entry[entryType]) : true))
         .map((entry) => ({ ...entry, magicCard: query.magicCard(entry.cardId) }))
         .sort(
           sortComparer,

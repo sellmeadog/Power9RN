@@ -3,6 +3,7 @@ import { Dimensions } from 'react-native';
 import { NavigationState, SceneRendererProps, TabView } from 'react-native-tab-view';
 
 import { P9DecklistEntryType } from '../../../core/data-user';
+import { P9DecklistEditorEntry } from '../../decklist-explorer/state/decklist-feature.model';
 import { P9DecklistEditorEntryExplorer } from '../decklist-editor-entry-explorer/decklist-editor-entry-explorer.component';
 import { P9DecklistEditorTabBar } from './decklist-editor-tab-bar.component';
 import { P9DecklistEditorRoute } from './decklist-editor-tab-view.types';
@@ -20,6 +21,7 @@ const DECKLIST_ENTRY_TYPES: P9DecklistEntryType[] = ['maindeck', 'sideboard'];
 export interface P9DecklistEditorTabViewProps {
   activeEntryType: P9DecklistEntryType;
   onActiveEntryTypeChange?(value: P9DecklistEntryType): void;
+  onPress?(entry: P9DecklistEditorEntry): void;
 }
 
 const TABVIEW_ROUTES: P9DecklistEditorRoute[] = [
@@ -30,6 +32,7 @@ const TABVIEW_ROUTES: P9DecklistEditorRoute[] = [
 export const P9DecklistEditorTabView: FunctionComponent<P9DecklistEditorTabViewProps> = ({
   activeEntryType,
   onActiveEntryTypeChange,
+  onPress,
 }) => {
   const navigationState = useMemo(
     () => ({
@@ -44,8 +47,8 @@ export const P9DecklistEditorTabView: FunctionComponent<P9DecklistEditorTabViewP
   };
 
   const renderScene = useCallback<P9RenderSceneFn>(
-    ({ route }) => <P9DecklistEditorEntryExplorer entryType={route.key} />,
-    [],
+    ({ route }) => <P9DecklistEditorEntryExplorer entryType={route.key} onPress={onPress} />,
+    [onPress],
   );
 
   const renderTabBar = useCallback<P9RenderTabBarFn>((props) => <P9DecklistEditorTabBar {...props} />, []);

@@ -1,6 +1,6 @@
 import { P9DecklistEntryType } from '../../core/data-user';
 import { P9UserDecklistEntry } from '../../core/data-user/schema/user-decklist-entry';
-import { P9MagicCardFace } from '../../core/public';
+import { P9MagicCard } from '../../core/public';
 
 export interface P9DecklistEditorSubEntry {
   id: string;
@@ -10,8 +10,9 @@ export interface P9DecklistEditorSubEntry {
 type P9DecklistEditorEntryType = { [key in P9DecklistEntryType]?: P9DecklistEditorSubEntry };
 
 export interface P9DecklistEditorEntry extends P9DecklistEditorEntryType {
+  cardId: string;
   id: string;
-  magicCard: P9MagicCardFace | undefined;
+  magicCard: P9MagicCard | undefined;
 }
 
 export interface P9DecklistEditorState {

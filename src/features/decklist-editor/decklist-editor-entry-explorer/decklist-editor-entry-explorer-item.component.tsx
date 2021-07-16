@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
@@ -11,14 +11,18 @@ import { P9DecklistEditorEntry } from './decklist-editor-entry-explorer.componen
 export interface P9DecklistEditorEntryExplorerItemProps {
   entry: P9DecklistEditorEntry;
   entryType: P9DecklistEntryType;
+  onPress?(entry: P9DecklistEditorEntry): void;
 }
 
 export const P9DecklistEditorEntryExplorerItem: FunctionComponent<P9DecklistEditorEntryExplorerItemProps> = ({
   entry,
   entryType,
+  onPress,
 }) => {
+  const handlePress = useCallback(() => onPress?.(entry), [entry, onPress]);
+
   return (
-    <P9TableViewItem containerStyle={P9DecklistEditorEntryExplorerItemTheme.itemContainer}>
+    <P9TableViewItem containerStyle={P9DecklistEditorEntryExplorerItemTheme.itemContainer} onPress={handlePress}>
       <P9RowView style={P9DecklistEditorEntryExplorerItemTheme.rowContainer}>
         <FastImage
           source={{ uri: entry.magicCard?.card_faces[0].image_uris?.art_crop }}
