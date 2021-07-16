@@ -1,5 +1,6 @@
 export * from './artist-label/artist-label.component';
 export * from './bulleted-text/bulleted-text';
+export * from './button-spin/button-spin.component';
 export * from './button-spring/spring-button';
 export * from './button-toggle-carousel/carousel-toggle-button.component';
 export * from './button-toggle-game-symbol/game-symbol-toggle-button.component';
