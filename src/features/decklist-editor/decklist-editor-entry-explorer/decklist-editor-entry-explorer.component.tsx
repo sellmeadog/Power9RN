@@ -65,8 +65,6 @@ export function useDecklistEditorEntries(
 }
 
 const sortComparer = ({ magicCard: a }: P9DecklistEditorEntry, { magicCard: b }: P9DecklistEditorEntry) => {
-  console.log('a', a?.card_faces[0].types, Array.isArray(a?.card_faces[0].types));
-  console.log('b', b?.card_faces[0].types);
   // if (a === undefined) {
   //   return -1;
   // } else if (b === undefined) {

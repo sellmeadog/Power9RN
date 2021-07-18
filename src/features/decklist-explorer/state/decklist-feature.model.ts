@@ -8,9 +8,11 @@ export type P9DecklistEditorEntryTypeMap = { [key in P9DecklistEditorEntryType]?
 
 export interface P9DecklistEditorEntry extends P9DecklistEditorEntryTypeMap {
   id: ID;
+  cardId: string;
   magicCard?: P9MagicCard;
 }
 
 export interface P9DecklistEditorUIState {
   activeEntryType: P9DecklistEntryType;
+  activeEntryId?: string;
 }

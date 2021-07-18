@@ -1,4 +1,4 @@
-import React, { FunctionComponent, ReactElement, useCallback, useMemo, useState } from 'react';
+import React, { FunctionComponent, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 import { Dimensions, ImageStyle, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 
@@ -18,7 +18,7 @@ export interface P9DecklistEditorEntryCarouselProps {
   magicCardImageContainerStyle?: StyleProp<ViewStyle>;
   magicCardImageStyle?: StyleProp<ImageStyle>;
   magicCardItemContainerStyle?: StyleProp<ViewStyle>;
-  onEditorEntryChanged?(magicCard?: P9DecklistEditorEntry): void;
+  onEditorEntryChanged?(entryId?: string): void;
   onIndexChanged?(index: number): void;
   showPagination?: boolean;
 }
@@ -28,9 +28,9 @@ const { width: SCREEN_WIDTH } = Dimensions.get('screen');
 export const P9DecklistEntryEditorCarousel: FunctionComponent<P9DecklistEditorEntryCarouselProps> = ({
   activeId,
   containerStyle,
+  editorEntries = [],
   magicCardImageContainerStyle,
   magicCardItemContainerStyle,
-  editorEntries = [],
   onEditorEntryChanged,
   onIndexChanged,
   showPagination = true,
@@ -42,7 +42,7 @@ export const P9DecklistEntryEditorCarousel: FunctionComponent<P9DecklistEditorEn
   const handleSnapToItem = useCallback(
     (index: number) => {
       if (onEditorEntryChanged) {
-        onEditorEntryChanged(editorEntries ? editorEntries[index] : undefined);
+        onEditorEntryChanged(editorEntries?.[index].id);
       }
 
       if (onIndexChanged) {
@@ -64,6 +64,8 @@ export const P9DecklistEntryEditorCarousel: FunctionComponent<P9DecklistEditorEn
     ),
     [magicCardImageContainerStyle, magicCardItemContainerStyle],
   );
+
+  useEffect(() => onEditorEntryChanged?.(activeId as unknown as string), [activeId, onEditorEntryChanged]);
 
   return (
     <View style={[P9DecklistEntryEditorCarouselTheme.container, containerStyle]}>

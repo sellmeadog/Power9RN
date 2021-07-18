@@ -28,7 +28,7 @@ export const P9SpinButton: FunctionComponent<P9SpinButtonProps> = ({ onValueChan
         {title && <Text style={[P9SpinButtonTheme.titleText]}>{title}</Text>}
         <P9RowView style={[P9SpinButtonTheme.buttonGroupContainer]}>
           <P9SpringButton iconProps={{ name: 'minus', type: 'material-community' }} onPress={handleDecrement} />
-          <Text style={[P9SpinButtonTheme.buttonText]}>{value}</Text>
+          <Text style={[P9SpinButtonTheme.buttonText]}>{value ?? 0}</Text>
           <P9SpringButton iconProps={{ name: 'plus', type: 'material-community' }} onPress={handleIncrement} />
         </P9RowView>
       </View>
