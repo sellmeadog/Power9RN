@@ -5,15 +5,15 @@ import { Text } from 'react-native-elements';
 import { P9RowView, P9TableViewItem } from '../../../components';
 import { P9DecklistEntryType } from '../../../core/data-user';
 import { P9MagicCardArtwork, P9MagicCardText } from '../../magic-cards';
-import { P9DecklistEditorEntry } from './decklist-editor-entry-explorer.component';
+import { P9DecklistEditorEntry } from './decklist-entry-explorer.component';
 
-export interface P9DecklistEditorEntryExplorerItemProps {
+export interface P9DecklistEntryExplorerItemProps {
   entry: P9DecklistEditorEntry;
   entryType: P9DecklistEntryType;
   onPress?(entry: P9DecklistEditorEntry): void;
 }
 
-export const P9DecklistEditorEntryExplorerItem: FunctionComponent<P9DecklistEditorEntryExplorerItemProps> = ({
+export const P9DecklistEntryExplorerItem: FunctionComponent<P9DecklistEntryExplorerItemProps> = ({
   entry,
   entryType,
   onPress,

@@ -7,17 +7,14 @@ import { useDependency } from '../../../core/di';
 import { P9MagicCard } from '../../../core/public';
 import { P9MagicCardGalleryQuery } from '../../magic-cards/state/magic-card.query';
 import { useDecklistEditorFacade } from '../state/decklist-editor.service';
-import { P9DecklistEditorEntryExplorerItem } from './decklist-editor-entry-explorer-item.component';
+import { P9DecklistEntryExplorerItem } from './decklist-entry-explorer-item.component';
 
-export interface P9DecklistEditorEntryExplorerProps {
+export interface P9DecklistEntryExplorerProps {
   entryType: P9DecklistEntryType;
   onPress?(entry: P9DecklistEditorEntry): void;
 }
 
-export const P9DecklistEditorEntryExplorer: FunctionComponent<P9DecklistEditorEntryExplorerProps> = ({
-  entryType,
-  onPress,
-}) => {
+export const P9DecklistEntryExplorer: FunctionComponent<P9DecklistEntryExplorerProps> = ({ entryType, onPress }) => {
   const [{ entries = [] }] = useDecklistEditorFacade();
   const editorEntries = useDecklistEditorEntries(entries, entryType);
 
@@ -26,9 +23,7 @@ export const P9DecklistEditorEntryExplorer: FunctionComponent<P9DecklistEditorEn
       ItemSeparatorComponent={P9ItemSeparator}
       data={editorEntries}
       keyExtractor={(item) => item.id}
-      renderItem={({ item }) => (
-        <P9DecklistEditorEntryExplorerItem entry={item} entryType={entryType} onPress={onPress} />
-      )}
+      renderItem={({ item }) => <P9DecklistEntryExplorerItem entry={item} entryType={entryType} onPress={onPress} />}
     />
   );
 };

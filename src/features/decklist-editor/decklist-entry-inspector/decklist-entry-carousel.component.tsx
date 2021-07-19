@@ -6,11 +6,11 @@ import { ID } from '@datorama/akita';
 
 import { usePower9Theme } from '../../../core/theme';
 import { P9MagicCardImage } from '../../magic-cards';
-import { P9DecklistEditorEntry } from '../decklist-editor-entry-explorer/decklist-editor-entry-explorer.component';
+import { P9DecklistEditorEntry } from '../decklist-entry-explorer/decklist-entry-explorer.component';
 
 type CarouselRenderItem<TData> = (item: { item: TData; index: number }) => ReactElement;
 
-export interface P9DecklistEditorEntryCarouselProps {
+export interface P9DecklistEntryCarouselProps {
   activeId?: ID;
   containerStyle?: StyleProp<ViewStyle>;
   editorEntries?: P9DecklistEditorEntry[];
@@ -25,7 +25,7 @@ export interface P9DecklistEditorEntryCarouselProps {
 
 const { width: SCREEN_WIDTH } = Dimensions.get('screen');
 
-export const P9DecklistEntryEditorCarousel: FunctionComponent<P9DecklistEditorEntryCarouselProps> = ({
+export const P9DecklistEntryCarousel: FunctionComponent<P9DecklistEntryCarouselProps> = ({
   activeId,
   containerStyle,
   editorEntries = [],

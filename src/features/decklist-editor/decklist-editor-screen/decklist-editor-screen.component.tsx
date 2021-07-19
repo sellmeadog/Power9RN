@@ -7,9 +7,9 @@ import BottomSheet from '@gorhom/bottom-sheet';
 import { NavigationProp, RouteProp } from '@react-navigation/native';
 
 import { P9DecklistEntryType } from '../../../core/data-user';
-import { P9DecklistEditorEntryInspector } from '../decklist-editor-entry-inspector/decklist-editor-entry-inspector.component';
 import { P9DecklistEditorTabView } from '../decklist-editor-tab-view/decklist-editor-tab-view.component';
 import { P9DecklistEditorNavigatorParamList } from '../decklist-editor.navigator';
+import { P9DecklistEntryInspector } from '../decklist-entry-inspector/decklist-entry-inspector.component';
 import { useDecklistEditorFacade } from '../state/decklist-editor.service';
 import { P9DecklistEditorBottomSheet } from './decklist-editor-bottom-sheet.component';
 
@@ -45,7 +45,7 @@ export const P9DecklistEditorHomeScreen: FunctionComponent<P9DecklistEditorHomeS
         }}
       />
       <P9DecklistEditorBottomSheet />
-      <P9DecklistEditorEntryInspector activeId={activeId} entries={entries} ref={modalRef} />
+      <P9DecklistEntryInspector activeId={activeId} entries={entries} ref={modalRef} />
     </>
   );
 };

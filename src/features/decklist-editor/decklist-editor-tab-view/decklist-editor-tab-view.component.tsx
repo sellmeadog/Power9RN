@@ -4,7 +4,7 @@ import { NavigationState, SceneRendererProps, TabView } from 'react-native-tab-v
 
 import { P9DecklistEntryType } from '../../../core/data-user';
 import { P9DecklistEditorEntry } from '../../decklist-explorer/state/decklist-feature.model';
-import { P9DecklistEditorEntryExplorer } from '../decklist-editor-entry-explorer/decklist-editor-entry-explorer.component';
+import { P9DecklistEntryExplorer } from '../decklist-entry-explorer/decklist-entry-explorer.component';
 import { P9DecklistEditorTabBar } from './decklist-editor-tab-bar.component';
 import { P9DecklistEditorRoute } from './decklist-editor-tab-view.types';
 
@@ -47,7 +47,7 @@ export const P9DecklistEditorTabView: FunctionComponent<P9DecklistEditorTabViewP
   };
 
   const renderScene = useCallback<P9RenderSceneFn>(
-    ({ route }) => <P9DecklistEditorEntryExplorer entryType={route.key} onPress={onPress} />,
+    ({ route }) => <P9DecklistEntryExplorer entryType={route.key} onPress={onPress} />,
     [onPress],
   );
 
@@ -56,11 +56,11 @@ export const P9DecklistEditorTabView: FunctionComponent<P9DecklistEditorTabViewP
   return (
     <>
       <TabView
-        navigationState={navigationState}
         initialLayout={INITIAL_LAYOUT}
+        navigationState={navigationState}
+        onIndexChange={handleIndexChange}
         renderScene={renderScene}
         renderTabBar={renderTabBar}
-        onIndexChange={handleIndexChange}
       />
     </>
   );
