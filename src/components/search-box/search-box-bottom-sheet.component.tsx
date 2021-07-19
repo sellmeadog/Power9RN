@@ -50,6 +50,9 @@ export const P9SearchBox: FunctionComponent<P9SearchBoxProps> = ({
         />
         <View style={[P9SearchBoxTheme.inputContainer, inputContainerStyle]}>
           <InputComponent
+            clearButtonMode={'always'}
+            multiline={false}
+            numberOfLines={1}
             onChangeText={onExpressionChange}
             placeholder={placeholder ?? 'Search'}
             style={[P9SearchBoxTheme.input, inputStyle]}
