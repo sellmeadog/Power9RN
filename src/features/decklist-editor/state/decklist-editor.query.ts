@@ -1,6 +1,6 @@
 import { SectionListData } from 'react-native';
 import { combineLatest, Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 import { singleton } from 'tsyringe';
 
 import { combineQueries, QueryEntity } from '@datorama/akita';
@@ -34,6 +34,11 @@ export class P9DecklistEditorQuery extends QueryEntity<P9UserDecklistFeatureStat
     map((entries) => entries?.filter(({ maindeck }) => Boolean(maindeck))),
   );
 
+  readonly maindeckEntryCount$ = this.maindeckEntries$.pipe(
+    map((entries) => entries?.reduce((sum, { maindeck = 0 }) => sum + maindeck, 0)),
+    distinctUntilChanged(),
+  );
+
   readonly maindeckEntrySections$ = combineLatest([
     this.makeEntrySection('Creature'),
     this.makeEntrySection('Planeswalker'),
@@ -45,6 +50,10 @@ export class P9DecklistEditorQuery extends QueryEntity<P9UserDecklistFeatureStat
   ]).pipe(map((sections) => sections.filter(({ data }) => Boolean(data?.length))));
 
   readonly sideboardEntries$ = this.entries$.pipe(
+    map((entries) => entries?.filter(({ sideboard }) => Boolean(sideboard))),
+  );
+
+  readonly sideboardEntrySections$ = this.sideboardEntries$.pipe(
     map((entries): SectionListData<P9DecklistEditorEntry>[] => [
       {
         data: entries?.filter(({ sideboard }) => Boolean(sideboard)) ?? [],
@@ -52,12 +61,17 @@ export class P9DecklistEditorQuery extends QueryEntity<P9UserDecklistFeatureStat
     ]),
   );
 
+  readonly sideboardEntryCount$ = this.sideboardEntries$.pipe(
+    map((entries) => entries?.reduce((sum, { sideboard = 0 }) => sum + sideboard, 0)),
+    distinctUntilChanged(),
+  );
+
   readonly editorState$: Observable<P9DecklistEditorState> = combineLatest({
     activeEntryType: this.activeEntryType$,
     entries: this.entries$,
     name: this.selectActive(({ name }) => name),
     maindeck: this.maindeckEntrySections$,
-    sideboard: this.sideboardEntries$,
+    sideboard: this.sideboardEntrySections$,
   });
 
   readonly entryInspectorState$ = combineQueries([
@@ -107,6 +121,7 @@ export class P9DecklistEditorQuery extends QueryEntity<P9UserDecklistFeatureStat
           data,
         };
       }),
+      distinctUntilChanged(),
     );
   }
 }
