@@ -36,25 +36,4 @@ const P9TableViewRowTheme = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-
-  leftContainer: {
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    flexShrink: 1,
-    flexDirection: 'row',
-    paddingHorizontal: 10,
-  },
-
-  rightContainer: {
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    flexShrink: 1,
-    flexDirection: 'row',
-    paddingHorizontal: 10,
-  },
-
-  title: {
-    fontSize: 17,
-    fontWeight: '500',
-  },
 });
