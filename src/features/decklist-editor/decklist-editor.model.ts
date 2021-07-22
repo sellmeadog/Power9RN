@@ -1,22 +1,22 @@
+import { SectionListData } from 'react-native';
+
 import { P9DecklistEntryType } from '../../core/data-user';
-import { P9UserDecklistEntry } from '../../core/data-user/schema/user-decklist-entry';
 import { P9MagicCard } from '../../core/public';
 
-export interface P9DecklistEditorSubEntry {
-  id: string;
-  count: number;
-}
+export type P9DecklistEditorEntryType = 'commander' | 'maindeck' | 'sideboard';
+export type P9DecklistEditorEntryCountMap = { [key in P9DecklistEditorEntryType]?: number };
+export type P9DecklistEditorEntryDataMap = {
+  [key in P9DecklistEditorEntryType]?: SectionListData<P9DecklistEditorEntry>[];
+};
 
-type P9DecklistEditorEntryType = { [key in P9DecklistEntryType]?: P9DecklistEditorSubEntry };
-
-export interface P9DecklistEditorEntry extends P9DecklistEditorEntryType {
+export interface P9DecklistEditorEntry extends P9DecklistEditorEntryCountMap {
   cardId: string;
   id: string;
-  magicCard: P9MagicCard | undefined;
+  magicCard?: P9MagicCard;
 }
 
-export interface P9DecklistEditorState {
+export interface P9DecklistEditorState extends P9DecklistEditorEntryDataMap {
   activeEntryType?: P9DecklistEntryType;
+  entries?: P9DecklistEditorEntry[];
   name?: string;
-  entries?: P9UserDecklistEntry[];
 }

@@ -6,7 +6,7 @@ import { ID } from '@datorama/akita';
 
 import { usePower9Theme } from '../../../core/theme';
 import { P9MagicCardImage } from '../../magic-cards';
-import { P9DecklistEditorEntry } from '../decklist-entry-explorer/decklist-entry-explorer.component';
+import { P9DecklistEditorEntry } from '../decklist-editor.model';
 
 type CarouselRenderItem<TData> = (item: { item: TData; index: number }) => ReactElement;
 
@@ -37,7 +37,7 @@ export const P9DecklistEntryCarousel: FunctionComponent<P9DecklistEntryCarouselP
 }) => {
   const [{ colors }] = usePower9Theme();
   const initialIndex = useMemo(() => editorEntries.findIndex(({ id }) => id === activeId), [activeId, editorEntries]);
-  const [currentIndex, setCurrentIndex] = useState(initialIndex);
+  const [currentIndex, setCurrentIndex] = useState<number>();
 
   const handleSnapToItem = useCallback(
     (index: number) => {
@@ -85,7 +85,7 @@ export const P9DecklistEntryCarousel: FunctionComponent<P9DecklistEntryCarouselP
       />
       {showPagination && (
         <Pagination
-          activeDotIndex={currentIndex}
+          activeDotIndex={currentIndex ?? initialIndex}
           containerStyle={P9DecklistEntryEditorCarouselTheme.paginationContainer}
           dotColor={colors?.grey5}
           dotContainerStyle={P9DecklistEntryEditorCarouselTheme.dotContainer}

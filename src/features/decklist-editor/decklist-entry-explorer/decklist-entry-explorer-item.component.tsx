@@ -5,7 +5,7 @@ import { Text } from 'react-native-elements';
 import { P9RowView, P9TableViewItem } from '../../../components';
 import { P9DecklistEntryType } from '../../../core/data-user';
 import { P9MagicCardArtwork, P9MagicCardText } from '../../magic-cards';
-import { P9DecklistEditorEntry } from './decklist-entry-explorer.component';
+import { P9DecklistEditorEntry } from '../decklist-editor.model';
 
 export interface P9DecklistEntryExplorerItemProps {
   entry: P9DecklistEditorEntry;
@@ -21,39 +21,44 @@ export const P9DecklistEntryExplorerItem: FunctionComponent<P9DecklistEntryExplo
   const handlePress = useCallback(() => onPress?.(entry), [entry, onPress]);
 
   return (
-    <P9TableViewItem containerStyle={P9DecklistEditorEntryExplorerItemTheme.itemContainer} onPress={handlePress}>
-      <P9RowView style={P9DecklistEditorEntryExplorerItemTheme.rowContainer}>
+    <P9TableViewItem containerStyle={P9DecklistEntryExplorerItemTheme.itemContainer} onPress={handlePress}>
+      <P9RowView style={P9DecklistEntryExplorerItemTheme.rowContainer}>
         <ImageBackground
           source={{ uri: entry.magicCard?.card_faces[0].image_uris?.art_crop }}
-          style={P9DecklistEditorEntryExplorerItemTheme.imageContainer}
+          style={P9DecklistEntryExplorerItemTheme.imageContainer}
         >
           <Text
-            style={[P9DecklistEditorEntryExplorerItemTheme.title, P9DecklistEditorEntryExplorerItemTheme.count]}
+            style={[P9DecklistEntryExplorerItemTheme.title, P9DecklistEntryExplorerItemTheme.count]}
           >{`${entry?.[entryType]}x `}</Text>
         </ImageBackground>
-        <View style={P9DecklistEditorEntryExplorerItemTheme.contentContainer}>
-          <View style={P9DecklistEditorEntryExplorerItemTheme.titleContainer}>
-            <Text style={[P9DecklistEditorEntryExplorerItemTheme.title]}>{entry?.magicCard?.name}</Text>
-            <Text style={[P9DecklistEditorEntryExplorerItemTheme.title]}>
-              <P9MagicCardText>{entry.magicCard?.card_faces[0].mana_cost}</P9MagicCardText>
+        <View style={P9DecklistEntryExplorerItemTheme.contentContainer}>
+          <View style={P9DecklistEntryExplorerItemTheme.titleContainer}>
+            <Text ellipsizeMode={'tail'} numberOfLines={1} style={[P9DecklistEntryExplorerItemTheme.title]}>
+              {entry?.magicCard?.name}
             </Text>
+            <View style={P9DecklistEntryExplorerItemTheme.titleSymbolContainer}>
+              <P9MagicCardText gameSymbolStyle={[P9DecklistEntryExplorerItemTheme.titleSymbol]}>
+                {entry.magicCard?.card_faces[0].mana_cost}
+              </P9MagicCardText>
+            </View>
           </View>
-          <Text style={[P9DecklistEditorEntryExplorerItemTheme.typeLine]}>
-            {entry?.magicCard?.card_faces[0].type_line}
-          </Text>
+          <Text style={[P9DecklistEntryExplorerItemTheme.typeLine]}>{entry?.magicCard?.card_faces[0].type_line}</Text>
         </View>
       </P9RowView>
     </P9TableViewItem>
   );
 };
 
-const P9DecklistEditorEntryExplorerItemTheme = StyleSheet.create({
+const P9DecklistEntryExplorerItemTheme = StyleSheet.create({
   itemContainer: {
     paddingVertical: 10,
+    flexShrink: 1,
   },
 
   rowContainer: {
     alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    flexGrow: 1,
   },
 
   imageContainer: {
@@ -64,14 +69,40 @@ const P9DecklistEditorEntryExplorerItemTheme = StyleSheet.create({
 
   contentContainer: {
     alignSelf: 'center',
-    flexGrow: 1,
+    flex: 1,
     paddingHorizontal: 10,
   },
 
   titleContainer: {
     alignItems: 'center',
     flexDirection: 'row',
+    flexShrink: 1,
+    flexWrap: 'nowrap',
     justifyContent: 'space-between',
+  },
+
+  titleSymbolContainer: {
+    alignItems: 'flex-end',
+    flexGrow: 1,
+    flexWrap: 'nowrap',
+    justifyContent: 'center',
+    marginLeft: 10,
+    paddingTop: 5,
+  },
+
+  titleSymbol: {
+    marginRight: 0,
+    marginLeft: 2,
+  },
+
+  title: {
+    flexShrink: 1,
+    fontFamily: 'Beleren2016-Bold',
+    fontSize: 17,
+  },
+
+  typeLine: {
+    fontSize: 15,
   },
 
   count: {
@@ -85,14 +116,5 @@ const P9DecklistEditorEntryExplorerItemTheme = StyleSheet.create({
     textShadowRadius: 2.22,
 
     elevation: 3,
-  },
-
-  title: {
-    fontFamily: 'Beleren2016-Bold',
-    fontSize: 17,
-  },
-
-  typeLine: {
-    fontSize: 15,
   },
 });

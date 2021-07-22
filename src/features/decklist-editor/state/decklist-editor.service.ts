@@ -63,7 +63,6 @@ export class P9DecklistEditorService {
   };
 
   updateEntryCount = (entryId: string, entryType: P9DecklistEntryType, count: number) => {
-    console.log('P9DecklistEditorService#updateEntryCount', entryType, count);
     this.store.updateActive((draft) => {
       draft.entries = arrayUpdate(draft.entries, entryId, { [entryType]: count });
       draft.modifiedOn = DateTime.local().toSeconds();

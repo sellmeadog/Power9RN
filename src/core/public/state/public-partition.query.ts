@@ -1,5 +1,5 @@
 import { CollectionChangeCallback, Results } from 'realm';
-import { MonoTypeOperatorFunction, Observable } from 'rxjs';
+import { MonoTypeOperatorFunction, Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { singleton } from 'tsyringe';
 
@@ -17,7 +17,7 @@ export class P9PublicPartitionQuery extends Query<P9PublicPartitionState> {
     super(store);
   }
 
-  magicCardById = (id: string) =>
+  findMagicCard = (id: string) =>
     this.getValue().partition?.objectForPrimaryKey<P9MagicCard>(P9MagicCardSchema.name, id);
 }
 

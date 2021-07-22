@@ -10,7 +10,6 @@ import { P9DecklistEntryType } from '../../../core/data-user';
 import { P9UserDecklistEntry } from '../../../core/data-user/schema/user-decklist-entry';
 import { useDependency } from '../../../core/di';
 import { P9DecklistEditorBottomSheetBackground } from '../decklist-editor-screen/decklist-editor-bottom-sheet.component';
-import { useDecklistEditorEntries } from '../decklist-entry-explorer/decklist-entry-explorer.component';
 import { P9DecklistEditorService } from '../state/decklist-editor.service';
 import { P9DecklistEntryCarousel } from './decklist-entry-carousel.component';
 
@@ -22,7 +21,6 @@ export interface P9DecklistEntryInspectorProps {
 export const P9DecklistEntryInspector = forwardRef<BottomSheet, P9DecklistEntryInspectorProps>(({ activeId }, ref) => {
   const [{ activeEntry, entries }, activateEntry, updateCount] = useDecklistEditorEntryFacade();
   const [layout, setLayout] = useState<LayoutRectangle>({ height: 1, width: 0, x: 0, y: 0 });
-  const editorEntries = useDecklistEditorEntries(entries);
   const snapPoints = useMemo(() => [0, layout.height], [layout]);
 
   const handleEditorEntryChange = useCallback((entryId) => entryId && activateEntry(entryId), [activateEntry]);
@@ -56,7 +54,7 @@ export const P9DecklistEntryInspector = forwardRef<BottomSheet, P9DecklistEntryI
       <BottomSheetView onLayout={(event) => setLayout(event.nativeEvent.layout)}>
         <P9DecklistEntryCarousel
           activeId={activeId}
-          editorEntries={editorEntries}
+          editorEntries={entries}
           onEditorEntryChanged={handleEditorEntryChange}
         />
         <P9RowView edges={['bottom']} style={P9DecklistEditorEntryInspectorTheme.spinButtonRow}>

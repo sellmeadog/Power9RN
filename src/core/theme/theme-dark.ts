@@ -103,6 +103,9 @@ export const P9_THEME_DARK: Partial<FullTheme> = {
   },
 
   Text: {
+    adjustsFontSizeToFit: true,
+    allowFontScaling: false,
+    minimumFontScale: 0.9,
     style: [
       {
         color: colors.white,

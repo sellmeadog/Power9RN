@@ -3,7 +3,7 @@ import { Dimensions } from 'react-native';
 import { NavigationState, SceneRendererProps, TabView } from 'react-native-tab-view';
 
 import { P9DecklistEntryType } from '../../../core/data-user';
-import { P9DecklistEditorEntry } from '../../decklist-explorer/state/decklist-feature.model';
+import { P9DecklistEditorEntry } from '../decklist-editor.model';
 import { P9DecklistEntryExplorer } from '../decklist-entry-explorer/decklist-entry-explorer.component';
 import { P9DecklistEditorTabBar } from './decklist-editor-tab-bar.component';
 import { P9DecklistEditorRoute } from './decklist-editor-tab-view.types';

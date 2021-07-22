@@ -39,8 +39,8 @@ export class P9MagicCardGalleryQuery extends Query<P9MagicCardGalleryState> {
     super(store);
   }
 
-  magicCard = (id: string) => {
-    return this.partitionQuery.magicCardById(id);
+  findMagicCard = (id: string) => {
+    return this.partitionQuery.findMagicCard(id);
   };
 }
 

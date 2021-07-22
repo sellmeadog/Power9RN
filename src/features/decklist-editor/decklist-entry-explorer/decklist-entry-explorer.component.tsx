@@ -1,11 +1,9 @@
-import React, { FunctionComponent, useMemo } from 'react';
+import React, { FunctionComponent } from 'react';
+import { SectionList, StyleSheet, View } from 'react-native';
 
-import { P9FlatList, P9ItemSeparator } from '../../../components';
+import { P9ItemSeparator, P9TableDivider } from '../../../components';
 import { P9DecklistEntryType } from '../../../core/data-user';
-import { P9UserDecklistEntry } from '../../../core/data-user/schema/user-decklist-entry';
-import { useDependency } from '../../../core/di';
-import { P9MagicCard } from '../../../core/public';
-import { P9MagicCardGalleryQuery } from '../../magic-cards/state/magic-card.query';
+import { P9DecklistEditorEntry } from '../decklist-editor.model';
 import { useDecklistEditorFacade } from '../state/decklist-editor.service';
 import { P9DecklistEntryExplorerItem } from './decklist-entry-explorer-item.component';
 
@@ -15,71 +13,24 @@ export interface P9DecklistEntryExplorerProps {
 }
 
 export const P9DecklistEntryExplorer: FunctionComponent<P9DecklistEntryExplorerProps> = ({ entryType, onPress }) => {
-  const [{ entries = [] }] = useDecklistEditorFacade();
-  const editorEntries = useDecklistEditorEntries(entries, entryType);
+  const [state] = useDecklistEditorFacade();
 
   return (
-    <P9FlatList
+    <SectionList
       ItemSeparatorComponent={P9ItemSeparator}
-      data={editorEntries}
+      ListFooterComponent={<View style={P9DecklistEntryExplorerTheme.footerContainer} />}
+      keyboardDismissMode={'interactive'}
+      keyboardShouldPersistTaps={'always'}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => <P9DecklistEntryExplorerItem entry={item} entryType={entryType} onPress={onPress} />}
+      renderSectionHeader={({ section }) => <P9TableDivider title={`${section.title} (${section.size})`} />}
+      sections={state[entryType] ?? []}
     />
   );
 };
 
-// const P9DecklistEditorEntryExplorerTheme = StyleSheet.create({});
-
-export interface P9DecklistEditorEntry extends P9UserDecklistEntry {
-  magicCard?: P9MagicCard;
-}
-
-export function useDecklistEditorEntries(
-  entries: P9UserDecklistEntry[] = [],
-  entryType?: P9DecklistEntryType,
-): P9DecklistEditorEntry[] {
-  const query = useDependency(P9MagicCardGalleryQuery);
-
-  return useMemo(
-    () =>
-      entries
-        .filter((entry) => (entryType ? Boolean(entry[entryType]) : true))
-        .map((entry) => ({ ...entry, magicCard: query.magicCard(entry.cardId) }))
-        .sort(
-          sortComparer,
-          // (a, b) =>
-          //   ((a.magicCard?.cmc ?? 0) - (b.magicCard?.cmc ?? 0) ||
-          //     a.magicCard?.name?.localeCompare(b.magicCard?.name ?? '', 'en', {
-          //       ignorePunctuation: true,
-          //       sensitivity: 'base',
-          //     })) ??
-          //   0,
-        ),
-    [entries, entryType, query],
-  );
-}
-
-const sortComparer = ({ magicCard: a }: P9DecklistEditorEntry, { magicCard: b }: P9DecklistEditorEntry) => {
-  // if (a === undefined) {
-  //   return -1;
-  // } else if (b === undefined) {
-  //   return 1;
-  // } else if (
-  //   (a.card_faces?.[0].types?.includes('Land') ?? false) > (b.card_faces?.[0].types?.includes('Land') ?? false)
-  // ) {
-  //   return 1;
-  // } else if (
-  //   (a.card_faces?.[0].types?.includes('Land') ?? false) < (b.card_faces?.[0].types?.includes('Land') ?? false)
-  // ) {
-  //   return -1;
-  // } else {
-  return (
-    ((a?.cmc ?? 0) - (b?.cmc ?? 0) ||
-      a?.name?.localeCompare(b?.name ?? '', 'en', {
-        ignorePunctuation: true,
-        sensitivity: 'base',
-      })) ??
-    0
-  );
-  // }
-};
+const P9DecklistEntryExplorerTheme = StyleSheet.create({
+  footerContainer: {
+    height: 88,
+  },
+});
