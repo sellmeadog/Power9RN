@@ -8,12 +8,20 @@ export const P9DecklistEditorTabViewTheme = StyleSheet.create({
   },
 
   tabBarItem: {
-    alignItems: 'flex-start',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexDirection: 'row-reverse',
     height: 44,
   },
 
   tabBarItemLabel: {
     fontSize: 13,
     fontWeight: '600',
+    textTransform: 'uppercase',
+  },
+
+  tabBarItemCount: {
+    fontSize: 8,
+    fontWeight: '700',
   },
 });

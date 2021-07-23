@@ -25,7 +25,7 @@ export interface P9DecklistEditorTabViewProps {
 }
 
 const TABVIEW_ROUTES: P9DecklistEditorRoute[] = [
-  { key: 'maindeck', title: 'Maindeck' },
+  { key: 'maindeck', title: 'Main' },
   { key: 'sideboard', title: 'Sideboard' },
 ];
 

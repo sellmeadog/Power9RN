@@ -56,7 +56,7 @@ export class P9DecklistEditorQuery extends QueryEntity<P9UserDecklistFeatureStat
   readonly sideboardEntrySections$ = this.sideboardEntries$.pipe(
     map((entries): SectionListData<P9DecklistEditorEntry>[] => [
       {
-        data: entries?.filter(({ sideboard }) => Boolean(sideboard)) ?? [],
+        data: entries ?? [],
       },
     ]),
   );
@@ -66,9 +66,12 @@ export class P9DecklistEditorQuery extends QueryEntity<P9UserDecklistFeatureStat
     distinctUntilChanged(),
   );
 
+  readonly entryCounts$ = combineLatest({ maindeck: this.maindeckEntryCount$, sideboard: this.sideboardEntryCount$ });
+
   readonly editorState$: Observable<P9DecklistEditorState> = combineLatest({
     activeEntryType: this.activeEntryType$,
     entries: this.entries$,
+    entryCounts: this.entryCounts$,
     name: this.selectActive(({ name }) => name),
     maindeck: this.maindeckEntrySections$,
     sideboard: this.sideboardEntrySections$,

@@ -1,6 +1,6 @@
 import { P9UserDecklistEntry } from './user-decklist-entry';
 
-export type P9DecklistEntryType = 'commander' | 'maindeck' | 'sideboard';
+export type P9DecklistEntryType = 'maindeck' | 'sideboard'; // 'commander' |
 
 /**
  * Defines an individual card entry in a decklist

@@ -1,7 +1,9 @@
 import React, { FunctionComponent } from 'react';
+import { Circle as ProgressCircle } from 'react-native-progress';
 import { TabBar, TabBarProps } from 'react-native-tab-view';
 
 import { usePower9Theme } from '../../../core/theme';
+import { useDecklistEditorFacade } from '../state/decklist-editor.service';
 import { P9DecklistEditorTabViewTheme } from './decklist-editor-tab-view.theme';
 import { P9DecklistEditorRoute } from './decklist-editor-tab-view.types';
 
@@ -16,22 +18,36 @@ export const P9DecklistEditorTabBar: FunctionComponent<P9DecklistEditorTabBarPro
   ...rest
 }) => {
   const [{ colors }] = usePower9Theme();
-  // const placeholder = useMemo(() => (navigationState.index === 0 ? 'main deck' : 'sideboard'), [navigationState]);
+  const [{ entryCounts = {} }] = useDecklistEditorFacade();
 
   return (
-    <>
-      <TabBar
-        activeColor={colors?.warning}
-        navigationState={navigationState}
-        inactiveColor={colors?.grey5}
-        indicatorStyle={{ backgroundColor: colors?.warning }}
-        labelStyle={P9DecklistEditorTabViewTheme.tabBarItemLabel}
-        style={[P9DecklistEditorTabViewTheme.tabBar, { backgroundColor: colors?.grey2 }]}
-        tabStyle={P9DecklistEditorTabViewTheme.tabBarItem}
-        {...rest}
-      />
-      {/* <P9SearchBar containerStyle={{ paddingLeft: 5, paddingRight: 10 }} placeholder={`Add cards to ${placeholder}`} /> */}
-      {/* <P9MagicCardSearchResultPanel canExpand={!!keyword?.length} /> */}
-    </>
+    <TabBar
+      activeColor={colors?.warning}
+      navigationState={navigationState}
+      inactiveColor={colors?.grey5}
+      indicatorStyle={{ backgroundColor: colors?.warning }}
+      labelStyle={P9DecklistEditorTabViewTheme.tabBarItemLabel}
+      style={[P9DecklistEditorTabViewTheme.tabBar, { backgroundColor: colors?.grey2 }]}
+      tabStyle={P9DecklistEditorTabViewTheme.tabBarItem}
+      renderIcon={({ color, route: { key } }) => {
+        const count = entryCounts[key] ?? 0;
+        const progress = count / (key === 'maindeck' ? 60 : 15);
+
+        return (
+          <ProgressCircle
+            animated
+            borderWidth={0}
+            color={color}
+            formatText={() => count}
+            progress={progress}
+            showsText
+            size={24}
+            strokeCap={'round'}
+            textStyle={P9DecklistEditorTabViewTheme.tabBarItemCount}
+          />
+        );
+      }}
+      {...rest}
+    />
   );
 };
