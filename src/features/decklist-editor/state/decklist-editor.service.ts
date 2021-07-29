@@ -1,13 +1,16 @@
 import { DateTime } from 'luxon';
 import { useObservableState } from 'observable-hooks';
 import { useCallback, useEffect } from 'react';
+import { Subscription } from 'rxjs';
+import { debounceTime, skip } from 'rxjs/operators';
 import { singleton } from 'tsyringe';
 
 import { arrayUpdate, arrayUpsert } from '@datorama/akita';
 
-import { P9DecklistEntryType } from '../../../core/data-user';
+import { P9DecklistEntryType, P9UserDecklistSchema } from '../../../core/data-user';
 import { P9UserDataPartitionService } from '../../../core/data-user/state/user-data-partition.service';
 import { useDependency } from '../../../core/di';
+import { whenDefined } from '../../../core/operators';
 import { P9MagicCard } from '../../../core/public';
 import { P9UserDecklistFeatureStore } from '../../decklist-explorer/state';
 import { P9DecklistEditorUIState } from '../../decklist-explorer/state/decklist-feature.model';
@@ -16,30 +19,42 @@ import { P9DecklistEditorQuery } from './decklist-editor.query';
 
 @singleton()
 export class P9DecklistEditorService {
+  #subscription: Subscription | undefined;
+
   constructor(
     private store: P9UserDecklistFeatureStore,
     public query: P9DecklistEditorQuery,
     private dataService: P9UserDataPartitionService,
-  ) {
-    // this.query
-    //   .selectActive()
-    //   .pipe(
-    //     debounceTime(1000),
-    //     tap((entity) => this.dataService.createObject(P9UserDecklistSchema, entity)),
-    //   )
-    //   .subscribe(console.log);
-  }
+  ) {}
 
-  initializeEditorUIState = () => {
+  activateEditorUI = () => {
     this.store.update((draft) => {
       draft.ui.decklistEditorState = { activeEntryType: 'maindeck', activeEntryId: undefined };
     });
 
     return () => {
-      this.store.removeActive(this.query.getActiveId());
-      this.store.update((draft) => {
-        draft.ui.decklistEditorState = undefined;
-      });
+      if (this.query.hasActive()) {
+        this.store.removeActive(this.query.getActiveId());
+        this.store.update((draft) => {
+          draft.ui.decklistEditorState = undefined;
+        });
+      }
+    };
+  };
+
+  activateAutoSave = () => {
+    if (!this.#subscription) {
+      this.#subscription = this.query
+        .selectActive()
+        .pipe(whenDefined(), skip(1), debounceTime(500))
+        .subscribe((entity) => this.dataService.createObject(P9UserDecklistSchema, entity));
+    }
+
+    return () => {
+      if (this.#subscription) {
+        this.#subscription?.unsubscribe();
+        this.#subscription = undefined;
+      }
     };
   };
 
@@ -77,7 +92,13 @@ export function useDecklistEditorFacade(): [
 ] {
   const service = useDependency(P9DecklistEditorService);
 
-  useEffect(() => service.initializeEditorUIState(), [service]);
+  useEffect(() => {
+    const hanldes = [service.activateEditorUI(), service.activateAutoSave()];
+
+    return () => {
+      hanldes.forEach((handle) => handle());
+    };
+  }, [service]);
 
   return [
     useObservableState(service.query.editorState$, { name: '' }),

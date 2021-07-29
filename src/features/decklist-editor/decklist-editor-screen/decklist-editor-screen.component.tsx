@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useCallback, useRef, useState } from 'react';
 import { Header } from 'react-native-elements';
-import { Button } from 'react-native-elements/dist/buttons/Button';
 
 import { ID } from '@datorama/akita';
 import BottomSheet from '@gorhom/bottom-sheet';
@@ -32,10 +31,7 @@ export const P9DecklistEditorHomeScreen: FunctionComponent<P9DecklistEditorHomeS
 
   return (
     <>
-      <Header
-        leftComponent={<Button onPress={goBack} icon={{ name: 'arrow-back-ios' }} />}
-        centerComponent={{ text: name }}
-      />
+      <Header leftComponent={{ icon: 'arrow-back-ios', onPress: goBack, size: 24 }} centerComponent={{ text: name }} />
       <P9DecklistEditorTabView
         activeEntryType={activeEntryType}
         onActiveEntryTypeChange={handleActiveEntryTypeChange}
