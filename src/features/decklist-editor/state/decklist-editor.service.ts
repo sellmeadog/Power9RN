@@ -7,7 +7,7 @@ import { singleton } from 'tsyringe';
 
 import { arrayUpdate, arrayUpsert } from '@datorama/akita';
 
-import { P9DecklistEntryType, P9UserDecklistSchema } from '../../../core/data-user';
+import { P9DecklistEntryType, P9UserDecklist, P9UserDecklistSchema } from '../../../core/data-user';
 import { P9UserDataPartitionService } from '../../../core/data-user/state/user-data-partition.service';
 import { useDependency } from '../../../core/di';
 import { whenDefined } from '../../../core/operators';
@@ -68,21 +68,32 @@ export class P9DecklistEditorService {
     });
   };
 
-  upsertEntry = (id: string, cardId: string, entryType: P9DecklistEntryType) => {
+  upsertEntry = ({ oracle_id: id, _id: cardId, card_faces }: P9MagicCard, entryType: P9DecklistEntryType) => {
     this.store.updateActive((draft) => {
       const entry = draft.entries.find((item) => item.id === id);
 
+      if (draft.entries.length === 0) {
+        draft.metadata.defaultCardArtworkUri = card_faces[0].image_uris?.art_crop;
+        draft.metadata.defaultCardId = cardId;
+      }
+
       draft.entries = arrayUpsert(draft.entries, id, { id, cardId, [entryType]: (entry?.[entryType] ?? 0) + 1 }, 'id');
-      draft.modifiedOn = DateTime.local().toSeconds();
+      updateMetadata(draft);
     });
   };
 
   updateEntryCount = (entryId: string, entryType: P9DecklistEntryType, count: number) => {
     this.store.updateActive((draft) => {
       draft.entries = arrayUpdate(draft.entries, entryId, { [entryType]: count });
-      draft.modifiedOn = DateTime.local().toSeconds();
+      updateMetadata(draft);
     });
   };
+}
+
+function updateMetadata(draft: P9UserDecklist) {
+  draft.metadata.maindeck = draft.entries.reduce((sum, { maindeck = 0 }) => sum + maindeck, 0);
+  draft.metadata.sideboard = draft.entries.reduce((sum, { sideboard = 0 }) => sum + sideboard, 0);
+  draft.modifiedOn = DateTime.local().toSeconds();
 }
 
 export function useDecklistEditorFacade(): [
@@ -109,8 +120,7 @@ export function useDecklistEditorFacade(): [
       [service],
     ),
     useCallback(
-      ({ _id, oracle_id }: P9MagicCard, entryType: P9DecklistEntryType) =>
-        service.upsertEntry(oracle_id, _id, entryType),
+      (magicCard: P9MagicCard, entryType: P9DecklistEntryType) => service.upsertEntry(magicCard, entryType),
       [service],
     ),
   ];

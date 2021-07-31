@@ -2,11 +2,11 @@ import Realm, { ObjectSchema, Results, User } from 'realm';
 import { singleton } from 'tsyringe';
 
 import { P9UserDecklist, P9UserDecklistSchema } from '../schema/user-decklist';
-import { P9UserDecklistEntrySchema } from '../schema/user-decklist-entry';
+import { P9UserDecklistEntrySchema, P9UserDecklistMetadataSchema } from '../schema/user-decklist-entry';
 import { P9UserDataPartitionQuery } from './user-data-partition.query';
 import { P9UserDataPartitionStore } from './user-data-partition.store';
 
-export const P9_USER_DATA_SCHEMA = [P9UserDecklistEntrySchema, P9UserDecklistSchema];
+export const P9_USER_DATA_SCHEMA = [P9UserDecklistEntrySchema, P9UserDecklistMetadataSchema, P9UserDecklistSchema];
 
 @singleton()
 export class P9UserDataPartitionService {

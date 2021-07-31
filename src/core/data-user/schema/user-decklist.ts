@@ -1,4 +1,4 @@
-import { P9UserDecklistEntry } from './user-decklist-entry';
+import { P9UserDecklistEntry, P9UserDecklistMetadata } from './user-decklist-entry';
 
 export type P9DecklistEntryType = 'maindeck' | 'sideboard'; // 'commander' |
 
@@ -23,6 +23,7 @@ export interface P9UserDecklist {
   isPublic: boolean | null;
   createdAt: number;
   modifiedOn: number;
+  metadata: P9UserDecklistMetadata;
 }
 
 export const P9UserDecklistSchema: Realm.ObjectSchema = {
@@ -38,5 +39,6 @@ export const P9UserDecklistSchema: Realm.ObjectSchema = {
     isPublic: 'bool?',
     createdAt: 'int',
     modifiedOn: 'int',
+    metadata: 'user_decklist_metadata',
   },
 };

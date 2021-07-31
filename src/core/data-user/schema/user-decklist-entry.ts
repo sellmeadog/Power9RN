@@ -21,3 +21,21 @@ export const P9UserDecklistEntrySchema: Realm.ObjectSchema = {
     sideboard: 'int?',
   },
 };
+
+export interface P9UserDecklistMetadata {
+  defaultCardArtworkUri?: string;
+  defaultCardId?: string;
+  maindeck: number;
+  sideboard: number;
+}
+
+export const P9UserDecklistMetadataSchema: Realm.ObjectSchema = {
+  name: 'user_decklist_metadata',
+  embedded: true,
+  properties: {
+    defaultCardArtworkUri: 'string',
+    defaultCardId: 'string',
+    maindeck: 'int',
+    sideboard: 'int',
+  },
+};

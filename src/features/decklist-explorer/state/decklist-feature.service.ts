@@ -64,6 +64,7 @@ export class P9UserDecklistFeatureService {
           entries: [],
           isPublic: false,
           modifiedOn: now,
+          metadata: { maindeck: 0, sideboard: 0 },
         }),
       );
     }
