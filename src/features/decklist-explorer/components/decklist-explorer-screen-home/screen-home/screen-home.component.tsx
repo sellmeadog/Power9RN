@@ -1,8 +1,10 @@
-import React, { FunctionComponent } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
-import { Icon, Text } from 'react-native-elements';
+import React, { FunctionComponent, useCallback } from 'react';
+import { Alert, FlatList, ImageBackground, Pressable, StyleSheet } from 'react-native';
+import { Text } from 'react-native-elements';
 
-import { P9DrawerNavigatorHeader, P9ItemSeparator, P9TableViewItem } from '../../../../../components';
+import { P9DrawerNavigatorHeader } from '../../../../../components';
+import { P9UserDecklist } from '../../../../../core/data-user';
+import { P9MagicCardArtwork } from '../../../../magic-cards';
 import { P9DecklistExplorerActionButton } from './screen-home-action-button.component';
 import { useHomeScreenFacade } from './screen-home.facade';
 
@@ -11,24 +13,39 @@ export interface P9DecklistExplorerHomeScreenProps {}
 export const P9DecklistExplorerHomeScreen: FunctionComponent<P9DecklistExplorerHomeScreenProps> = () => {
   const [{ data }, onActivate, onRemove] = useHomeScreenFacade();
 
+  const handleLongPress = useCallback(
+    (decklist: P9UserDecklist) => {
+      Alert.alert(
+        `Delete ${decklist.name}?`,
+        'Are you sure you want to delete this deck? This action cannot be undone.',
+        [
+          { text: 'Cancel', style: 'default' },
+          { text: 'Delete', onPress: () => onRemove(decklist), style: 'destructive' },
+        ],
+      );
+    },
+    [onRemove],
+  );
+
   return (
     <>
       <P9DrawerNavigatorHeader centerComponent={{ text: 'My Decks' }} />
       <FlatList
         data={data}
         keyExtractor={(item) => item._id}
-        ItemSeparatorComponent={P9ItemSeparator}
         renderItem={({ item }) => (
-          <P9TableViewItem onPress={() => onActivate(item._id)}>
-            <Text style={[P9DecklistExplorerHomeScreenTheme.container]}>
-              {item.name} ({item.formatId})
-            </Text>
-            <Icon
-              containerStyle={[P9DecklistExplorerHomeScreenTheme.container]}
-              name={'delete-outline'}
-              onPress={() => onRemove(item)}
-            />
-          </P9TableViewItem>
+          <Pressable
+            onLongPress={() => handleLongPress(item)}
+            onPress={() => onActivate(item._id)}
+            style={P9DecklistExplorerHomeScreenTheme.itemContainer}
+          >
+            <ImageBackground
+              source={{ uri: item.metadata?.defaultCardArtworkUri }}
+              style={P9DecklistExplorerHomeScreenTheme.itemBackground}
+            >
+              <Text style={[P9DecklistExplorerHomeScreenTheme.itemTitle]}>{item.name}</Text>
+            </ImageBackground>
+          </Pressable>
         )}
       />
       <P9DecklistExplorerActionButton decklistCount={0} />
@@ -37,7 +54,35 @@ export const P9DecklistExplorerHomeScreen: FunctionComponent<P9DecklistExplorerH
 };
 
 const P9DecklistExplorerHomeScreenTheme = StyleSheet.create({
-  container: {
+  itemContainer: {
+    padding: 32,
+    overflow: 'visible',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 4.65,
+
+    elevation: 8,
+  },
+
+  itemBackground: {
+    aspectRatio: P9MagicCardArtwork.ASPECT_RATIO,
+    borderRadius: 16,
+    flex: 1,
+    justifyContent: 'flex-end',
+    overflow: 'hidden',
+  },
+
+  itemTitle: {
+    backgroundColor: '#000',
+    fontFamily: 'Beleren2016-Bold',
+    fontSize: 21,
+    opacity: 0.9,
     paddingHorizontal: 10,
+    paddingVertical: 16,
+    textAlign: 'center',
   },
 });
