@@ -68,7 +68,10 @@ export class P9DecklistEditorService {
     });
   };
 
-  upsertEntry = ({ oracle_id: id, _id: cardId, card_faces }: P9MagicCard, entryType: P9DecklistEntryType) => {
+  upsertEntry = (
+    { oracle_id: id, _id: cardId, card_faces, color_identity }: P9MagicCard,
+    entryType: P9DecklistEntryType,
+  ) => {
     this.store.updateActive((draft) => {
       const entry = draft.entries.find((item) => item.id === id);
 
@@ -76,6 +79,10 @@ export class P9DecklistEditorService {
         draft.metadata.defaultCardArtworkUri = card_faces[0].image_uris?.art_crop;
         draft.metadata.defaultCardId = cardId;
       }
+
+      color_identity?.forEach((color) => {
+        draft.metadata[color] = (draft.metadata[color] ?? 0) + 1;
+      });
 
       draft.entries = arrayUpsert(draft.entries, id, { id, cardId, [entryType]: (entry?.[entryType] ?? 0) + 1 }, 'id');
       updateMetadata(draft);

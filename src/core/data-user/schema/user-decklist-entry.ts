@@ -27,15 +27,28 @@ export interface P9UserDecklistMetadata {
   defaultCardId?: string;
   maindeck: number;
   sideboard: number;
+  W?: number;
+  U?: number;
+  B?: number;
+  R?: number;
+  G?: number;
+  C?: number;
+  [key: string]: any;
 }
 
 export const P9UserDecklistMetadataSchema: Realm.ObjectSchema = {
   name: 'user_decklist_metadata',
   embedded: true,
   properties: {
-    defaultCardArtworkUri: 'string',
-    defaultCardId: 'string',
+    defaultCardArtworkUri: 'string?',
+    defaultCardId: 'string?',
     maindeck: 'int',
     sideboard: 'int',
+    W: 'int?',
+    U: 'int?',
+    B: 'int?',
+    R: 'int?',
+    G: 'int?',
+    C: 'int?',
   },
 };

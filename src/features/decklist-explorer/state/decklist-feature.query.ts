@@ -8,7 +8,7 @@ import { P9UserDecklistFeatureState, P9UserDecklistFeatureStore } from './deckli
 
 @singleton()
 export class P9UserDecklistFeatureQuery extends QueryEntity<P9UserDecklistFeatureState> {
-  decklists$ = this.selectAll({ sortBy: (entity) => entity.createdAt });
+  decklists$ = this.selectAll({ sortBy: (entity) => entity.modifiedOn });
   homeScreenState$ = combineLatest({ data: this.decklists$ });
   createDecklistUIState$ = this.select(({ ui }) => ui.decklistInfo);
 
