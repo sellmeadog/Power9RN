@@ -18,9 +18,9 @@ export interface P9UserDecklist {
   _partition: string;
   name: string;
   formatId?: string;
-  description: string | null;
+  description?: string;
   entries: P9UserDecklistEntry[];
-  isPublic: boolean | null;
+  isPublic?: boolean;
   createdAt: number;
   modifiedOn: number;
   metadata: P9UserDecklistMetadata;
