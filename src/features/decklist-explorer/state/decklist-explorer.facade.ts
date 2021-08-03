@@ -5,7 +5,7 @@ import { useDependency } from '../../../core/di';
 import { P9DecklistExplorerQuery } from './decklist-explorer.query';
 
 export function useUserDecklistExplorerFacade(): [
-  state: { formatId: string; data: P9UserDecklist[] }[],
+  state: { formatId: string; data: P9UserDecklist[][] }[],
   // activate: (id: ID) => void,
   // remove: (entity: P9UserDecklist) => void,
 ] {

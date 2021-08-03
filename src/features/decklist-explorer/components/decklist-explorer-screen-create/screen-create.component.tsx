@@ -11,6 +11,7 @@ import {
   P9TableViewInputItem,
   P9TableViewPickerItem,
 } from '../../../../components';
+import { P9_GAME_FORMATS } from '../../state/decklist-feature.model';
 import { useCreateDecklistFacade } from './screen-create.facade';
 
 export interface P9CreateDecklistScreenProps {}
@@ -49,19 +50,7 @@ export const P9CreateDecklistScreen: FunctionComponent<P9CreateDecklistScreenPro
           <P9ItemSeparator />
           <P9TableViewPickerItem
             itemPropsExtractor={(gameFormat) => ({ label: gameFormat.name, value: gameFormat.id })}
-            items={[
-              { id: 'casual', name: 'Casual' },
-              { id: 'standard', name: 'Standard' },
-              { id: 'historic', name: 'Historic' },
-              { id: 'pioneer', name: 'Pioneer' },
-              { id: 'modern', name: 'Modern' },
-              { id: 'legacy', name: 'Legacy' },
-              { id: 'pauper', name: 'Pauper' },
-              { id: 'vintage', name: 'Vintage' },
-              { id: 'brawl', name: 'Brawl' },
-              { id: 'commander', name: 'Commander' },
-              { id: 'oathbreaker', name: 'Oathbreaker' },
-            ]}
+            items={P9_GAME_FORMATS}
             onValueChange={(value) => dispatch('formatId', value.toString())}
             selectedValue={decklistInfo?.formatId}
             title={'Format'}
