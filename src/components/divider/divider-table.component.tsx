@@ -1,14 +1,15 @@
 import React, { FunctionComponent } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleProp, StyleSheet, TextStyle, View } from 'react-native';
 import { Text } from 'react-native-elements';
 
 import { usePower9Theme } from '../../core/theme';
 
 export interface P9TableDividerProps {
   title?: string;
+  titleStyle?: StyleProp<TextStyle>;
 }
 
-export const P9TableDivider: FunctionComponent<P9TableDividerProps> = ({ title }) => {
+export const P9TableDivider: FunctionComponent<P9TableDividerProps> = ({ title, titleStyle }) => {
   const [{ colors }] = usePower9Theme();
 
   return (
@@ -18,7 +19,7 @@ export const P9TableDivider: FunctionComponent<P9TableDividerProps> = ({ title }
         { backgroundColor: colors?.grey0, borderBottomColor: colors?.grey3, borderTopColor: colors?.grey3 },
       ]}
     >
-      <Text style={[P9TableDividerTheme.title]}>{title}</Text>
+      <Text style={[P9TableDividerTheme.title, titleStyle]}>{title}</Text>
     </View>
   );
 };
@@ -37,5 +38,6 @@ const P9TableDividerTheme = StyleSheet.create({
   title: {
     fontSize: 17,
     fontFamily: 'Beleren2016SmallCaps-Bold',
+    textTransform: 'capitalize',
   },
 });
