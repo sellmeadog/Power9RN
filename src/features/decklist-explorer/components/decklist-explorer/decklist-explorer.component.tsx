@@ -23,7 +23,7 @@ export function P9DecklistExplorer({
   );
 
   const renderSectionHeader = useCallback(
-    ({ section }: { section: SectionListData<P9UserDecklist[]> }) => <P9TableDivider title={section.formatId} />,
+    ({ section }: { section: SectionListData<P9UserDecklist[]> }) => <P9TableDivider title={section.title} />,
     [],
   );
 

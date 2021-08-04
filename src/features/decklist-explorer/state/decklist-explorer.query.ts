@@ -12,7 +12,7 @@ export class P9DecklistExplorerQuery extends QueryEntity<P9UserDecklistFeatureSt
   decklistGroups$ = combineLatest(
     P9_GAME_FORMATS.map(({ id }) => id).map((formatId) =>
       this.selectAll({ filterBy: (entity) => entity.formatId === formatId }).pipe(
-        map((data) => ({ formatId, data: data.length ? [data] : [] })),
+        map((data) => ({ formatId, data: data.length ? [data] : [], title: `${formatId} Decks` })),
       ),
     ),
   ).pipe(map((sections) => sections.filter(({ data }) => data.length)));
