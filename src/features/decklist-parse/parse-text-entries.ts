@@ -1,15 +1,15 @@
 import { P9DecklistEntryType } from '../../core/data-user';
 import { P9CreateDecklistEntryInfo } from './parse-document-types';
 
-const REGEX_EMPTY_LINE = /^[\r|\n]*?$/;
-const REGEX_SIDEBOARD_LINE = /^(?:.*?Sideboard.*?)?$/gim;
+const REGEX_EMPTY_LINE = /^[\r|\n]*?$/im;
+const REGEX_SIDEBOARD_LINE = /^(?:.*?Sideboard.*?)?$/im;
 const REGEX_DECKLIST_ENTRY_LINE = /^((?:SB:\s*?)?\d+)\s*(.*(?=\s\(\w*?\))|.*)(?:\s\((\w*)\)\s?(\w*)?)?$/gim;
 
-export function parseEntryInfo(type: P9DecklistEntryType, maindeck: string): P9CreateDecklistEntryInfo[] {
+export function parseEntryInfo(type: P9DecklistEntryType, textEntries: string): P9CreateDecklistEntryInfo[] {
   const entries: P9CreateDecklistEntryInfo[] = [];
   let match: RegExpExecArray | null;
 
-  while ((match = REGEX_DECKLIST_ENTRY_LINE.exec(maindeck))) {
+  while ((match = REGEX_DECKLIST_ENTRY_LINE.exec(textEntries))) {
     const [_, count, cardName, expansionCode, collectorNumber] = match;
 
     entries.push({

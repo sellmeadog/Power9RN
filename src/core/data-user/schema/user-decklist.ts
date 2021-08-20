@@ -27,18 +27,18 @@ export interface P9UserDecklist {
 }
 
 export const P9UserDecklistSchema: Realm.ObjectSchema = {
-  name: 'user_decklist_2',
+  name: 'UserDecklist',
   primaryKey: '_id',
   properties: {
     _id: 'string',
     _partition: 'string',
-    name: 'string',
-    formatId: 'string?',
-    description: 'string?',
-    entries: 'user_decklist_entry[]',
-    isPublic: 'bool?',
     createdAt: 'int',
+    description: 'string?',
+    entries: 'UserDecklistEntry[]',
+    formatId: 'string?',
+    isPublic: 'bool?',
+    metadata: 'UserDecklistMetadata',
     modifiedOn: 'int',
-    metadata: 'user_decklist_metadata',
+    name: 'string',
   },
 };

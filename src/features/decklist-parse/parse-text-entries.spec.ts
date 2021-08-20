@@ -116,4 +116,44 @@ in a deck list
     // Assert
     expect(actual).toMatchSnapshot();
   });
+
+  it('should parse pasted file text', () => {
+    // Arrange
+    const textEntries = `
+2 Craterhoof Behemoth
+4 Frogmite
+4 Memnite
+2 Myr Enforcer
+4 Ornithopter
+4 Sojourner's Companion
+4 Thought Monitor
+4 Neoform
+2 Thoughtcast
+3 Cranial Plating
+4 Mishra's Bauble
+1 Shadowspear
+4 Springleaf Drum
+4 Darksteel Citadel
+2 Glimmervoid
+2 Razortide Bridge
+2 Spire of Industry
+4 Tanglepool Bridge
+4 Urza's Saga
+Sideboard
+2 Dispatch
+3 Etched Champion
+2 Flusterstorm
+3 Hurkyl's Recall
+1 Pithing Needle
+3 Soul-Guide Lantern
+1 Welding Jar
+
+`;
+
+    // Act
+    const actual = parseTextEntries(textEntries);
+
+    // Assert
+    expect(actual).toMatchSnapshot();
+  });
 });

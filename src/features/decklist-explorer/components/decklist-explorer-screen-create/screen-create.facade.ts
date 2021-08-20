@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 
 import { P9DocumentInfo } from '../../../../core/data-user';
 import { useAuthorizationFacade } from '../../../authorization';
-import { P9CreateDecklistInfo, parseDocument } from '../../../decklist-parse';
+import { P9CreateDecklistInfo, parseDocument, parseTextEntries } from '../../../decklist-parse';
 import { useUserDecklistFeatureService } from '../../state';
 
 type UpdateFn = <K extends keyof P9CreateDecklistInfo>(key: K, value: P9CreateDecklistInfo[K]) => void;
@@ -31,8 +31,17 @@ export function useCreateDecklistFacade(): [
   );
 
   const dispatchFn: UpdateFn = useCallback(
-    <K extends keyof P9CreateDecklistInfo>(key: K, value: P9CreateDecklistInfo[K]) =>
-      service.updateCreateDecklistUI(key, value),
+    <K extends keyof P9CreateDecklistInfo>(key: K, value: P9CreateDecklistInfo[K]) => {
+      switch (key) {
+        case 'manualEntries':
+          service.updateCreateDecklistUI(key, value);
+          service.updateCreateDecklistUI('parsedEntries', parseTextEntries(value as string));
+          break;
+
+        default:
+          service.updateCreateDecklistUI(key, value);
+      }
+    },
     [service],
   );
 

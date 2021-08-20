@@ -71,6 +71,28 @@ export class P9PublicPartitionService {
   magicCardById = (id: string): P9MagicCard | undefined => {
     return this.#partition?.objectForPrimaryKey<P9MagicCard>(P9MagicCardSchema.name, id);
   };
+
+  findMagicCard = (name: string, setCode?: string, collectorNumber?: string): P9MagicCard | undefined => {
+    let results = this.#magic_cards
+      ?.sorted([
+        ['digital', false],
+        ['released_at', true],
+      ])
+      .filtered(
+        'name ==[c] $0 OR name_simple ==[c] $0 OR card_faces.name ==[c] $0 OR card_faces.name_simple ==[c] $0',
+        name,
+      );
+
+    if (setCode) {
+      results = results?.filtered('magic_set.code ==[c] $0', setCode);
+    }
+
+    if (collectorNumber) {
+      results = results?.filtered('collector_number ==[c] $0', collectorNumber);
+    }
+
+    return results?.[0];
+  };
 }
 
 export type P9PartitionServiceTuple = [query: P9PublicPartitionQuery, service: P9PublicPartitionService];

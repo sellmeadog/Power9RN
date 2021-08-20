@@ -12,7 +12,7 @@ export interface P9UserDecklistEntry extends P9UserDecklistEntryTypeMap {
 }
 
 export const P9UserDecklistEntrySchema: Realm.ObjectSchema = {
-  name: 'user_decklist_entry',
+  name: 'UserDecklistEntry',
   embedded: true,
   properties: {
     id: 'string',
@@ -37,7 +37,7 @@ export interface P9UserDecklistMetadata {
 }
 
 export const P9UserDecklistMetadataSchema: Realm.ObjectSchema = {
-  name: 'user_decklist_metadata',
+  name: 'UserDecklistMetadata',
   embedded: true,
   properties: {
     defaultCardArtworkUri: 'string?',

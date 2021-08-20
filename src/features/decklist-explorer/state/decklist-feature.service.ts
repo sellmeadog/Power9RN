@@ -4,15 +4,17 @@ import { switchMap } from 'rxjs/operators';
 import { singleton } from 'tsyringe';
 import { v1 } from 'uuid';
 
-import { ID } from '@datorama/akita';
+import { arrayUpsert, ID } from '@datorama/akita';
 
 import { P9UserDecklist, P9UserDecklistSchema } from '../../../core/data-user';
+import { P9UserDecklistEntry } from '../../../core/data-user/schema/user-decklist-entry';
 import { P9UserDataPartitionQuery } from '../../../core/data-user/state/user-data-partition.query';
 import { P9UserDataPartitionService } from '../../../core/data-user/state/user-data-partition.service';
 import { useDependency } from '../../../core/di';
 import { whenDefined } from '../../../core/operators';
+import { P9PublicPartitionService } from '../../../core/public/state/public-partition.service';
 import { P9User } from '../../authorization/state/authorization.store';
-import { P9CreateDecklistInfo } from '../../decklist-parse';
+import { P9CreateDecklistEntryInfo, P9CreateDecklistInfo } from '../../decklist-parse';
 import { P9UserDecklistFeatureQuery } from './decklist-feature.query';
 import { P9UserDecklistFeatureStore } from './decklist-feature.store';
 
@@ -31,6 +33,7 @@ export class P9UserDecklistFeatureService {
     private query: P9UserDecklistFeatureQuery,
     private dataQuery: P9UserDataPartitionQuery,
     private dataService: P9UserDataPartitionService,
+    private publicDataService: P9PublicPartitionService,
   ) {}
 
   loadUserDecklists = () => {
@@ -52,7 +55,7 @@ export class P9UserDecklistFeatureService {
     const decklistInfo = this.store.getValue().ui.decklistInfo;
 
     if (decklistInfo) {
-      const { manualEntries: _, parsedEntries: __, ...rest } = decklistInfo;
+      const { manualEntries: _, parsedEntries = [], ...rest } = decklistInfo;
       const now = DateTime.utc().toSeconds();
 
       this.store.add(
@@ -61,7 +64,7 @@ export class P9UserDecklistFeatureService {
           _partition: user.id,
           ...rest,
           createdAt: now,
-          entries: [],
+          entries: this.findEntries(parsedEntries),
           isPublic: false,
           modifiedOn: now,
           metadata: { maindeck: 0, sideboard: 0 },
@@ -96,6 +99,23 @@ export class P9UserDecklistFeatureService {
       draft.ui.decklistInfo![key] = value;
     });
   };
+
+  private findEntries(parsedEntries: P9CreateDecklistEntryInfo[]): P9UserDecklistEntry[] {
+    return parsedEntries
+      .map((info): P9UserDecklistEntry | undefined => {
+        const magicCard = this.publicDataService.findMagicCard(info.cardName, info.expansionCode, info.collectorNumber);
+
+        if (magicCard) {
+          return { id: magicCard.oracle_id, cardId: magicCard._id, [info.type]: Number(info.count) };
+        }
+
+        return undefined;
+      })
+      .filter((entry): entry is P9UserDecklistEntry => Boolean(entry))
+      .reduce((acc, curr) => {
+        return arrayUpsert(acc, curr.id, curr);
+      }, [] as P9UserDecklistEntry[]);
+  }
 }
 
 export function useUserDecklistFeatureService() {
