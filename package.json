@@ -97,6 +97,12 @@
       "jsx",
       "json",
       "node"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.setup.ts"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!(@react-native|react-native|react-native-auth0|tsyringe)/)"
     ]
   }
 }
