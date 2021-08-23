@@ -361,6 +361,8 @@ PODS:
   - RealmJS (10.6.1):
     - GCDWebServer
     - React
+  - RNCAsyncStorage (1.15.6):
+    - React-Core
   - RNCMaskedView (0.1.11):
     - React
   - RNCPicker (1.16.3):
@@ -475,6 +477,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "ReactNativeART (from `../node_modules/@react-native-community/art`)"
   - RealmJS (from `../node_modules/realm`)
+  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - RNFastImage (from `../node_modules/react-native-fast-image`)
@@ -578,6 +581,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/art"
   RealmJS:
     :path: "../node_modules/realm"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
   RNCPicker:
@@ -650,6 +655,7 @@ SPEC CHECKSUMS:
   ReactCommon: cfe2b7fd20e0dbd2d1185cd7d8f99633fbc5ff05
   ReactNativeART: 78edc68dd4a1e675338cd0cd113319cf3a65f2ab
   RealmJS: 550ecbe8a0d55bd0e2abb79a63313d4da08bcf25
+  RNCAsyncStorage: b7c6564ce662366dd44d0189456183ef7eda2d4d
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: 6724ab5fcca83c34fe1f18a89baa13e9885f0393
   RNFastImage: d4870d58f5936111c56218dbd7fcfc18e65b58ff
