@@ -29,15 +29,6 @@ describe('parseTextEntries', () => {
     const actual = parseTextEntries(textEntries);
 
     // Assert
-    // expect(
-    //   actual.includes({
-    //     cardName: 'damping sphere',
-    //     collectorNumber: undefined,
-    //     count: '3',
-    //     expansionCode: undefined,
-    //     type: 'sideboard',
-    //   })
-    // ).toBeTruthy();
     expect(actual).toMatchSnapshot();
   });
 
@@ -54,15 +45,6 @@ Sideboard:
     const actual = parseTextEntries(textEntries);
 
     // Assert
-    // expect(
-    //   actual.includes({
-    //     cardName: 'damping sphere',
-    //     collectorNumber: undefined,
-    //     count: '3',
-    //     expansionCode: undefined,
-    //     type: 'sideboard',
-    //   })
-    // ).toBeTruthy();
     expect(actual).toMatchSnapshot();
   });
 
@@ -71,7 +53,6 @@ Sideboard:
     const textEntries = `
 4 Gravecrawler
 4 geralfs messenger
-
 
 Sideboard:
 3 damping sphere
