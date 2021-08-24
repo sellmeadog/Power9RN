@@ -4,8 +4,8 @@ import { Alert } from 'react-native';
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { useAuthorizedUser } from '../../../../core/authorization';
 import { P9DocumentInfo } from '../../../../core/data-user';
-import { useAuthorizationFacade } from '../../../authorization';
 import { P9CreateDecklistInfo, parseDocument, parseTextEntries } from '../../../decklist-parse';
 import { useUserDecklistFeatureService } from '../../state';
 
@@ -17,7 +17,7 @@ export function useCreateDecklistFacade(): [
   parseDocumentInfo: (documentInfo?: P9DocumentInfo) => void,
   createFn: () => Promise<void>,
 ] {
-  const [{ user }] = useAuthorizationFacade();
+  const { user } = useAuthorizedUser();
   const service = useUserDecklistFeatureService();
 
   const state = useObservableState(

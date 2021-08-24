@@ -5,9 +5,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/core';
 
 import { P9TableDivider } from '../../../components';
+import { useAuthorizationFacade } from '../../../core/authorization';
 import { useDependency } from '../../../core/di';
 import { P9PublicPartitionService } from '../../../core/public/state/public-partition.service';
-import { useAuthorizationFacade } from '../../authorization';
 
 export interface P9DeveloperScreenProps {}
 

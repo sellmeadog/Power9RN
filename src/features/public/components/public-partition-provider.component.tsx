@@ -2,11 +2,11 @@ import { useObservableState } from 'observable-hooks';
 import React, { createContext, FunctionComponent, useCallback, useContext, useEffect, useMemo, useRef } from 'react';
 import { Results } from 'realm';
 
+import { useAuthorizedUser } from '../../../core/authorization';
 import { P9UserDataPartitionService } from '../../../core/data-user/state/user-data-partition.service';
 import { useDependency } from '../../../core/di';
 import { P9MagicCard } from '../../../core/public';
 import { P9PublicPartitionService } from '../../../core/public/state/public-partition.service';
-import { useAuthorizationFacade } from '../../authorization';
 import { P9MagicCardGalleryQuery } from '../../magic-cards/state/magic-card.query';
 import { P9MagicCardGalleryStateTuple, P9MagicCardGalleryStore } from '../../magic-cards/state/magic-card.store';
 
@@ -15,7 +15,7 @@ const P9PartitionContext = createContext<{ magicCardGallery: P9MagicCardGalleryS
 export interface P9PartitionProviderProps {}
 
 export const P9PartitionProvider: FunctionComponent<P9PartitionProviderProps> = ({ children }) => {
-  const [{ user }] = useAuthorizationFacade();
+  const { user } = useAuthorizedUser();
   const publicDataService = useDependency(P9PublicPartitionService);
   const galleryRef = useRef<P9MagicCardGalleryStateTuple>([
     useDependency(P9MagicCardGalleryStore),
@@ -24,7 +24,7 @@ export const P9PartitionProvider: FunctionComponent<P9PartitionProviderProps> = 
   const userDataService = useDependency(P9UserDataPartitionService);
 
   useEffect(() => {
-    if (!user || !user.isLoggedIn) {
+    if (!user?.isLoggedIn) {
       return;
     }
 
