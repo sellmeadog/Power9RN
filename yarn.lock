@@ -6839,10 +6839,10 @@ react-is@^16.13.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
-react-native-auth0@^2.8.3:
-  version "2.8.3"
-  resolved "https://registry.yarnpkg.com/react-native-auth0/-/react-native-auth0-2.8.3.tgz#49f9b1f300ecbbaabbd462c31b2b084758a115c1"
-  integrity sha512-sej8MbYtXTWAcxNS7WN3n5IoQsjNFgs6BrC9FPUFKBMT7W7cSz67hde0VzaQjg2R+0e3SVKLfLv1GFabBPC8Ug==
+react-native-auth0@^2.9.0:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/react-native-auth0/-/react-native-auth0-2.9.0.tgz#0fc037926617652de7fae92312fd41436f288353"
+  integrity sha512-jPXr8m7pX1GujPw9bE38RP2kg9pzfaB6m9stxHcOKfFfNZXtSFxFIxZj4HQ7MAMPF25VBUChiaNjH6tzaLGD9Q==
   dependencies:
     base-64 "^0.1.0"
     crypto-js "^3.3.0"

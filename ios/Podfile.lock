@@ -1,5 +1,5 @@
 PODS:
-  - A0Auth0 (2.8.3):
+  - A0Auth0 (2.9.0):
     - React
   - boost-for-react-native (1.63.0)
   - BVLinearGradient (2.5.6):
@@ -605,7 +605,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  A0Auth0: 72124e18b03e4a8292b190f7b157aa16a3010988
+  A0Auth0: 293fd04e4a4458bd260ca2782fbe25d8ec7ea9f1
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
