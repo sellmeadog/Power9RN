@@ -1,13 +1,13 @@
 import { firstValueFrom } from 'rxjs';
 import { container } from 'tsyringe';
 
-import { P9Auth0Client } from './auth0-client';
+import { P9AuthClient } from './auth-client';
 
-describe('P9Auth0Client', () => {
-  let client: P9Auth0Client;
+describe('P9AuthClient', () => {
+  let client: P9AuthClient;
 
   beforeEach(() => {
-    client = container.resolve(P9Auth0Client);
+    client = container.resolve(P9AuthClient);
   });
 
   afterAll(() => {

@@ -5,7 +5,7 @@ import { singleton } from 'tsyringe';
 
 import { Store } from '@datorama/akita';
 
-import { P9UserAuthorization } from './auth0-client';
+import { P9UserAuthorization } from './auth-client';
 
 export interface P9AuthorizationState {
   authorization?: P9UserAuthorization;
