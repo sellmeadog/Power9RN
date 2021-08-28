@@ -2,6 +2,7 @@ import React, { FunctionComponent } from 'react';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
+import { withFlag } from '../../../core/types';
 import { P9DecklistExplorerNavigator } from '../../decklist-explorer';
 import { P9DeveloperNavigator } from '../../developer';
 import { P9MagicCardFeatureNavigator } from '../../magic-cards';
@@ -19,7 +20,13 @@ export const P9DrawerNavigator: FunctionComponent<P9DrawerNavigatorProps> = () =
         component={P9DecklistExplorerNavigator}
         options={{ title: 'Decks' }}
       />
-      <Screen name={'P9:Drawer:Developer'} component={P9DeveloperNavigator} options={{ title: 'Developer' }} />
+      {/* {FEATURE_FLAG('P9_FLAG_DEVELOPER_SCREEN') && (
+        <Screen name={'P9:Drawer:Developer'} component={P9DeveloperNavigator} options={{ title: 'Developer' }} />
+      )} */}
+      {withFlag(
+        'P9_FLAG_DEVELOPER_SCREEN',
+        <Screen name={'P9:Drawer:Developer'} component={P9DeveloperNavigator} options={{ title: 'Developer' }} />,
+      )}
     </Navigator>
   );
 };

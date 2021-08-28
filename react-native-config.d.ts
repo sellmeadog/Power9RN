@@ -5,6 +5,8 @@ declare module 'react-native-config' {
     P9_AUTH0_REDIRECT_URL: string;
     P9_AUTH0_SCOPES: string;
 
+    P9_FLAG_DEVELOPER_SCREEN: string;
+
     P9_MONGODB_REALM_APP_ID: string;
   }
 
