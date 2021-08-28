@@ -7,7 +7,11 @@ import { Store } from '@datorama/akita';
 
 import { P9UserAuthorization } from './auth-client';
 
-export interface P9AuthorizationState {
+export interface P9User extends User, SimpleObject {
+  last_login: number;
+}
+
+export interface P9AuthorizationState extends Record<string, unknown> {
   authorization?: P9UserAuthorization;
   user?: User;
   profile?: SimpleObject;
@@ -24,8 +28,8 @@ export class P9AuthorizationStore
 
   next = (state: Partial<P9AuthorizationState>) => {
     this.update((draft) => {
-      (Object.keys(state) as [keyof P9AuthorizationState]).forEach((key) => {
-        draft[key] = state[key] as any;
+      Object.keys(state).forEach((key) => {
+        draft[key] = state[key];
       });
     });
   };

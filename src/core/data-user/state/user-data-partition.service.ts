@@ -20,7 +20,9 @@ export class P9UserDataPartitionService {
   constructor(private store: P9UserDataPartitionStore, private query: P9UserDataPartitionQuery) {}
 
   open = (user: User): void => {
-    if (user.providerType === 'anon-user') {
+    if (
+      user.identities.map((identity) => identity.providerType).every((providerType) => providerType === 'anon-user')
+    ) {
       console.log('User is anonymous');
       return;
     }

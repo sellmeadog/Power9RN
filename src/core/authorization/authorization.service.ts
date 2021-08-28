@@ -8,6 +8,7 @@ import { catchError, map, mapTo, switchMap, tap } from 'rxjs/operators';
 import { injectable, registry } from 'tsyringe';
 
 import { useDependency } from '../di';
+import { whenDefined } from '../operators';
 import { P9AuthClient, P9IdToken, P9PasswordCredentials, P9UserAuthorizationError } from './auth-client';
 import { P9AuthorizationQuery } from './authorization.query';
 import { P9AuthorizationStore } from './authorization.store';
@@ -37,6 +38,7 @@ export class P9AuthorizationService {
     );
 
     const authorizedUser$ = this.query.authorization$.pipe(
+      whenDefined(),
       switchMap(({ idToken }) => {
         const { sub }: P9IdToken = jwtDecode(idToken);
 
