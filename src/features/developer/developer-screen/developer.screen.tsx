@@ -2,8 +2,6 @@ import React, { FunctionComponent, useCallback } from 'react';
 import { Button, Text } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { useNavigation } from '@react-navigation/core';
-
 import { P9TableDivider } from '../../../components';
 import { useAuthorizationFacade } from '../../../core/authorization';
 import { useDependency } from '../../../core/di';
@@ -14,7 +12,6 @@ export interface P9DeveloperScreenProps {}
 export const P9DeveloperScreen: FunctionComponent<P9DeveloperScreenProps> = () => {
   const service = useDependency(P9PublicPartitionService);
   const [{ user, isAnonymous }, authenticate] = useAuthorizationFacade();
-  const { navigate } = useNavigation();
 
   const handlePress = useCallback(() => {
     authenticate();
