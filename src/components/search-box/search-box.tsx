@@ -12,6 +12,7 @@ export interface P9SearchBoxProps {
   inputContainerStyle?: StyleProp<ViewStyle>;
   inputStyle?: StyleProp<ViewStyle>;
   onExpressionChange?: (expression: string) => void;
+  placeholder?: string;
 }
 
 export const P9SearchBox: FunctionComponent<P9SearchBoxProps> = ({
@@ -21,6 +22,7 @@ export const P9SearchBox: FunctionComponent<P9SearchBoxProps> = ({
   inputContainerStyle,
   inputStyle,
   onExpressionChange,
+  placeholder,
 }) => {
   const [{ colors }] = usePower9Theme();
 
@@ -37,7 +39,7 @@ export const P9SearchBox: FunctionComponent<P9SearchBoxProps> = ({
         <View style={[P9SearchBoxStyle.inputContainer, inputContainerStyle]}>
           <P9TextInput
             onChangeText={onExpressionChange}
-            placeholder={'Search'}
+            placeholder={placeholder ?? 'Search'}
             style={[P9SearchBoxStyle.input, inputStyle]}
             value={expression}
           />

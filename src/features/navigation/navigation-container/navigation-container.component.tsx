@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useDependency } from '../../../core/di';
 import { usePower9Theme } from '../../../core/theme';
 import { P9AuthorizationNavigator } from '../../authorization/components/authorization.navigator';
+import { P9CreateDecklistScreen } from '../../decklist-explorer';
 import { P9MagicCardFilterNavigator } from '../../magic-card-filter';
 import { P9ScryfallCatalogService } from '../../magic-card-filter/state/scryfall-catalog/scryfall-catalog.service';
 import { P9DrawerNavigator } from '../drawer-navigator/drawer-navigator.component';
@@ -36,6 +37,7 @@ export const P9NavigationContainer: FunctionComponent<P9NavigationContainerProps
         <Screen name={'P9:Drawer'} component={P9DrawerNavigator} />
         <Screen name={'P9:Authorization'} component={P9AuthorizationNavigator} />
         <Screen name={'P9:MagicCardFilter'} component={P9MagicCardFilterNavigator} />
+        <Screen name={'P9:Modal:CreateDecklist'} component={P9CreateDecklistScreen} />
       </Navigator>
     </NavigationContainer>
   );

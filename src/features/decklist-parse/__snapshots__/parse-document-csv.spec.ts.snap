@@ -1,0 +1,282 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`parseDocumentCsv should parse Deckbox 1`] = `
+Object {
+  "manualEntries": "4 Angel of Serenity (Return to Ravnica) 1
+1 Ashen Rider (Theros) 187
+1 Anax and Cymede (Theros) 186",
+  "parsedEntries": Array [
+    Object {
+      "cardName": "Angel of Serenity",
+      "collectorNumber": "1",
+      "count": "4",
+      "expansionCode": "Return to Ravnica",
+      "type": "maindeck",
+    },
+    Object {
+      "cardName": "Ashen Rider",
+      "collectorNumber": "187",
+      "count": "1",
+      "expansionCode": "Theros",
+      "type": "maindeck",
+    },
+    Object {
+      "cardName": "Anax and Cymede",
+      "collectorNumber": "186",
+      "count": "1",
+      "expansionCode": "Theros",
+      "type": "maindeck",
+    },
+  ],
+}
+`;
+
+exports[`parseDocumentCsv should parse Decked Builder 1`] = `
+Object {
+  "manualEntries": "3 Black Sun's Zenith (Mirrodin Besieged)
+1 Snapcaster Mage (Innistrad)",
+  "parsedEntries": Array [
+    Object {
+      "cardName": "Black Sun's Zenith",
+      "count": "3",
+      "expansionCode": "Mirrodin Besieged",
+      "type": "maindeck",
+    },
+    Object {
+      "cardName": "Snapcaster Mage",
+      "count": "1",
+      "expansionCode": "Innistrad",
+      "type": "maindeck",
+    },
+  ],
+}
+`;
+
+exports[`parseDocumentCsv should parse Deckstats.net 1`] = `
+Object {
+  "manualEntries": "1 Abandon Reason (EMN)
+2 Abandoned Sarcophagus (HOU)",
+  "parsedEntries": Array [
+    Object {
+      "cardName": "Abandon Reason",
+      "count": "1",
+      "expansionCode": "EMN",
+      "type": "maindeck",
+    },
+    Object {
+      "cardName": "Abandoned Sarcophagus",
+      "count": "2",
+      "expansionCode": "HOU",
+      "type": "maindeck",
+    },
+  ],
+}
+`;
+
+exports[`parseDocumentCsv should parse MTG Manager 1`] = `
+Object {
+  "manualEntries": "1 Amulet of Vigor (WWK)
+1 Arcane Lighthouse (C14)",
+  "parsedEntries": Array [
+    Object {
+      "cardName": "Amulet of Vigor",
+      "count": "1",
+      "expansionCode": "WWK",
+      "type": "maindeck",
+    },
+    Object {
+      "cardName": "Arcane Lighthouse",
+      "count": "1",
+      "expansionCode": "C14",
+      "type": "maindeck",
+    },
+  ],
+}
+`;
+
+exports[`parseDocumentCsv should parse MTG Studio 1`] = `
+Object {
+  "manualEntries": "1 Aether Vial (MMA)
+4 Anax and Cymede (THS)",
+  "parsedEntries": Array [
+    Object {
+      "cardName": "Aether Vial",
+      "count": "1",
+      "expansionCode": "MMA",
+      "type": "maindeck",
+    },
+    Object {
+      "cardName": "Anax and Cymede",
+      "count": "4",
+      "expansionCode": "THS",
+      "type": "maindeck",
+    },
+  ],
+}
+`;
+
+exports[`parseDocumentCsv should parse MTGGoldfish 1`] = `
+Object {
+  "manualEntries": "1 Aether Vial (MMA)
+4 Anax and Cymede (THS)",
+  "parsedEntries": Array [
+    Object {
+      "cardName": "Aether Vial",
+      "count": "1",
+      "expansionCode": "MMA",
+      "type": "maindeck",
+    },
+    Object {
+      "cardName": "Anax and Cymede",
+      "count": "4",
+      "expansionCode": "THS",
+      "type": "maindeck",
+    },
+  ],
+}
+`;
+
+exports[`parseDocumentCsv should parse MTGO 1`] = `
+Object {
+  "manualEntries": "1 Banisher Priest (PRM) 1136
+10 Batterskull (PRM) 1136",
+  "parsedEntries": Array [
+    Object {
+      "cardName": "Banisher Priest",
+      "collectorNumber": "1136",
+      "count": "1",
+      "expansionCode": "PRM",
+      "type": "maindeck",
+    },
+    Object {
+      "cardName": "Batterskull",
+      "collectorNumber": "1136",
+      "count": "10",
+      "expansionCode": "PRM",
+      "type": "maindeck",
+    },
+  ],
+}
+`;
+
+exports[`parseDocumentCsv should parse MTGStocks 1`] = `
+Object {
+  "manualEntries": "2 Abandon Hope (Tempest)
+1 Abduction (Classic Sixth Edition)
+1 Advent of the Wurm (Modern Masters 2017)
+3 Advent of the Wurm (Modern Masters 2017)",
+  "parsedEntries": Array [
+    Object {
+      "cardName": "Abandon Hope",
+      "count": "2",
+      "expansionCode": "Tempest",
+      "type": "maindeck",
+    },
+    Object {
+      "cardName": "Abduction",
+      "count": "1",
+      "expansionCode": "Classic Sixth Edition",
+      "type": "maindeck",
+    },
+    Object {
+      "cardName": "Advent of the Wurm",
+      "count": "1",
+      "expansionCode": "Modern Masters 2017",
+      "type": "maindeck",
+    },
+    Object {
+      "cardName": "Advent of the Wurm",
+      "count": "3",
+      "expansionCode": "Modern Masters 2017",
+      "type": "maindeck",
+    },
+  ],
+}
+`;
+
+exports[`parseDocumentCsv should parse Pucatrade 1`] = `
+Object {
+  "manualEntries": "1 Breeding Pool (GTC)
+8 Rattleclaw Mystic (KTK)
+1 Opulent Palace (KTK)
+1 Tasigur the Golden Fang (FRF)
+1 Tasigur the Golden Fang (FRF)",
+  "parsedEntries": Array [
+    Object {
+      "cardName": "Breeding Pool",
+      "count": "1",
+      "expansionCode": "GTC",
+      "type": "maindeck",
+    },
+    Object {
+      "cardName": "Rattleclaw Mystic",
+      "count": "8",
+      "expansionCode": "KTK",
+      "type": "maindeck",
+    },
+    Object {
+      "cardName": "Opulent Palace",
+      "count": "1",
+      "expansionCode": "KTK",
+      "type": "maindeck",
+    },
+    Object {
+      "cardName": "Tasigur the Golden Fang",
+      "count": "1",
+      "expansionCode": "FRF",
+      "type": "maindeck",
+    },
+    Object {
+      "cardName": "Tasigur the Golden Fang",
+      "count": "1",
+      "expansionCode": "FRF",
+      "type": "maindeck",
+    },
+  ],
+}
+`;
+
+exports[`parseDocumentCsv should parse TCGplayer 1`] = `
+Object {
+  "manualEntries": "1 Verdant Catacombs (ZEN) 229
+1 Graven Cairns (EXP) 28
+1 Olivia Voldaren (ISD) 215",
+  "parsedEntries": Array [
+    Object {
+      "cardName": "Verdant Catacombs",
+      "collectorNumber": "229",
+      "count": "1",
+      "expansionCode": "ZEN",
+      "type": "maindeck",
+    },
+    Object {
+      "cardName": "Graven Cairns",
+      "collectorNumber": "28",
+      "count": "1",
+      "expansionCode": "EXP",
+      "type": "maindeck",
+    },
+    Object {
+      "cardName": "Olivia Voldaren",
+      "collectorNumber": "215",
+      "count": "1",
+      "expansionCode": "ISD",
+      "type": "maindeck",
+    },
+  ],
+}
+`;
+
+exports[`parseDocumentCsv should parse count from Regular and Foil headers 1`] = `
+Object {
+  "manualEntries": "3 Forest (Amonkhet)",
+  "parsedEntries": Array [
+    Object {
+      "cardName": "Forest",
+      "count": "3",
+      "expansionCode": "Amonkhet",
+      "type": "maindeck",
+    },
+  ],
+}
+`;

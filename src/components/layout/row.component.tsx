@@ -1,13 +1,18 @@
 import React, { FunctionComponent } from 'react';
 import { StyleSheet, View, ViewProps } from 'react-native';
+import { Edge, SafeAreaView } from 'react-native-safe-area-context';
 
-export interface P9RowViewProps extends ViewProps {}
+export interface P9RowViewProps extends ViewProps {
+  edges?: Edge[];
+}
 
-export const P9RowView: FunctionComponent<P9RowViewProps> = ({ children, style, ...rest }) => {
+export const P9RowView: FunctionComponent<P9RowViewProps> = ({ edges, children, style, ...rest }) => {
+  const Container = edges ? SafeAreaView : View;
+
   return (
-    <View {...rest} style={[P9RowViewTheme.row, style]}>
+    <Container edges={edges} {...rest} style={[P9RowViewTheme.row, style]}>
       {children}
-    </View>
+    </Container>
   );
 };
 

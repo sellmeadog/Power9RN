@@ -21,6 +21,18 @@ export const P9_THEME_DARK: Partial<FullTheme> = {
     ],
   },
 
+  BottomSheetTextInput: {
+    autoCorrect: false,
+    placeholderTextColor: colors.placeholder,
+    style: [
+      {
+        color: colors.white,
+        fontSize: 17,
+        minHeight: 44,
+      },
+    ],
+  },
+
   ButtonGroup: {
     activeOpacity: 0.9,
     buttonStyle: [{ backgroundColor: colors.grey2 }],
@@ -38,25 +50,31 @@ export const P9_THEME_DARK: Partial<FullTheme> = {
     centerComponent: {
       style: [{ color: colors?.white, fontFamily: 'Beleren2016-Bold', fontSize: 19, fontWeight: 'bold' }],
     },
-    leftContainerStyle: {
-      minHeight: 24,
-      justifyContent: 'center',
-    },
-    centerContainerStyle: {
-      minHeight: 24,
-      justifyContent: 'center',
-    },
-    rightContainerStyle: {
-      minHeight: 24,
-      justifyContent: 'center',
-    },
+    leftContainerStyle: [
+      {
+        minHeight: 24,
+        justifyContent: 'center',
+      },
+    ],
+    centerContainerStyle: [
+      {
+        minHeight: 24,
+        justifyContent: 'center',
+      },
+    ],
+    rightContainerStyle: [
+      {
+        minHeight: 24,
+        justifyContent: 'center',
+      },
+    ],
     containerStyle: [
       {
         borderBottomColor: colors.background,
       },
     ],
-    rightComponent: { style: { fontSize: 17, color: colors.primary } },
-    leftComponent: { style: { fontSize: 17, color: colors.primary } },
+    rightComponent: { style: [{ fontSize: 17, color: colors.primary }] },
+    leftComponent: { style: [{ fontSize: 17, color: colors.primary }] },
   },
 
   Icon: {
@@ -85,6 +103,9 @@ export const P9_THEME_DARK: Partial<FullTheme> = {
   },
 
   Text: {
+    adjustsFontSizeToFit: true,
+    allowFontScaling: false,
+    minimumFontScale: 0.9,
     style: [
       {
         color: colors.white,
@@ -112,7 +133,7 @@ export const P9_THEME_DARK: Partial<FullTheme> = {
       {
         color: colors.white,
         fontSize: 17,
-        height: 44,
+        minHeight: 44,
       },
     ],
   },

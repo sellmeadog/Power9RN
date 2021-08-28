@@ -3,8 +3,8 @@ import { Avatar, AvatarProps } from 'react-native-elements';
 
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 
+import { useAuthorizationFacade } from '../../core/authorization';
 import { usePower9Theme } from '../../core/theme';
-import { useAuthorizationFacade } from '../../features/authorization';
 
 export interface P9DrawerNavigatorAvatarProps {}
 

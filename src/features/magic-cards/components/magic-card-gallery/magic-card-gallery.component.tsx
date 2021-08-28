@@ -12,13 +12,13 @@ const { width: WIDTH } = Dimensions.get('screen');
 
 export interface P9MagicCardGalleryProps {
   currentIndex?: number;
-  data: Results<P9MagicCard> | undefined;
-  onPress?(index: number): void;
+  data: Results<P9MagicCard & Realm.Object> | undefined;
+  onPress?(magicCard: P9MagicCard, index: number): void;
 }
 
 export const P9MagicCardGallery: FunctionComponent<P9MagicCardGalleryProps> = ({ currentIndex, data, onPress }) => {
   const [dataProvider, setDataProvider] = useState(
-    () => new ResultsDataProvider((x: P9MagicCard, y: P9MagicCard) => x._id !== y._id),
+    () => new ResultsDataProvider((x: P9MagicCard & Realm.Object, y: P9MagicCard & Realm.Object) => x._id !== y._id),
   );
 
   const layoutProvider = useMemo(
@@ -34,12 +34,12 @@ export const P9MagicCardGallery: FunctionComponent<P9MagicCardGalleryProps> = ({
   );
 
   useEffect(() => {
-    setDataProvider((d) => d.cloneWithRows((data || []) as unknown as any[]));
+    setDataProvider((d) => d.cloneWithRows((data || []) as unknown as Array<P9MagicCard & Realm.Object>));
   }, [data]);
 
   const renderItem = useCallback(
     (_: string | number, item: P9MagicCard, index: number) => (
-      <P9MagicCardGalleryItem booster={item.booster} card_faces={item.card_faces} index={index} onPress={onPress} />
+      <P9MagicCardGalleryItem index={index} magicCard={item} onPress={onPress} />
     ),
     [onPress],
   );

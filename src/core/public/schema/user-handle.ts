@@ -6,7 +6,7 @@ export interface P9UserHandle {
 }
 
 export const P9UserHandleSchema: Realm.ObjectSchema = {
-  name: 'user_handles',
+  name: 'UserHandle',
   properties: {
     _id: 'string',
     _partition: 'string',

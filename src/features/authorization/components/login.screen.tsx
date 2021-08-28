@@ -10,8 +10,8 @@ import { map } from 'rxjs/operators';
 
 import { useNavigation } from '@react-navigation/core';
 
+import { useAuthorizationFacade } from '../../../core/authorization';
 import { usePower9Theme } from '../../../core/theme';
-import { useAuthorizationFacade } from '../authorization.provider';
 
 export interface P9LoginScreenProps {}
 
