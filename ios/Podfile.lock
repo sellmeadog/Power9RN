@@ -89,6 +89,11 @@ PODS:
     - libwebp/demux
   - libwebp/webp (1.2.0)
   - OpenSSL-Universal (1.1.180)
+  - Purchases (3.12.2):
+    - PurchasesCoreSwift (= 3.12.2)
+  - PurchasesCoreSwift (3.12.2)
+  - PurchasesHybridCommon (1.8.0):
+    - Purchases (= 3.12.2)
   - RCT-Folly (2020.01.13.00):
     - boost-for-react-native
     - DoubleConversion
@@ -375,6 +380,9 @@ PODS:
     - React
   - RNGestureHandler (1.10.3):
     - React-Core
+  - RNPurchases (4.3.0):
+    - PurchasesHybridCommon (= 1.8.0)
+    - React-Core
   - RNReanimated (2.1.0):
     - DoubleConversion
     - FBLazyVector
@@ -483,6 +491,7 @@ DEPENDENCIES:
   - RNFastImage (from `../node_modules/react-native-fast-image`)
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNPurchases (from `../node_modules/react-native-purchases`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -506,6 +515,9 @@ SPEC REPOS:
     - libevent
     - libwebp
     - OpenSSL-Universal
+    - Purchases
+    - PurchasesCoreSwift
+    - PurchasesHybridCommon
     - SDWebImage
     - SDWebImageWebPCoder
     - YogaKit
@@ -593,6 +605,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNPurchases:
+    :path: "../node_modules/react-native-purchases"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -626,6 +640,9 @@ SPEC CHECKSUMS:
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   libwebp: e90b9c01d99205d03b6bb8f2c8c415e5a4ef66f0
   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
+  Purchases: 3e20881892483ab6ca17cb86a89af4c6d1731562
+  PurchasesCoreSwift: e614645840af49d465dee1918011f784365d79a6
+  PurchasesHybridCommon: f87cfd2fb1a55df8daa2a996a1d19d48e5bfbf4f
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: 2f8cb5b7533219bf4218a045f92768129cf7050a
   RCTTypeSafety: 512728b73549e72ad7330b92f3d42936f2a4de5b
@@ -661,6 +678,7 @@ SPEC CHECKSUMS:
   RNFastImage: d4870d58f5936111c56218dbd7fcfc18e65b58ff
   RNFS: 3ab21fa6c56d65566d1fb26c2228e2b6132e5e32
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
+  RNPurchases: e067a4eb18561125d119de8148f27aa0bae2f9db
   RNReanimated: b8c8004b43446e3c2709fe64b2b41072f87428ad
   RNScreens: c277bfc4b5bb7c2fe977d19635df6f974f95dfd6
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
