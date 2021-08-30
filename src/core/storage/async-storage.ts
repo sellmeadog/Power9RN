@@ -20,7 +20,7 @@ const P9AsyncStorage: PersistStateStorage = {
 export function persistState() {
   return persistState_({
     enableInNonBrowser: true,
-    include: ['my.authorization'],
+    include: ['my.authorization', 'purchases'],
     storage: P9AsyncStorage,
   });
 }
