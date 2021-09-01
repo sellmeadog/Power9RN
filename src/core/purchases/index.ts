@@ -1,1 +1,2 @@
-export * from './purchases.service';
+export * from './state/purchases.service';
+export * from './ui/purchases.screen';
