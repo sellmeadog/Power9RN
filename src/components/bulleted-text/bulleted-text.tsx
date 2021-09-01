@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from 'react';
 import { StyleProp, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
-
 import { Text } from 'react-native-elements';
 
 export interface P9BulletedTextProps {
@@ -46,5 +45,5 @@ function getFlexBasis(bullet?: string): number {
     return 16;
   }
 
-  return 40;
+  return 20;
 }

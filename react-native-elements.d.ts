@@ -26,5 +26,6 @@ declare module 'react-native-elements' {
     TextFootnote: Partial<TextProps>;
     TextInput: Partial<TextInputProps>;
     TextTitle: Partial<TextProps>;
+    TextTitleLarge: Partial<TextProps>;
   }
 }

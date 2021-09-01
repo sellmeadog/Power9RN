@@ -1,5 +1,6 @@
 export * from './artist-label/artist-label.component';
 export * from './bulleted-text/bulleted-text';
+export * from './bulleted-text/unordered-list';
 export * from './button-spin/button-spin.component';
 export * from './button-spring/spring-button';
 export * from './button-toggle-carousel/carousel-toggle-button.component';
@@ -12,6 +13,7 @@ export * from './button-toggle/toggle-button';
 export * from './divider/divider-table-title.component';
 export * from './divider/divider-table.component';
 export * from './game-symbol/game-symbol';
+export * from './header/header-modal.component';
 export * from './header/header-navigator-drawer.component';
 export * from './header/header-navigator-drawer.component';
 export * from './input/text-input';

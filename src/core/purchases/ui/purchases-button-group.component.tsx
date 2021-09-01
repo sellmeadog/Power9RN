@@ -58,6 +58,7 @@ const P9PurchasesButtonGroupTheme = StyleSheet.create({
 
   buttonTitle: {
     fontFamily: 'Beleren2016-Bold',
+    fontSize: 20,
     fontWeight: '600',
   },
 
