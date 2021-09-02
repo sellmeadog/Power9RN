@@ -316,7 +316,7 @@ PODS:
     - React-Core
   - react-native-get-random-values (1.7.0):
     - React-Core
-  - react-native-safe-area-context (3.2.0):
+  - react-native-safe-area-context (3.3.2):
     - React-Core
   - React-perflogger (0.65.1)
   - React-RCTActionSheet (0.65.1):
@@ -404,7 +404,7 @@ PODS:
   - RNPurchases (4.3.0):
     - PurchasesHybridCommon (= 1.8.0)
     - React-Core
-  - RNReanimated (2.1.0):
+  - RNReanimated (2.2.0):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -433,8 +433,9 @@ PODS:
     - React-RCTVibration
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.2.0):
+  - RNScreens (3.6.0):
     - React-Core
+    - React-RCTImage
   - RNSVG (12.1.1):
     - React
   - RNVectorIcons (8.1.0):
@@ -690,7 +691,7 @@ SPEC CHECKSUMS:
   react-native-config: c98128a72bc2c3a1ca72caec0b021f0fa944aa29
   react-native-document-picker: f1b5398801b332c77bc62ae0eae2116f49bdff26
   react-native-get-random-values: 237bffb1c7e05fb142092681531810a29ba53015
-  react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
+  react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
   React-perflogger: fd28ee1f2b5b150b00043f0301d96bd417fdc339
   React-RCTActionSheet: 7f3fa0855c346aa5d7c60f9ced16e067db6d29fa
   React-RCTAnimation: 2119a18ee26159004b001bc56404ca5dbaae6077
@@ -712,8 +713,8 @@ SPEC CHECKSUMS:
   RNFS: 3ab21fa6c56d65566d1fb26c2228e2b6132e5e32
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNPurchases: e067a4eb18561125d119de8148f27aa0bae2f9db
-  RNReanimated: 51872b20cb5f4939c28c82831cdf3f6cc2277d67
-  RNScreens: c277bfc4b5bb7c2fe977d19635df6f974f95dfd6
+  RNReanimated: 7245c2ff6dca3b42b6f77e800adf85ce68532759
+  RNScreens: eb0dfb2d6b21d2d7f980ad46b14eb306d2f1062e
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
