@@ -384,7 +384,7 @@ PODS:
     - React-perflogger (= 0.65.1)
   - ReactNativeART (1.2.0):
     - React
-  - RealmJS (10.6.1):
+  - RealmJS (10.7.0):
     - GCDWebServer
     - React
   - RNCAsyncStorage (1.15.6):
@@ -704,7 +704,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 85187f19dd9c47a7c102f9994f9d14e4dc2110de
   ReactCommon: eafed38eec7b591c31751bfa7494801618460459
   ReactNativeART: 78edc68dd4a1e675338cd0cd113319cf3a65f2ab
-  RealmJS: 550ecbe8a0d55bd0e2abb79a63313d4da08bcf25
+  RealmJS: e6691dbdccd8b5666c2271ef95616befe68a8b7e
   RNCAsyncStorage: b7c6564ce662366dd44d0189456183ef7eda2d4d
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: 6724ab5fcca83c34fe1f18a89baa13e9885f0393
