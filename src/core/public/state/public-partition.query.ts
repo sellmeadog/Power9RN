@@ -1,5 +1,5 @@
 import { CollectionChangeCallback, Results } from 'realm';
-import { MonoTypeOperatorFunction, Observable, of } from 'rxjs';
+import { MonoTypeOperatorFunction, Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { singleton } from 'tsyringe';
 
