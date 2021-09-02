@@ -33,6 +33,10 @@ export const P9_THEME_DARK: Partial<FullTheme> = {
     ],
   },
 
+  Button: {
+    buttonStyle: [{ height: 44 }],
+  },
+
   ButtonGroup: {
     activeOpacity: 0.9,
     buttonStyle: [{ backgroundColor: colors.grey2 }],
@@ -120,6 +124,25 @@ export const P9_THEME_DARK: Partial<FullTheme> = {
 
   TextTitle: {
     style: [{ color: colors?.white, fontFamily: 'Beleren2016SmallCaps-Bold', fontSize: 17, fontWeight: 'bold' }],
+  },
+
+  TextTitleLarge: {
+    style: [
+      {
+        fontFamily: 'Beleren2016-Bold',
+        fontSize: 34,
+        fontWeight: 'bold',
+        padding: 10,
+        textShadowColor: 'rgba(0,0,0,0.22)',
+        textShadowOffset: {
+          width: 0,
+          height: 1,
+        },
+        textShadowRadius: 2.22,
+
+        elevation: 3,
+      },
+    ],
   },
 
   TextFootnote: {

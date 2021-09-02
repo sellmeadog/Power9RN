@@ -4,6 +4,7 @@ import { StyleSheet, View, ViewProps } from 'react-native';
 import { usePower9Theme } from '../../core/theme';
 
 export interface P9ItemSeparatorProps extends ViewProps {
+  color?: string;
   marginBottom?: number;
   marginLeft?: number;
   marginRight?: number;
@@ -11,6 +12,7 @@ export interface P9ItemSeparatorProps extends ViewProps {
 }
 
 export const P9ItemSeparator: FunctionComponent<P9ItemSeparatorProps> = ({
+  color,
   marginBottom,
   marginLeft = 10,
   marginRight,
@@ -25,7 +27,7 @@ export const P9ItemSeparator: FunctionComponent<P9ItemSeparatorProps> = ({
       {...rest}
       style={[
         P9ItemSeparatorTheme.container,
-        { backgroundColor: colors?.grey3, marginBottom, marginLeft, marginRight, marginTop },
+        { backgroundColor: color ?? colors?.grey3, marginBottom, marginLeft, marginRight, marginTop },
         style,
       ]}
     />

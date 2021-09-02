@@ -1,9 +1,6 @@
 import { useCallback, useState } from 'react';
-import { UpdateMode } from 'realm';
-import { v1 } from 'uuid';
 
 import { P9UserDecklist } from '../../../core/data-user';
-import { P9MagicCardFace } from '../../../core/public';
 import { P9CreateDecklistInfo } from '../../decklist-parse';
 
 type P9CreateDecklistFn = (decklistInfo?: P9CreateDecklistInfo) => void;
@@ -21,7 +18,7 @@ export function useCreateDecklist(): [P9CreateDecklistFn, P9CreateDecklistProgre
   const [result, setResult] = useState<P9CreateDecklistProgress>({ hasError: false, writing: false });
 
   const createFn: P9CreateDecklistFn = useCallback(
-    async (decklistInfo?: P9CreateDecklistInfo) => {
+    async (/*decklistInfo?: P9CreateDecklistInfo*/) => {
       setResult((current) => ({ ...current }));
     },
     [],

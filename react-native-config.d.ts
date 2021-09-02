@@ -8,6 +8,8 @@ declare module 'react-native-config' {
     P9_FLAG_DEVELOPER_SCREEN: string;
 
     P9_MONGODB_REALM_APP_ID: string;
+
+    P9_REVENUECAT_API_KEY: string;
   }
 
   const Environment: Dotenv;
