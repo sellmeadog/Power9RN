@@ -2,19 +2,23 @@ import React, { FunctionComponent } from 'react';
 import { ImageBackground, StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
-import { PurchasesEntitlementInfo, PurchasesPackage } from 'react-native-purchases';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { P9ItemSeparator, P9ModalHeader, P9TitleLargeText, P9UnorderedList } from '../../../components';
 import { usePower9Theme } from '../../theme';
-import { useActiveSubscription, useAvailablePackages } from '../state/purchases.query';
-import { usePurchaseSubscription } from '../state/purchases.service';
+import { P9PurchasesUIState, usePurchasesUIState } from '../state/purchases.query';
+import {
+  P9PurchaseSubscriptionFn,
+  P9RestoreSubscriptionFn,
+  usePurchaseSubscription,
+  useRestoreSubscription,
+} from '../state/purchases.service';
 import { P9PurchasesButtonGroup } from './purchases-button-group.component';
 
 export interface P9PurchasesScreenProps {}
 
 export const P9PurchasesScreen: FunctionComponent<P9PurchasesScreenProps> = () => {
-  const [packages, activeSubscription, handlePurchase] = usePurchasesScreenFacade();
+  const [{ loading, packages, activeSubscription }, handlePurchase, handleRestore] = usePurchasesUIFacade();
   const [{ colors }] = usePower9Theme();
 
   return (
@@ -34,17 +38,24 @@ export const P9PurchasesScreen: FunctionComponent<P9PurchasesScreenProps> = () =
             </Text>
             <P9UnorderedList
               containerStyle={[P9PurchasesScreenTheme.paragraph]}
-              items={['Remove ads', 'Build unlimted decks', 'An angel gets its wings']}
+              items={[
+                'Remove ads',
+                'Build unlimted decks',
+                'Support ongoing feature development',
+                'An angel gets its wings',
+              ]}
             />
           </View>
           <P9ItemSeparator color={colors?.grey5} marginBottom={42} marginLeft={64} marginRight={64} marginTop={22} />
           <P9PurchasesButtonGroup
             activeProductIdentifier={activeSubscription?.productIdentifier}
+            loading={loading}
             packages={packages}
             onPurchase={handlePurchase}
           />
           <Button
             containerStyle={[P9PurchasesScreenTheme.buttonContainer]}
+            onPress={handleRestore}
             title={'Already a subscriber? Restore Now.'}
             type={'clear'}
           />
@@ -84,10 +95,10 @@ const P9PurchasesScreenTheme = StyleSheet.create({
   },
 });
 
-const usePurchasesScreenFacade = (): [
-  packages: PurchasesPackage[],
-  activeSubscription: PurchasesEntitlementInfo | undefined,
-  purchase: (subscription: PurchasesPackage) => void,
+const usePurchasesUIFacade = (): [
+  state: P9PurchasesUIState,
+  purchaseSubscription: P9PurchaseSubscriptionFn,
+  restoreSubscription: P9RestoreSubscriptionFn,
 ] => {
-  return [useAvailablePackages(), useActiveSubscription(), usePurchaseSubscription()];
+  return [usePurchasesUIState(), usePurchaseSubscription(), useRestoreSubscription()];
 };

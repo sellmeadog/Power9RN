@@ -22,13 +22,15 @@ export class P9PurchasesStore extends Store<P9PurchasesState> implements Observe
         draft[key] = value;
       });
     });
+    this.setLoading(false);
   };
 
   error = (error: unknown) => {
     this.setError(error);
+    this.setLoading(false);
   };
 
   complete = () => {
-    // NOOP
+    this.setLoading(false);
   };
 }

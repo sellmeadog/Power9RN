@@ -1,5 +1,6 @@
 import { useObservable, useObservableState } from 'observable-hooks';
-import { PurchasesEntitlementInfo } from 'react-native-purchases';
+import { PurchasesEntitlementInfo, PurchasesPackage } from 'react-native-purchases';
+import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { singleton } from 'tsyringe';
 
@@ -35,4 +36,27 @@ export function useAvailablePackages() {
 export function useActiveSubscription() {
   const query = useDependency(P9PurchasesQuery);
   return useObservableState(useObservable(() => query.activeSubscription$));
+}
+
+export interface P9PurchasesUIState {
+  activeSubscription?: PurchasesEntitlementInfo;
+  error?: any;
+  loading: boolean;
+  packages: PurchasesPackage[];
+}
+
+export function usePurchasesUIState(): P9PurchasesUIState {
+  const query = useDependency(P9PurchasesQuery);
+
+  return useObservableState(
+    useObservable(() =>
+      combineLatest({
+        activeSubscription: query.activeSubscription$,
+        error: query.selectError(),
+        loading: query.selectLoading(),
+        packages: query.availablePackages$,
+      }),
+    ),
+    { loading: false, packages: [] } as P9PurchasesUIState,
+  );
 }

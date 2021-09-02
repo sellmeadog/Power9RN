@@ -33,6 +33,10 @@ export const P9_THEME_DARK: Partial<FullTheme> = {
     ],
   },
 
+  Button: {
+    buttonStyle: [{ height: 44 }],
+  },
+
   ButtonGroup: {
     activeOpacity: 0.9,
     buttonStyle: [{ backgroundColor: colors.grey2 }],

@@ -1,16 +1,18 @@
 import React, { FunctionComponent } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Badge, Button, ButtonProps } from 'react-native-elements';
+import { Badge, Button } from 'react-native-elements';
 import { PACKAGE_TYPE, PurchasesPackage } from 'react-native-purchases';
 
-export interface P9PurchasesButtonGroupProps extends ButtonProps {
+export interface P9PurchasesButtonGroupProps {
   activeProductIdentifier?: string;
+  loading: boolean;
   packages?: PurchasesPackage[];
   onPurchase?: (pkg: PurchasesPackage) => void;
 }
 
 export const P9PurchasesButtonGroup: FunctionComponent<P9PurchasesButtonGroupProps> = ({
   activeProductIdentifier,
+  loading,
   packages,
   onPurchase,
 }) => {
@@ -19,15 +21,12 @@ export const P9PurchasesButtonGroup: FunctionComponent<P9PurchasesButtonGroupPro
       {packages?.map((pkg) => (
         <View key={pkg.product.identifier}>
           <Button
+            containerStyle={[P9PurchasesButtonGroupTheme.buttonContainer]}
             icon={
-              pkg.product.identifier === activeProductIdentifier && {
-                name: 'check-circle',
-                color: '#fff',
-                size: 22,
-              }
+              pkg.product.identifier === activeProductIdentifier && { name: 'check-circle', color: '#fff', size: 22 }
             }
             iconContainerStyle={[P9PurchasesButtonGroupTheme.iconContainer]}
-            containerStyle={[P9PurchasesButtonGroupTheme.buttonContainer]}
+            loading={loading}
             onPress={() => onPurchase?.(pkg)}
             title={`${pkg.product.price_string ?? '-'}/${pkg.packageType === PACKAGE_TYPE.ANNUAL ? 'year' : 'month'}`}
             titleStyle={[P9PurchasesButtonGroupTheme.buttonTitle]}
