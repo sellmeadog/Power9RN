@@ -21,9 +21,14 @@ export const P9SubscriptionSettings: FunctionComponent<P9SubscriptionSettingsPro
   return (
     <>
       <P9TableDivider title={'Power 9+'} />
-      <P9TableViewActionItem onPress={handlePurchase} title={title} />
+      <P9TableViewActionItem accessory={'arrow-forward-ios'} onPress={handlePurchase} primary title={title} />
       <P9ItemSeparator />
-      <P9TableViewActionItem disabled={!!activeSubscription} onPress={handleRestore} title={'Restore Subscription'} />
+      <P9TableViewActionItem
+        action
+        disabled={!!activeSubscription}
+        onPress={handleRestore}
+        title={'Restore Subscription'}
+      />
     </>
   );
 };

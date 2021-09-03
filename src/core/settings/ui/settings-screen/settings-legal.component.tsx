@@ -9,9 +9,17 @@ export const P9LegalSettings: FunctionComponent<P9LegalSettingsProps> = () => {
   return (
     <>
       <P9TableDivider title={'Discuss // Support'} />
-      <P9TableViewActionItem title={'Privacy Policy'} onPress={openExternalUrl('http://privacy.power9.io')} />
+      <P9TableViewActionItem
+        accessory={'open-in-new'}
+        title={'Privacy Policy'}
+        onPress={openExternalUrl('http://privacy.power9.io')}
+      />
       <P9ItemSeparator />
-      <P9TableViewActionItem title={'Terms of Use'} onPress={openExternalUrl('http://legal.power9.io/terms-of-use')} />
+      <P9TableViewActionItem
+        accessory={'open-in-new'}
+        title={'Terms of Use'}
+        onPress={openExternalUrl('http://legal.power9.io/terms-of-use')}
+      />
     </>
   );
 };

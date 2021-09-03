@@ -13,9 +13,15 @@ export const P9AccountSettings: FunctionComponent<P9AccountSettingsProps> = () =
   return (
     <>
       <P9TableDivider title={'Account'} />
-      <P9TableViewActionItem title={isAnonymous ? 'Anonymous' : user?.customData.handle ?? 'My Account'} />
+      <P9TableViewActionItem primary title={isAnonymous ? 'Anonymous' : user?.customData.handle ?? 'My Account'} />
       <P9ItemSeparator />
-      <P9TableViewActionItem disabled={!isAnonymous} title={'Create Account'} onPress={handleAuthenticate} />
+      <P9TableViewActionItem
+        action
+        accessory={'open-in-new'}
+        disabled={!isAnonymous}
+        title={'Create Account'}
+        onPress={handleAuthenticate}
+      />
     </>
   );
 };

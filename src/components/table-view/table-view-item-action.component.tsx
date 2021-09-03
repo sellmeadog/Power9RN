@@ -1,19 +1,26 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { FunctionComponent, useCallback } from 'react';
 import { GestureResponderEvent, StyleSheet } from 'react-native';
-import { Text } from 'react-native-elements';
+import { Icon, Text } from 'react-native-elements';
 import { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { usePower9Theme } from '../../core/theme';
 import { P9TableViewItem, P9TableViewItemProps } from './table-view-item.component';
 
 export interface P9TableViewActionItemProps extends P9TableViewItemProps {
+  accessory?: 'arrow-forward-ios' | 'open-in-new';
+  action?: boolean;
+  primary?: boolean;
   title: string;
 }
 
 export const P9TableViewActionItem: FunctionComponent<P9TableViewActionItemProps> = ({
+  accessory,
+  action,
   disabled,
   onLongPress,
   onPress,
+  primary,
   title,
 }) => {
   const [{ colors }] = usePower9Theme();
@@ -50,13 +57,24 @@ export const P9TableViewActionItem: FunctionComponent<P9TableViewActionItemProps
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
     >
-      <Text style={[{ color: disabled ? colors?.grey5 : colors?.primary }]}>{title}</Text>
+      <Text
+        style={[
+          {
+            color: disabled ? colors?.grey5 : action ? colors?.primary : colors?.white,
+            fontWeight: primary ? '600' : 'normal',
+          },
+        ]}
+      >
+        {title}
+      </Text>
+      {accessory && !disabled && <Icon name={accessory} />}
     </P9TableViewItem>
   );
 };
 
 const P9TableViewActionItemTheme = StyleSheet.create({
   contentContainer: {
-    paddingHorizontal: 10,
+    paddingLeft: 10,
+    paddingRight: 7,
   },
 });
