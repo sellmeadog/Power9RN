@@ -4,15 +4,22 @@ import { Header, HeaderProps } from 'react-native-elements';
 
 import { useNavigation } from '@react-navigation/native';
 
-export interface P9ModalHeaderProps extends HeaderProps {}
+export interface P9ModalHeaderProps extends HeaderProps {
+  cancelButtonTitle?: string;
+}
 
-export const P9ModalHeader: FunctionComponent<P9ModalHeaderProps> = ({ containerStyle, leftComponent, ...rest }) => {
+export const P9ModalHeader: FunctionComponent<P9ModalHeaderProps> = ({
+  cancelButtonTitle,
+  containerStyle,
+  leftComponent,
+  ...rest
+}) => {
   const { goBack } = useNavigation();
 
   return (
     <Header
       containerStyle={[P9ModalHeaderTheme.container, containerStyle]}
-      leftComponent={leftComponent ?? { text: 'Cancel', onPress: goBack }}
+      leftComponent={leftComponent ?? { text: cancelButtonTitle ?? 'Cancel', onPress: goBack }}
       {...rest}
     />
   );

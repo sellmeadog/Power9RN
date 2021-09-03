@@ -4,6 +4,7 @@ import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { useDependency } from '../../../core/di';
+import { P9PurchasesScreen } from '../../../core/purchases';
 import { usePower9Theme } from '../../../core/theme';
 import { P9AuthorizationNavigator } from '../../authorization/components/authorization.navigator';
 import { P9CreateDecklistScreen } from '../../decklist-explorer';
@@ -38,6 +39,7 @@ export const P9NavigationContainer: FunctionComponent<P9NavigationContainerProps
         <Screen name={'P9:Authorization'} component={P9AuthorizationNavigator} />
         <Screen name={'P9:MagicCardFilter'} component={P9MagicCardFilterNavigator} />
         <Screen name={'P9:Modal:CreateDecklist'} component={P9CreateDecklistScreen} />
+        <Screen name={'P9:Modal:Purchases'} component={P9PurchasesScreen} />
       </Navigator>
     </NavigationContainer>
   );

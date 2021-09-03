@@ -28,7 +28,7 @@ export const P9PurchasesScreen: FunctionComponent<P9PurchasesScreenProps> = () =
       imageStyle={[P9PurchasesScreenTheme.backgroundImage]}
       style={[P9PurchasesScreenTheme.container]}
     >
-      <P9ModalHeader />
+      <P9ModalHeader cancelButtonTitle={activeSubscription ? 'Done' : 'Cancel'} />
       <LinearGradient colors={['transparent', colors!.grey0!]} locations={[0, 0.15]}>
         <SafeAreaView edges={['bottom']}>
           <View>

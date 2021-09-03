@@ -42,6 +42,10 @@ export class P9PurchasesService {
       .pipe(
         retry(3),
         map(({ purchaserInfo }) => ({ purchaser: purchaserInfo })),
+        catchError((reason) => {
+          console.log(reason);
+          return EMPTY;
+        }),
       )
       .subscribe(this.store);
   };

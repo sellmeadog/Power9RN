@@ -4,7 +4,7 @@ import { Keyboard, StyleSheet } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import { Text } from 'react-native-elements';
 import Animated, { Easing, useSharedValue, withTiming } from 'react-native-reanimated';
-import { fromEvent } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, mapTo } from 'rxjs/operators';
 
 import { Picker, PickerItemProps, PickerProps } from '@react-native-picker/picker';
@@ -31,7 +31,15 @@ export function P9TableViewPickerItem<T>({
   const [collapsed, setCollapsed] = useState(true);
 
   useSubscription(
-    useObservable(() => fromEvent(Keyboard, 'keyboardWillShow').pipe(mapTo(true))),
+    useObservable(() =>
+      new Observable<KeyboardEvent>((subscriber) => {
+        const subscription = Keyboard.addListener('keyboardWillShow', subscriber.next.bind(subscriber));
+
+        return () => {
+          subscription.remove();
+        };
+      }).pipe(mapTo(true)),
+    ),
     setCollapsed,
   );
 
