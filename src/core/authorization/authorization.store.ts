@@ -7,13 +7,11 @@ import { Store } from '@datorama/akita';
 
 import { P9UserAuthorization } from './auth-client';
 
-export interface P9User extends User, SimpleObject {
-  last_login: number;
-}
+export type P9User = User<Realm.DefaultFunctionsFactory, { handle: string }>;
 
 export interface P9AuthorizationState extends Record<string, unknown> {
   authorization?: P9UserAuthorization;
-  user?: User;
+  user?: P9User;
   profile?: SimpleObject;
 }
 
