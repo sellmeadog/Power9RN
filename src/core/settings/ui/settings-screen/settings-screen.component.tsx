@@ -2,6 +2,7 @@ import React, { FunctionComponent } from 'react';
 
 import { P9DrawerNavigatorHeader } from '../../../../components';
 import { P9AccountSettings } from './settings-account.component';
+import { P9LegalSettings } from './settings-legal.component';
 import { P9SubscriptionSettings } from './settings-subscription.component';
 import { P9SupportSettings } from './settings-support.component';
 
@@ -14,6 +15,7 @@ export const P9SettingsScreen: FunctionComponent<P9SettingsScreenProps> = () => 
       <P9AccountSettings />
       <P9SubscriptionSettings />
       <P9SupportSettings />
+      <P9LegalSettings />
     </>
   );
 };
