@@ -2,12 +2,12 @@ import { useCallback, useEffect } from 'react';
 import { Alert } from 'react-native';
 import Environment from 'react-native-config';
 import Purchases, { PurchaserInfo, PurchaserInfoUpdateListener, PurchasesPackage } from 'react-native-purchases';
-import { User } from 'realm';
 import { combineLatest, defer, EMPTY, merge, MonoTypeOperatorFunction, Observable, of, OperatorFunction } from 'rxjs';
 import { catchError, first, map, mergeMapTo, retry, tap } from 'rxjs/operators';
 import { singleton } from 'tsyringe';
 
 import { P9AuthorizationQuery } from '../../authorization';
+import { P9User } from '../../authorization/authorization.store';
 import { useDependency } from '../../di';
 import { P9PurchasesState, P9PurchasesStore } from './purchases.store';
 
@@ -42,6 +42,10 @@ export class P9PurchasesService {
       .pipe(
         retry(3),
         map(({ purchaserInfo }) => ({ purchaser: purchaserInfo })),
+        catchError((reason) => {
+          console.log(reason);
+          return EMPTY;
+        }),
       )
       .subscribe(this.store);
   };
@@ -81,7 +85,7 @@ function alertRestoreStatus(): MonoTypeOperatorFunction<PurchaserInfo> {
   });
 }
 
-function publishState(): OperatorFunction<User, P9PurchasesState> {
+function publishState(): OperatorFunction<P9User, P9PurchasesState> {
   return mergeMapTo(
     combineLatest({
       purchaser: merge(purchaserInfo$, purchaserUpdates$),
@@ -90,7 +94,7 @@ function publishState(): OperatorFunction<User, P9PurchasesState> {
   );
 }
 
-function setupPurchases(): MonoTypeOperatorFunction<User> {
+function setupPurchases(): MonoTypeOperatorFunction<P9User> {
   return tap(({ id }) => {
     console.log(`Setup RevenueCat SDK for user ${id}...`);
     Purchases.setup(Environment.P9_REVENUECAT_API_KEY, id);

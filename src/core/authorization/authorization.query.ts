@@ -1,17 +1,16 @@
-import { User } from 'realm';
 import { filter, map } from 'rxjs/operators';
 import { singleton } from 'tsyringe';
 
 import { Query } from '@datorama/akita';
 
-import { P9AuthorizationState, P9AuthorizationStore } from './authorization.store';
+import { P9AuthorizationState, P9AuthorizationStore, P9User } from './authorization.store';
 
 @singleton()
 export class P9AuthorizationQuery extends Query<P9AuthorizationState> {
   authorization$ = this.select(({ authorization }) => authorization);
   user$ = this.select(({ user }) => user);
   authorizedUser$ = this.user$.pipe(
-    filter((user): user is User =>
+    filter((user): user is P9User =>
       Boolean(user?.identities.map((identity) => identity.providerType).includes('custom-token')),
     ),
   );

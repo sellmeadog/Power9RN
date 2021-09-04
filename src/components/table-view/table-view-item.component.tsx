@@ -3,19 +3,18 @@ import { Pressable, PressableProps, StyleProp, StyleSheet, View, ViewStyle } fro
 import Animated from 'react-native-reanimated';
 
 export interface P9TableViewItemProps extends Omit<PressableProps, 'children' | 'style'> {
+  containerStyle?: Animated.AnimatedStyleProp<ViewStyle>;
   contentContainerStyle?: StyleProp<ViewStyle>;
-  containerStyle?: StyleProp<ViewStyle>;
 }
 
 export const P9TableViewItem: FunctionComponent<P9TableViewItemProps> = ({
   children,
   containerStyle,
   contentContainerStyle,
-  onPress,
-  onLongPress,
+  ...rest
 }) => {
   return (
-    <Pressable onLongPress={onLongPress} onPress={onPress}>
+    <Pressable {...rest}>
       <Animated.View style={[P9TableViewRowTheme.container, containerStyle]}>
         <View style={[P9TableViewRowTheme.contentContainer, contentContainerStyle]}>{children}</View>
       </Animated.View>
