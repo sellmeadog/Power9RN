@@ -2,7 +2,7 @@ import React, { FunctionComponent, useCallback, useMemo } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 
-import { P9ItemSeparator, P9TableDivider, P9TableViewActionItem } from '../../../../components';
+import { P9ItemSeparator, P9TableDivider, P9TableViewActionItem, P9TableViewTextItem } from '../../../../components';
 import { P9RestoreSubscriptionFn, useRestoreSubscription } from '../../../purchases';
 import { P9PurchasesUIState, usePurchasesUIState } from '../../../purchases/state/purchases.query';
 
@@ -20,7 +20,7 @@ export const P9SubscriptionSettings: FunctionComponent<P9SubscriptionSettingsPro
 
   return (
     <>
-      <P9TableDivider title={'Power 9+'} />
+      <P9TableDivider borderTop title={'Power 9+'} />
       <P9TableViewActionItem accessory={'arrow-forward-ios'} onPress={handlePurchase} primary title={title} />
       <P9ItemSeparator />
       <P9TableViewActionItem
@@ -28,6 +28,9 @@ export const P9SubscriptionSettings: FunctionComponent<P9SubscriptionSettingsPro
         disabled={!!activeSubscription}
         onPress={handleRestore}
         title={'Restore Subscription'}
+      />
+      <P9TableViewTextItem
+        text={['Subscriptions auto-renew within 24 hours of expiration unless cancelled in your Apple account.']}
       />
     </>
   );

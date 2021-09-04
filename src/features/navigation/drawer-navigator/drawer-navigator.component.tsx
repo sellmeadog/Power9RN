@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
-import { P9SettingsScreen } from '../../../core/settings/ui/settings-screen/settings-screen.component';
+import { P9SettingsNavigator } from '../../../core/settings';
 import { withFlag } from '../../../core/types';
 import { P9DecklistExplorerNavigator } from '../../decklist-explorer';
 import { P9DeveloperNavigator } from '../../developer';
@@ -21,7 +21,7 @@ export const P9DrawerNavigator: FunctionComponent<P9DrawerNavigatorProps> = () =
         component={P9DecklistExplorerNavigator}
         options={{ title: 'Decks' }}
       />
-      <Screen name={'P9:Drawer:Settings'} component={P9SettingsScreen} options={{ title: 'Settings' }} />
+      <Screen name={'P9:Drawer:Settings'} component={P9SettingsNavigator} options={{ title: 'Settings' }} />
       {withFlag(
         'P9_FLAG_DEVELOPER_SCREEN',
         <Screen name={'P9:Drawer:Developer'} component={P9DeveloperNavigator} options={{ title: 'Developer' }} />,

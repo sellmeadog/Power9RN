@@ -34,5 +34,6 @@ export * from './table-view/table-view-item-action.component';
 export * from './table-view/table-view-item-document-picker.component';
 export * from './table-view/table-view-item-input.component';
 export * from './table-view/table-view-item-picker.component';
+export * from './table-view/table-view-item-text.component';
 export * from './table-view/table-view-item.component';
 export * from './text/text.component';

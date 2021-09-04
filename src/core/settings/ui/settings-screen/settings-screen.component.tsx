@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from 'react';
+import { ScrollView } from 'react-native-gesture-handler';
 
 import { P9DrawerNavigatorHeader } from '../../../../components';
 import { P9AccountSettings } from './settings-account.component';
@@ -12,10 +13,12 @@ export const P9SettingsScreen: FunctionComponent<P9SettingsScreenProps> = () => 
   return (
     <>
       <P9DrawerNavigatorHeader centerComponent={{ text: 'Settings' }} />
-      <P9AccountSettings />
-      <P9SubscriptionSettings />
-      <P9SupportSettings />
-      <P9LegalSettings />
+      <ScrollView>
+        <P9AccountSettings />
+        <P9SubscriptionSettings />
+        <P9SupportSettings />
+        <P9LegalSettings />
+      </ScrollView>
     </>
   );
 };
