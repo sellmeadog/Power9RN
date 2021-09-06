@@ -1,10 +1,9 @@
 import React, { FunctionComponent, useCallback } from 'react';
 import { Button, Text } from 'react-native-elements';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useNavigation } from '@react-navigation/native';
 
-import { P9TableDivider } from '../../../components';
+import { P9DrawerNavigatorHeader, P9TableDivider } from '../../../components';
 import { useAuthorizationFacade } from '../../../core/authorization';
 import { useDependency } from '../../../core/di';
 import { P9PublicPartitionService } from '../../../core/public/state/public-partition.service';
@@ -21,8 +20,8 @@ export const P9DeveloperScreen: FunctionComponent<P9DeveloperScreenProps> = () =
   }, [authenticate]);
 
   return (
-    <SafeAreaView>
-      <Text>{'Developer Settings'}</Text>
+    <>
+      <P9DrawerNavigatorHeader centerComponent={{ text: 'Developer Tools' }} />
       <P9TableDivider title={'Security'} />
       <Text>
         User: {user?.profile.email} ({user?.id})
@@ -33,6 +32,6 @@ export const P9DeveloperScreen: FunctionComponent<P9DeveloperScreenProps> = () =
       <Button onPress={() => service.etl()} title={'Populate Public Partition'} />
       <P9TableDivider title={'Subscriptions'} />
       <Button onPress={() => navigate('P9:Drawer:Developer:Purchases')} title={'Subscribe'} />
-    </SafeAreaView>
+    </>
   );
 };
