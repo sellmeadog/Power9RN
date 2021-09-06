@@ -21,6 +21,7 @@ export const P9LegalSettings: FunctionComponent<P9LegalSettingsProps> = () => {
         onPress={openExternalUrl('http://legal.power9.io/terms-of-use')}
       />
       <P9TableViewTextItem
+        edges={['bottom']}
         text={[
           'The literal and graphical information provided by this app about Magic: The Gathering, including card images, mana symbols, and oracle text, is copyright Wizards of the Coast, LLC, a subsidiary of Hasbro, Inc. This app is not produced by, endorsed by, supported by, or affiliated with Wizards of the Coast.',
           'Card prices represent market values provided by our affiliates. Absolutely no guarantee is made for any price information. See stores for final prices and availability.',
