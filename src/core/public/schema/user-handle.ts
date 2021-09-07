@@ -3,6 +3,7 @@ export interface P9UserHandle {
   _partition: 'PUBLIC';
   _owner: string;
   handle: string;
+  picture_url?: string;
 }
 
 export const P9UserHandleSchema: Realm.ObjectSchema = {
@@ -12,6 +13,7 @@ export const P9UserHandleSchema: Realm.ObjectSchema = {
     _partition: 'string',
     _owner: 'string',
     handle: 'string',
+    picture_url: 'string?',
   },
   primaryKey: '_id',
 };

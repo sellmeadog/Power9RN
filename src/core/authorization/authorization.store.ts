@@ -5,9 +5,10 @@ import { singleton } from 'tsyringe';
 
 import { Store } from '@datorama/akita';
 
+import { P9UserHandle } from '../public';
 import { P9UserAuthorization } from './auth-client';
 
-export type P9User = User<Realm.DefaultFunctionsFactory, { handle: string }>;
+export type P9User = User<Realm.DefaultFunctionsFactory, P9UserHandle>;
 
 export interface P9AuthorizationState extends Record<string, unknown> {
   authorization?: P9UserAuthorization;

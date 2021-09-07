@@ -1,18 +1,14 @@
 import React, { FunctionComponent } from 'react';
 import { Icon } from 'react-native-elements/dist/icons/Icon';
 
-import {
-  createDrawerNavigator,
-  DrawerContentComponentProps,
-  DrawerContentScrollView,
-  DrawerItemList,
-} from '@react-navigation/drawer';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import { P9SettingsNavigator } from '../../../core/settings';
 import { withFlag } from '../../../core/types';
 import { P9DecklistExplorerNavigator } from '../../decklist-explorer';
 import { P9DeveloperNavigator } from '../../developer';
 import { P9MagicCardFeatureNavigator } from '../../magic-cards';
+import { P9DrawerContent } from '../drawer-content/drawer-content.component';
 
 const { Navigator, Screen } = createDrawerNavigator();
 
@@ -64,15 +60,5 @@ export const P9DrawerNavigator: FunctionComponent<P9DrawerNavigatorProps> = () =
         />,
       )}
     </Navigator>
-  );
-};
-
-const P9DrawerContent: FunctionComponent<DrawerContentComponentProps> = (props) => {
-  return (
-    <>
-      <DrawerContentScrollView {...props}>
-        <DrawerItemList {...props} />
-      </DrawerContentScrollView>
-    </>
   );
 };
