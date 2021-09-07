@@ -12,7 +12,7 @@ export const P9MagicCardGalleryScreen: FunctionComponent<P9MagicCardGalleryScree
   const [{ visibleResults, keywordExpression }, handleKeywordExpressionChange] = useMagicCardGalleryFacade();
   const { navigate } = useNavigation();
 
-  const handlePress = useCallback(() => navigate('P9:Modal:MagicCardFeature:Detail'), [navigate]);
+  const handlePress = useCallback((_, index) => navigate('P9:Modal:MagicCardFeature:Detail', { index }), [navigate]);
 
   return (
     <>
