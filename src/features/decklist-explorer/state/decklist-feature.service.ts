@@ -6,6 +6,7 @@ import { v1 } from 'uuid';
 
 import { arrayUpsert, ID } from '@datorama/akita';
 
+import { P9User } from '../../../core/authorization';
 import { P9UserDecklist, P9UserDecklistSchema } from '../../../core/data-user';
 import { P9UserDecklistEntry } from '../../../core/data-user/schema/user-decklist-entry';
 import { P9UserDataPartitionQuery } from '../../../core/data-user/state/user-data-partition.query';
@@ -13,7 +14,6 @@ import { P9UserDataPartitionService } from '../../../core/data-user/state/user-d
 import { useDependency } from '../../../core/di';
 import { whenDefined } from '../../../core/operators';
 import { P9PublicPartitionService } from '../../../core/public/state/public-partition.service';
-import { P9User } from '../../authorization/state/authorization.store';
 import { P9CreateDecklistEntryInfo, P9CreateDecklistInfo } from '../../decklist-parse';
 import { P9UserDecklistFeatureQuery } from './decklist-feature.query';
 import { P9UserDecklistFeatureStore } from './decklist-feature.store';
