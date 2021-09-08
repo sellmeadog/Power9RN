@@ -132,6 +132,7 @@ export const P9_THEME_DARK: Partial<FullTheme> = {
         fontFamily: 'Beleren2016-Bold',
         fontSize: 34,
         fontWeight: 'bold',
+        lineHeight: 40,
         padding: 10,
         textShadowColor: 'rgba(0,0,0,0.22)',
         textShadowOffset: {

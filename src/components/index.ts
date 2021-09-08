@@ -15,7 +15,7 @@ export * from './divider/divider-table-title.component';
 export * from './divider/divider-table.component';
 export * from './game-symbol/game-symbol';
 export * from './header/header-modal.component';
-export * from './header/header-navigator-drawer.component';
+export * from './header/header-navigator-avatar.component';
 export * from './header/header-navigator-drawer.component';
 export * from './input/text-input';
 export * from './layout/row.component';

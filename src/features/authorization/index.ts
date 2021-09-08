@@ -1,1 +1,1 @@
-// export * from './authorization.provider';
+export * from './components/anonymous-guard.component';
