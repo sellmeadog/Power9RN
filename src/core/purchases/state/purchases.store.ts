@@ -16,12 +16,16 @@ export class P9PurchasesStore extends Store<P9PurchasesState> implements Observe
     super({ packages: [] }, { name: 'purchases', producerFn: produce });
   }
 
-  next = (patch: Partial<P9PurchasesState>) => {
+  patch = (patch: Partial<P9PurchasesState>) => {
     this.update((draft) => {
       Object.entries(patch).forEach(([key, value]) => {
         draft[key] = value;
       });
     });
+  };
+
+  next = (patch: Partial<P9PurchasesState>) => {
+    this.patch(patch);
     this.setLoading(false);
   };
 

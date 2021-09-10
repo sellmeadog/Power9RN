@@ -4,15 +4,16 @@ import { Button, Text } from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { P9ItemSeparator, P9ModalHeader, P9TitleLargeText, P9UnorderedList } from '../../../components';
-import { usePower9Theme } from '../../theme';
-import { P9PurchasesUIState, usePurchasesUIState } from '../state/purchases.query';
 import {
   P9PurchaseSubscriptionFn,
+  P9PurchasesUIState,
   P9RestoreSubscriptionFn,
   usePurchaseSubscription,
+  usePurchasesUIState,
   useRestoreSubscription,
-} from '../state/purchases.service';
+} from '../';
+import { P9ItemSeparator, P9ModalHeader, P9TitleLargeText, P9UnorderedList } from '../../../components';
+import { usePower9Theme } from '../../theme';
 import { P9PurchasesButtonGroup } from './purchases-button-group.component';
 
 export interface P9PurchasesScreenProps {}

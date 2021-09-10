@@ -15,7 +15,7 @@ export interface P9DecklistExplorerHomeScreenProps {}
 export const P9DecklistExplorerHomeScreen: FunctionComponent<P9DecklistExplorerHomeScreenProps> = () => {
   const [{ isAnonymous }] = useAuthorizationFacade();
   const [_, onActivate, onRemove] = useHomeScreenFacade();
-  const [data] = useUserDecklistExplorerFacade();
+  const [{ decklistCount, decklistGroups }] = useUserDecklistExplorerFacade();
 
   const handleLongPress = useCallback(
     (decklist: P9UserDecklist) => {
@@ -47,8 +47,8 @@ export const P9DecklistExplorerHomeScreen: FunctionComponent<P9DecklistExplorerH
   ) : (
     <>
       <P9DrawerNavigatorHeader centerComponent={{ text: 'My Decks' }} />
-      <P9DecklistExplorer sections={data} onActivate={onActivate} onLongPress={handleLongPress} />
-      <P9DecklistExplorerActionButton decklistCount={0} />
+      <P9DecklistExplorer sections={decklistGroups} onActivate={onActivate} onLongPress={handleLongPress} />
+      <P9DecklistExplorerActionButton decklistCount={decklistCount} />
     </>
   );
 };

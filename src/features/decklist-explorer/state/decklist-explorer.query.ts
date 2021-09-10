@@ -9,6 +9,8 @@ import { P9UserDecklistFeatureState, P9UserDecklistFeatureStore } from './deckli
 
 @singleton()
 export class P9DecklistExplorerQuery extends QueryEntity<P9UserDecklistFeatureState> {
+  decklistCount$ = this.selectAll().pipe(map(({ length }) => length));
+
   decklistGroups$ = combineLatest(
     P9_GAME_FORMATS.map(({ id }) => id).map((formatId) =>
       this.selectAll({
