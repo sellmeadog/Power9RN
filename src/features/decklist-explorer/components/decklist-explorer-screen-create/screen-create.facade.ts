@@ -4,6 +4,8 @@ import { Alert } from 'react-native';
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { useNavigation } from '@react-navigation/native';
+
 import { useAuthorizedUser } from '../../../../core/authorization';
 import { P9DocumentInfo } from '../../../../core/data-user';
 import { P9CreateDecklistInfo, parseDocument, parseTextEntries } from '../../../decklist-parse';
@@ -18,6 +20,7 @@ export function useCreateDecklistFacade(): [
   createFn: () => Promise<void>,
 ] {
   const { user } = useAuthorizedUser();
+  const { navigate } = useNavigation();
   const service = useUserDecklistFeatureService();
 
   const state = useObservableState(
@@ -45,7 +48,7 @@ export function useCreateDecklistFacade(): [
     [service],
   );
 
-  useEffect(() => service.initCreateDecklistUI(), [service]);
+  useEffect(() => service.deactivateCreateDecklistUI, [service]);
 
   const parseDocumentInfo = useCallback(
     async (documentInfo: P9DocumentInfo | undefined) => {
@@ -61,11 +64,16 @@ export function useCreateDecklistFacade(): [
 
   const createFn = useCallback(async () => {
     try {
-      await service.createDecklist(user);
+      const decklist = await service.createDecklist(user!);
+
+      if (decklist) {
+        service.activateDecklist(decklist._id);
+        navigate('P9:Modal:DecklistExplorer:Editor');
+      }
     } catch (error) {
       Alert.alert('Decklist Error', error.message);
     }
-  }, [service, user]);
+  }, [navigate, service, user]);
 
   return [state, dispatchFn, parseDocumentInfo, createFn];
 }

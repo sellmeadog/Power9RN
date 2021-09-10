@@ -16,7 +16,7 @@ export interface P9DocumentInfo extends Pick<DocumentPickerResponse, 'name' | 't
  */
 export const useDocumentPicker = (
   callback?: (documentInfo: P9DocumentInfo) => void,
-): [documentInfo: P9DocumentInfo | undefined, pickDocumentAsync: () => Promise<void>] => {
+): [documentInfo: P9DocumentInfo | undefined, pickDocumentAsync: () => Promise<boolean>] => {
   const [documentInfo, setDocumentInfo] = useState<P9DocumentInfo>();
 
   async function pickDocumentAsync() {
@@ -35,10 +35,12 @@ export const useDocumentPicker = (
 
       setDocumentInfo(documentPickerResponse);
       callback?.(documentPickerResponse);
+      return true;
     } catch (error) {
       if (!DocumentPicker.isCancel(error)) {
         Alert.alert('Document Error', 'An error occurred in the document picker. Please try again.');
       }
+      return false;
     }
   }
 

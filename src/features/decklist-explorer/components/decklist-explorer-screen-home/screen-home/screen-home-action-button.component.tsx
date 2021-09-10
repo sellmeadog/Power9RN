@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { useActiveEntitlementGuard } from '../../../../../core/purchases';
 import { usePower9Theme } from '../../../../../core/theme';
+import { useUserDecklistFeatureService } from '../../../state';
 
 export interface P9DecklistExplorerActionButtonProps {
   decklistCount: number;
@@ -19,15 +20,16 @@ export const P9DecklistExplorerActionButton: FunctionComponent<P9DecklistExplore
 }) => {
   const [{ colors }] = usePower9Theme();
   const { navigate } = useNavigation();
+  const service = useUserDecklistFeatureService();
 
   const canCreateDecklist = useActiveEntitlementGuard(
     'Wish you could keep brewing?\n',
     'Build unlimited decks with Power 9+',
+    () => decklistCount < 5,
     () => {
-      console.log(decklistCount);
-      return decklistCount < 5;
+      service.initCreateDecklistUI();
+      navigate('P9:Modal:CreateDecklist');
     },
-    () => navigate('P9:Modal:CreateDecklist'),
   );
 
   const canImportDecklist = useActiveEntitlementGuard(
