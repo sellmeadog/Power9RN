@@ -12,7 +12,15 @@ import { P9MagicCardFilterNavigator } from '../../magic-card-filter';
 import { P9ScryfallCatalogService } from '../../magic-card-filter/state/scryfall-catalog/scryfall-catalog.service';
 import { P9DrawerNavigator } from '../drawer-navigator/drawer-navigator.component';
 
-const { Navigator, Screen } = createStackNavigator();
+export type P9NavigationContainerParamsList = {
+  'P9:Drawer': undefined;
+  'P9:Authorization': undefined;
+  'P9:MagicCardFilter': undefined;
+  'P9:Modal:CreateDecklist': undefined;
+  'P9:Modal:Purchases': undefined;
+};
+
+const { Navigator, Screen } = createStackNavigator<P9NavigationContainerParamsList>();
 
 export interface P9NavigationContainerProps {}
 

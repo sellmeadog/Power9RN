@@ -1,14 +1,28 @@
-import { useCallback, useEffect } from 'react';
 import { Alert } from 'react-native';
 import Environment from 'react-native-config';
-import Purchases, { PurchaserInfo, PurchaserInfoUpdateListener, PurchasesPackage } from 'react-native-purchases';
-import { combineLatest, defer, EMPTY, merge, MonoTypeOperatorFunction, Observable, of, OperatorFunction } from 'rxjs';
-import { catchError, first, map, mergeMapTo, retry, tap } from 'rxjs/operators';
+import Purchases, {
+  PACKAGE_TYPE,
+  PurchaserInfo,
+  PurchaserInfoUpdateListener,
+  PurchasesPackage,
+} from 'react-native-purchases';
+import {
+  combineLatest,
+  defer,
+  EMPTY,
+  firstValueFrom,
+  merge,
+  MonoTypeOperatorFunction,
+  Observable,
+  of,
+  OperatorFunction,
+} from 'rxjs';
+import { catchError, first, map, mapTo, mergeMap, mergeMapTo, retry, tap } from 'rxjs/operators';
 import { singleton } from 'tsyringe';
 
 import { P9AuthorizationQuery } from '../../authorization';
 import { P9User } from '../../authorization/authorization.store';
-import { useDependency } from '../../di';
+import { P9PurchasesQuery } from './purchases.query';
 import { P9PurchasesState, P9PurchasesStore } from './purchases.store';
 
 const purchaserInfo$ = defer(() => Purchases.getPurchaserInfo()).pipe(
@@ -33,7 +47,11 @@ const packages$ = defer(() => Purchases.getOfferings()).pipe(
 
 @singleton()
 export class P9PurchasesService {
-  constructor(private store: P9PurchasesStore, private authQuery: P9AuthorizationQuery) {}
+  constructor(
+    private store: P9PurchasesStore,
+    private query: P9PurchasesQuery,
+    private authQuery: P9AuthorizationQuery,
+  ) {}
 
   purchaseSubscription = (subscription: PurchasesPackage) => {
     this.store.setLoading(true);
@@ -73,6 +91,25 @@ export class P9PurchasesService {
 
     return subscription.unsubscribe.bind(subscription);
   };
+
+  trialSubscription = async () => {
+    return await firstValueFrom(
+      this.query.availablePackages$.pipe(
+        map((packages) => packages.find(({ packageType }) => packageType === PACKAGE_TYPE.MONTHLY)),
+        mergeMap((pkg) =>
+          pkg
+            ? defer(() => Purchases.purchasePackage(pkg)).pipe(
+                retry(3),
+                map(({ purchaserInfo }) => ({ purchaser: purchaserInfo })),
+                tap(this.store.patch),
+                mapTo(true),
+                catchError(() => of(false)),
+              )
+            : of(false),
+        ),
+      ),
+    );
+  };
 }
 
 function alertRestoreStatus(): MonoTypeOperatorFunction<PurchaserInfo> {
@@ -100,26 +137,4 @@ function setupPurchases(): MonoTypeOperatorFunction<P9User> {
     Purchases.setup(Environment.P9_REVENUECAT_API_KEY, id);
     console.log('RevenueCat SDK setup!');
   });
-}
-
-export function usePurchasesSetup(): void {
-  const service = useDependency(P9PurchasesService);
-
-  useEffect(() => {
-    return service.setup();
-  }, [service]);
-}
-
-export type P9PurchaseSubscriptionFn = (subscription: PurchasesPackage) => void;
-
-export function usePurchaseSubscription(): P9PurchaseSubscriptionFn {
-  const service = useDependency(P9PurchasesService);
-  return useCallback((subscription: PurchasesPackage) => service.purchaseSubscription(subscription), [service]);
-}
-
-export type P9RestoreSubscriptionFn = () => void;
-
-export function useRestoreSubscription(): P9RestoreSubscriptionFn {
-  const service = useDependency(P9PurchasesService);
-  return useCallback(() => service.restoreSubscription(), [service]);
 }

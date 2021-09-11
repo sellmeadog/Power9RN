@@ -2,9 +2,9 @@ import jwtDecode from 'jwt-decode';
 import { useObservable, useObservableState } from 'observable-hooks';
 import { useCallback, useLayoutEffect } from 'react';
 import Environment from 'react-native-config';
-import { App, Credentials } from 'realm';
+import { App, Credentials, User } from 'realm';
 import { combineLatest, defer, EMPTY, iif, merge, of, throwError } from 'rxjs';
-import { catchError, map, mapTo, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, mapTo, mergeMap, retry, switchMap, tap } from 'rxjs/operators';
 import { injectable, registry } from 'tsyringe';
 
 import { useDependency } from '../di';
@@ -33,8 +33,12 @@ export class P9AuthorizationService {
   authorize = () => {
     const currentUser$ = iif(
       () => Boolean(this.app.currentUser),
-      of(this.app.currentUser! as P9User),
-      defer(() => this.app.logIn(Credentials.anonymous()) as Promise<P9User>),
+      of(this.app.currentUser! as unknown as P9User).pipe(
+        mergeMap((user) =>
+          defer(() => user.refreshCustomData()).pipe(retry(3), mapTo(this.app.currentUser! as unknown as P9User)),
+        ),
+      ),
+      defer(() => this.app.logIn(Credentials.anonymous()) as unknown as Promise<P9User>),
     );
 
     const authorizedUser$ = this.query.authorization$.pipe(
@@ -44,13 +48,18 @@ export class P9AuthorizationService {
 
         return iif(
           () => this.app.currentUser!.identities.map(({ id }) => id).includes(sub),
-          of(this.app.currentUser! as P9User),
+          of(this.app.currentUser! as unknown as P9User),
           defer(() => this.app.currentUser!.linkCredentials(Credentials.jwt(idToken))).pipe(
-            mapTo(this.app.currentUser! as P9User),
+            mergeMap(() =>
+              defer(() => this.app.currentUser!.refreshCustomData()).pipe(
+                retry(3),
+                mapTo(this.app.currentUser! as unknown as P9User),
+              ),
+            ),
             catchError(({ code, message }: P9UserAuthorizationError) => {
               if (code === 2) {
-                return defer(() => this.app.logIn(Credentials.jwt(idToken)) as Promise<P9User>).pipe(
-                  tap((user) => this.app.switchUser(user)),
+                return defer(() => this.app.logIn(Credentials.jwt(idToken)) as unknown as Promise<P9User>).pipe(
+                  tap((user) => this.app.switchUser(user as unknown as User)),
                 );
               }
 

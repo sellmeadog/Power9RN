@@ -6,15 +6,15 @@ import { v1 } from 'uuid';
 
 import { arrayUpsert, ID } from '@datorama/akita';
 
-import { P9UserDecklist, P9UserDecklistSchema } from '../../../core/data-user';
+import { P9User } from '../../../core/authorization';
+import { P9DocumentInfo, P9UserDecklist, P9UserDecklistSchema } from '../../../core/data-user';
 import { P9UserDecklistEntry } from '../../../core/data-user/schema/user-decklist-entry';
 import { P9UserDataPartitionQuery } from '../../../core/data-user/state/user-data-partition.query';
 import { P9UserDataPartitionService } from '../../../core/data-user/state/user-data-partition.service';
 import { useDependency } from '../../../core/di';
 import { whenDefined } from '../../../core/operators';
 import { P9PublicPartitionService } from '../../../core/public/state/public-partition.service';
-import { P9User } from '../../authorization/state/authorization.store';
-import { P9CreateDecklistEntryInfo, P9CreateDecklistInfo } from '../../decklist-parse';
+import { P9CreateDecklistEntryInfo, P9CreateDecklistInfo, parseDocument } from '../../decklist-parse';
 import { P9UserDecklistFeatureQuery } from './decklist-feature.query';
 import { P9UserDecklistFeatureStore } from './decklist-feature.store';
 
@@ -57,20 +57,22 @@ export class P9UserDecklistFeatureService {
     if (decklistInfo) {
       const { manualEntries: _, parsedEntries = [], ...rest } = decklistInfo;
       const now = DateTime.utc().toSeconds();
+      const decklist = await this.dataService.createUserDecklist({
+        _id: v1(),
+        _partition: user.id,
+        ...rest,
+        createdAt: now,
+        entries: this.findEntries(parsedEntries),
+        isPublic: false,
+        modifiedOn: now,
+        metadata: { maindeck: 0, sideboard: 0 },
+      });
 
-      this.store.add(
-        await this.dataService.createUserDecklist({
-          _id: v1(),
-          _partition: user.id,
-          ...rest,
-          createdAt: now,
-          entries: this.findEntries(parsedEntries),
-          isPublic: false,
-          modifiedOn: now,
-          metadata: { maindeck: 0, sideboard: 0 },
-        }),
-      );
+      this.store.add(decklist);
+      return decklist;
     }
+
+    return null;
   };
 
   activateDecklist = (id: ID) => {
@@ -82,16 +84,29 @@ export class P9UserDecklistFeatureService {
     this.dataService.removeObject(P9UserDecklistSchema, entity._id);
   };
 
-  initCreateDecklistUI = () => {
+  initCreateDecklistUI = (decklistInfo: P9CreateDecklistInfo = { name: '', formatId: 'casual', description: '' }) => {
     this.store.update((draft) => {
-      draft.ui.decklistInfo = { name: '', formatId: 'casual', description: '' };
+      draft.ui.decklistInfo = decklistInfo;
     });
 
     return () => {
-      this.store.update((draft) => {
-        draft.ui.decklistInfo = undefined;
-      });
+      this.deactivateCreateDecklistUI();
     };
+  };
+
+  importCreateDecklistUI = async (documentInfo: P9DocumentInfo) => {
+    const { manualEntries, name, parsedEntries } = await parseDocument(documentInfo);
+
+    this.initCreateDecklistUI();
+    this.updateCreateDecklistUI('manualEntries', manualEntries);
+    this.updateCreateDecklistUI('name', name);
+    this.updateCreateDecklistUI('parsedEntries', parsedEntries);
+  };
+
+  deactivateCreateDecklistUI = () => {
+    this.store.update((draft) => {
+      draft.ui.decklistInfo = undefined;
+    });
   };
 
   updateCreateDecklistUI = <K extends keyof P9CreateDecklistInfo>(key: K, value: P9CreateDecklistInfo[K]) => {

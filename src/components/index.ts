@@ -1,4 +1,5 @@
 export * from './artist-label/artist-label.component';
+export * from './avatar/avatar.component';
 export * from './bulleted-text/bulleted-text';
 export * from './bulleted-text/unordered-list';
 export * from './button-spin/button-spin.component';
@@ -14,7 +15,7 @@ export * from './divider/divider-table-title.component';
 export * from './divider/divider-table.component';
 export * from './game-symbol/game-symbol';
 export * from './header/header-modal.component';
-export * from './header/header-navigator-drawer.component';
+export * from './header/header-navigator-avatar.component';
 export * from './header/header-navigator-drawer.component';
 export * from './input/text-input';
 export * from './layout/row.component';
