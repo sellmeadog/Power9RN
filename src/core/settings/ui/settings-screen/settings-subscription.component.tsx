@@ -3,6 +3,7 @@ import React, { FunctionComponent, useCallback, useMemo } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import { P9ItemSeparator, P9TableDivider, P9TableViewActionItem, P9TableViewTextItem } from '../../../../components';
+import { useAuthorizationFacade } from '../../../authorization';
 import {
   P9PurchasesUIState,
   P9RestoreSubscriptionFn,
@@ -13,6 +14,7 @@ import {
 export interface P9SubscriptionSettingsProps {}
 
 export const P9SubscriptionSettings: FunctionComponent<P9SubscriptionSettingsProps> = () => {
+  const [{ isAnonymous }] = useAuthorizationFacade();
   const [{ activeSubscription }, handlePurchase, handleRestore] = useSubscriptionSettingsUIFacade();
   const title = useMemo(() => {
     return activeSubscription
@@ -22,7 +24,7 @@ export const P9SubscriptionSettings: FunctionComponent<P9SubscriptionSettingsPro
       : 'Subscribe';
   }, [activeSubscription]);
 
-  return (
+  return isAnonymous ? null : (
     <>
       <P9TableDivider borderTop title={'Power 9+'} />
       <P9TableViewActionItem accessory={'arrow-forward-ios'} onPress={handlePurchase} primary title={title} />

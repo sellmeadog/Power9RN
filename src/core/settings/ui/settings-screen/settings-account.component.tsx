@@ -13,7 +13,7 @@ export const P9AccountSettings: FunctionComponent<P9AccountSettingsProps> = () =
   return (
     <>
       <P9TableDivider title={'Account'} />
-      <P9TableViewActionItem primary title={isAnonymous ? 'Anonymous' : user?.customData.handle ?? 'My Account'} />
+      <P9TableViewActionItem primary title={isAnonymous ? 'Anonymous' : user?.customData?.handle ?? 'My Account'} />
       <P9ItemSeparator />
       <P9TableViewActionItem
         action
