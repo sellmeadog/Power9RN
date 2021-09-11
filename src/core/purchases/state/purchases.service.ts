@@ -27,7 +27,6 @@ import { P9PurchasesState, P9PurchasesStore } from './purchases.store';
 
 const purchaserInfo$ = defer(() => Purchases.getPurchaserInfo()).pipe(
   retry(3),
-  tap(console.log),
   catchError(() => EMPTY),
 );
 
