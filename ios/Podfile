@@ -3,8 +3,8 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '11.0'
 
-target 'Power9RN' do
-  project 'Power9RN',
+target 'Power9' do
+  project 'Power9',
           'Debug' => :debug,
           'Debug-AppStore' => :debug,
           'Release' => :release,
@@ -18,7 +18,7 @@ target 'Power9RN' do
     :hermes_enabled => true
   )
 
-  target 'Power9RNTests' do
+  target 'Power9Tests' do
     inherit! :complete
     # Pods for testing
   end

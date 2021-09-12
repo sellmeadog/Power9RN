@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "Power9RN.app"
-               BlueprintName = "Power9RN"
-               ReferencedContainer = "container:Power9RN.xcodeproj">
+               BuildableName = "Power9.app"
+               BlueprintName = "Power9"
+               ReferencedContainer = "container:Power9.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "Power9RNTests.xctest"
-               BlueprintName = "Power9RNTests"
-               ReferencedContainer = "container:Power9RN.xcodeproj">
+               BuildableName = "Power9Tests.xctest"
+               BlueprintName = "Power9Tests"
+               ReferencedContainer = "container:Power9.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Power9RN.app"
-            BlueprintName = "Power9RN"
-            ReferencedContainer = "container:Power9RN.xcodeproj">
+            BuildableName = "Power9.app"
+            BlueprintName = "Power9"
+            ReferencedContainer = "container:Power9.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Power9RN.app"
-            BlueprintName = "Power9RN"
-            ReferencedContainer = "container:Power9RN.xcodeproj">
+            BuildableName = "Power9.app"
+            BlueprintName = "Power9"
+            ReferencedContainer = "container:Power9.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
