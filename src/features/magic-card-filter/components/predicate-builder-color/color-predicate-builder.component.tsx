@@ -26,10 +26,10 @@ export interface P9ColorPredicateBuilderProps {
 export const P9ColorPredicateBuilder: FunctionComponent<P9ColorPredicateBuilderProps> = ({
   symbols = ['W', 'U', 'B', 'R', 'G', 'C'],
 }) => {
-  const [{ metadata, selection }, { togglePredicate, update }] =
-    usePredicateAttributeGroupFacade<P9GameSymbolType, { enforceIdentity?: boolean; fuzziness?: number }>(
-      'card_faces.colors',
-    );
+  const [{ metadata, selection }, { togglePredicate, update }] = usePredicateAttributeGroupFacade<
+    P9GameSymbolType,
+    { enforceIdentity?: boolean; fuzziness?: number }
+  >('card_faces.colors');
 
   const handleEnforceIdentity = (enforceIdentity: boolean) => update({ metadata: { enforceIdentity } });
   const handleFuzziness = (fuzziness: number) => update({ metadata: { fuzziness } });
