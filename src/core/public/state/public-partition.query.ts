@@ -1,7 +1,7 @@
 import { useObservable, useObservableState } from 'observable-hooks';
-import { CollectionChangeCallback, ProgressNotificationCallback, Results } from 'realm';
+import { CollectionChangeCallback, ConnectionNotificationCallback, ProgressNotificationCallback, Results } from 'realm';
 import { combineLatest, MonoTypeOperatorFunction, Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { singleton } from 'tsyringe';
 
 import { Query } from '@datorama/akita';
@@ -14,7 +14,22 @@ import { P9PublicPartitionState, P9PublicPartitionStore } from './public-partiti
 export class P9PublicPartitionQuery extends Query<P9PublicPartitionState> {
   partition$ = this.select(({ partition }) => partition);
 
-  magicCards$ = this.select(({ magicCards }) => magicCards).pipe(watchCollection());
+  connectionStatus$ = this.partition$.pipe(
+    switchMap(
+      (partition) =>
+        new Observable((subscriber) => {
+          const connectionCallback: ConnectionNotificationCallback = (status) => subscriber.next(status);
+
+          // subscriber.next(partition ? ConnectionState.Connecting : ConnectionState.Disconnected);
+          subscriber.next('Unknown');
+          partition?.syncSession?.addConnectionNotification(connectionCallback);
+
+          return () => {
+            partition?.syncSession?.removeConnectionNotification(connectionCallback);
+          };
+        }),
+    ),
+  );
 
   downloadProgress$ = this.partition$.pipe(
     switchMap(
@@ -24,7 +39,7 @@ export class P9PublicPartitionQuery extends Query<P9PublicPartitionState> {
             if (transferred > 0) {
               subscriber.next(transferred / transferable);
 
-              if (transferred === transferable) {
+              if (transferred / transferable > 0.99) {
                 subscriber.complete();
               }
             }
@@ -38,6 +53,16 @@ export class P9PublicPartitionQuery extends Query<P9PublicPartitionState> {
         }),
     ),
   );
+
+  isEmpty$ = this.partition$.pipe(map((partition) => partition?.empty ?? true));
+
+  magicCards$ = this.select(({ magicCards }) => magicCards).pipe(watchCollection());
+
+  partitionMetadata$ = combineLatest({
+    connectionStatus: this.connectionStatus$,
+    downloadProgress: this.downloadProgress$,
+    isEmpty: this.isEmpty$,
+  });
 
   constructor(store: P9PublicPartitionStore) {
     super(store);
@@ -74,4 +99,14 @@ export const useDownloadProgress = () => {
     useObservable(() => combineLatest({ loading: query.selectLoading(), progress: query.downloadProgress$ })),
     { loading: true, progress: 0 },
   );
+};
+
+export const usePublicPartitionMetadata = () => {
+  const query = useDependency(P9PublicPartitionQuery);
+
+  return useObservableState(query.partitionMetadata$, {
+    connectionStatus: undefined,
+    downloadProgress: 0,
+    isEmpty: true,
+  });
 };

@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Dimensions, Platform, ScrollViewProps, StyleSheet } from 'react-native';
+import { Dimensions, Platform, ScrollViewProps, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Results } from 'realm';
 import { LayoutProvider, RecyclerListView } from 'recyclerlistview';
@@ -73,11 +73,12 @@ export const P9MagicCardGallery: FunctionComponent<P9MagicCardGalleryProps> = ({
     );
   }
 
-  return null;
+  return <View style={P9MagicCardGalleryTheme.container} />;
 };
 
 const P9MagicCardGalleryTheme = StyleSheet.create({
   container: {
+    flexGrow: 1,
     paddingLeft: 10,
     paddingTop: 10,
     paddingBottom: 10,

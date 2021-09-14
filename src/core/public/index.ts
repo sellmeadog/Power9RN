@@ -5,7 +5,7 @@ import { P9MagicCardPart, P9MagicCardPartSchema } from './schema/magic-card-part
 import { P9MagicCardPreview, P9MagicCardPreviewSchema } from './schema/magic-card-preview';
 import { P9MagicSet, P9MagicSetSchema } from './schema/magic-set';
 import { P9UserHandle, P9UserHandleSchema } from './schema/user-handle';
-import { useDownloadProgress } from './state/public-partition.query';
+import { useDownloadProgress, usePublicPartitionMetadata } from './state/public-partition.query';
 
 export {
   P9MagicCard,
@@ -23,4 +23,5 @@ export {
   P9MagicSetSchema,
   P9UserHandleSchema,
   useDownloadProgress,
+  usePublicPartitionMetadata,
 };
