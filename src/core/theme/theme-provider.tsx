@@ -30,7 +30,7 @@ export const P9ThemeProvider: FunctionComponent = ({ children }) => {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider theme={colorScheme === 'dark' ? P9_THEME_DARK : P9_THEME_LIGHT}>
+    <ThemeProvider theme={colorScheme === 'dark' ? P9_THEME_DARK : P9_THEME_DARK}>
       <ThemeConsumer>
         {({ theme, replaceTheme }) => (
           <P9ThemeProvider_ theme={theme} replaceTheme={replaceTheme}>
