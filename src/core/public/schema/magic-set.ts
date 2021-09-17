@@ -1,45 +1,42 @@
-import { NullableBoolean, NullableNumber, NullableString } from './nullable-types';
+import { ObjectSchema } from 'realm';
 
-export type P9MagicSet = {
-  arena_code: NullableString;
-  block: NullableString;
-  block_code: NullableString;
-  card_count: NullableNumber;
+export interface P9MagicSet {
+  _id: string;
   code: string;
-  digital: NullableBoolean;
-  foil_only: NullableBoolean;
-  icon_svg_uri: NullableString;
-  mtgo_code: NullableString;
-  name: NullableString;
-  nonfoil_only: NullableBoolean;
-  parent_set_code: NullableString;
-  printed_size: NullableNumber;
-  released_at: NullableString;
-  set_type: NullableString;
-  source_id: NullableString;
-  tcgplayer_id: NullableNumber;
-};
+  tcgplayer_id: number | null;
+  name: string;
+  set_type: string;
+  released_at: string | null;
+  block_code: string | null;
+  block: string | null;
+  parent_set_code: string | null;
+  card_count: number;
+  printed_size: number;
+  digital: boolean;
+  icon_svg_uri: string;
+}
 
-export const P9MagicSetSchema: Realm.ObjectSchema = {
+export const P9MagicSetSchema: ObjectSchema = {
   name: 'MagicSet',
   embedded: true,
   properties: {
-    arena_code: 'string?',
-    block: 'string?',
-    block_code: 'string?',
-    card_count: 'int?',
+    _id: { type: 'string', indexed: true },
     code: { type: 'string', indexed: true },
-    digital: 'bool?',
-    foil_only: 'bool?',
-    icon_svg_uri: 'string',
-    mtgo_code: 'string?',
-    name: 'string',
-    nonfoil_only: 'bool?',
-    parent_set_code: 'string?',
-    printed_size: 'int?',
-    released_at: 'string',
-    set_type: 'string',
-    source_id: 'string',
     tcgplayer_id: 'int?',
+    name: 'string',
+    set_type: 'string',
+    released_at: 'string?',
+    block_code: 'string?',
+    block: 'string?',
+    parent_set_code: 'string?',
+    card_count: 'int',
+    printed_size: 'int',
+    digital: 'bool',
+    icon_svg_uri: 'string',
+    magic_cards: {
+      type: 'linkingObjects',
+      objectType: 'MagicCard',
+      property: 'magic_set',
+    },
   },
 };

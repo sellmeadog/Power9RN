@@ -40,12 +40,12 @@ export const P9MagicCardDetailGalleryItem: FunctionComponent<P9MagicCardDetailGa
       <P9MagicCardDetailParallaxBackground
         scrollOffset={scrollOffset}
         scrollY={scrollY}
-        sourceUri={card_faces[0].image_uris?.art_crop}
+        sourceUri={card_faces[0].image_uris?.art_crop ?? ''}
       />
       <P9MagicCardDetailParallaxForeground
         scrollOffset={scrollOffset}
         scrollY={scrollY}
-        sourceUri={card_faces[0].image_uris?.normal}
+        sourceUri={card_faces[0].image_uris?.normal ?? ''}
       />
       <P9MagicCardDetailHeader scrollOffset={scrollOffset} scrollY={scrollY} title={name} />
       <Animated.ScrollView onScroll={handleScroll} scrollEventThrottle={16}>

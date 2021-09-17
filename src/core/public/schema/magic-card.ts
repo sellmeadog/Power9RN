@@ -1,95 +1,96 @@
+import { ObjectSchema } from 'realm';
+
 import { P9MagicCardFace } from './magic-card-face';
-import { P9MagicCardPart } from './magic-card-part';
+import { P9MagicCardLegalityMap } from './magic-card-legality-map';
 import { P9MagicCardPreview } from './magic-card-preview';
 import { P9MagicSet } from './magic-set';
-import { Nullable, NullableArray, NullableBoolean, NullableNumber, NullableString } from './nullable-types';
 
 export interface P9MagicCard {
+  // Core Card Fields
   _id: string;
-  _owner: string;
   _partition: string;
-  arena_id: NullableNumber;
-  booster: NullableBoolean;
-  border_color: NullableString;
-  card_faces: Array<P9MagicCardFace>;
-  cardmarket_id: NullableNumber;
-  cmc: NullableNumber;
-  collector_number: NullableString;
-  color_identity: NullableArray<string>;
-  digital: NullableBoolean;
-  edhrec_rank: NullableNumber;
-  foil: NullableBoolean;
-  frame_effects: NullableArray<string>;
-  frame: NullableString;
-  full_art: NullableBoolean;
-  games: NullableArray<string>;
-  keywords: NullableArray<string>;
-  lang: Nullable<string>;
-  layout: NullableString;
-  legalities: NullableArray<string>;
-  magic_set: P9MagicSet;
-  name: NullableString;
-  name_simple: NullableString;
-  nonfoil: NullableBoolean;
+  tcgplayer_id: number | null;
+  cardmarket_id: number | null;
   oracle_id: string;
-  oversized: NullableBoolean;
-  preview: P9MagicCardPreview;
-  produced_mana: NullableArray<string>;
-  promo_types: NullableArray<string>;
-  promo: NullableBoolean;
-  rarity: NullableString;
-  related_cards: NullableArray<P9MagicCardPart>;
-  released_at: NullableString;
-  reprint: NullableBoolean;
-  reserved: NullableBoolean;
-  rulings_uri: NullableString;
-  tcgplayer_id: NullableNumber;
-  textless: NullableBoolean;
+  rulings_uri: string;
+
+  // Gameplay Fields
+  card_faces: P9MagicCardFace[];
+  cmc: number;
+  color_identity: string[];
+  edhrec_rank: number | null;
+  keywords: string[];
+  layout: string;
+  legalities: P9MagicCardLegalityMap;
+  name: string;
+  produced_mana: string[];
+  reserved: boolean;
+
+  // Print Fields
+  booster: boolean;
+  border_color: string;
+  collector_number: string;
+  default_card: boolean | null;
+  digital: boolean;
+  finishes: string[];
+  flavor_name: string | null;
+  frame_effects: string[];
+  frame: string;
+  full_art: boolean;
+  games: string[];
+  magic_set: P9MagicSet;
+  promo: boolean;
+  promo_types: string[];
+  rarity: string;
+  released_at: string;
+  reprint: boolean;
+  textless: boolean;
+  preview: P9MagicCardPreview | null;
 }
 
-export const P9MagicCardSchema: Realm.ObjectSchema = {
+export const P9MagicCardSchema: ObjectSchema = {
   name: 'MagicCard',
-  properties: {
-    _id: 'string',
-    _owner: 'string',
-    _partition: 'string',
-    arena_id: 'int?',
-    booster: 'bool?',
-    border_color: 'string?',
-    card_faces: 'MagicCardFace[]',
-    cardmarket_id: 'int?',
-    cmc: { type: 'double', default: 0 },
-    collector_number: 'string?',
-    color_identity: 'string[]',
-    digital: 'bool?',
-    edhrec_rank: 'int?',
-    foil: 'bool?',
-    frame_effects: 'string[]',
-    frame: 'string?',
-    full_art: 'bool?',
-    games: 'string[]',
-    keywords: 'string[]',
-    lang: 'string?',
-    layout: 'string?',
-    legalities: 'string[]',
-    magic_set: 'MagicSet?',
-    name: { type: 'string', indexed: true },
-    name_simple: { type: 'string', optional: true },
-    nonfoil: 'bool?',
-    oracle_id: 'string?',
-    oversized: 'bool?',
-    preview: 'MagicCardPreview?',
-    produced_mana: 'string[]',
-    promo_types: 'string[]',
-    promo: 'bool?',
-    rarity: 'string?',
-    related_cards: 'MagicCardPart[]',
-    released_at: { type: 'string', indexed: true },
-    reprint: 'bool?',
-    reserved: 'bool?',
-    rulings_uri: 'string?',
-    tcgplayer_id: 'int?',
-    textless: 'bool?',
-  },
   primaryKey: '_id',
+  properties: {
+    // Core Card Fields
+    _id: { type: 'string', indexed: true },
+    _partition: { type: 'string', indexed: true },
+    tcgplayer_id: 'int?',
+    cardmarket_id: 'int?',
+    oracle_id: { type: 'string', indexed: true },
+    rulings_uri: 'string',
+
+    // Gameplay Fields
+    card_faces: 'MagicCardFace[]',
+    cmc: 'double',
+    color_identity: 'string[]',
+    edhrec_rank: 'int?',
+    keywords: 'string[]',
+    layout: 'string',
+    legalities: 'MagicCardLegalityMap',
+    name: 'string',
+    produced_mana: 'string[]',
+    reserved: 'bool',
+
+    // Print Fields
+    booster: 'bool',
+    border_color: 'string',
+    collector_number: 'string',
+    default_card: { type: 'bool', indexed: true },
+    digital: 'bool',
+    finishes: 'string[]',
+    flavor_name: 'string?',
+    frame_effects: 'string[]',
+    frame: 'string',
+    full_art: 'bool',
+    games: 'string[]',
+    magic_set: 'MagicSet',
+    promo: 'bool',
+    promo_types: 'string[]',
+    rarity: { type: 'string', indexed: true },
+    released_at: { type: 'string', indexed: true },
+    reprint: 'bool',
+    textless: 'bool',
+    preview: 'MagicCardPreview?',
+  },
 };

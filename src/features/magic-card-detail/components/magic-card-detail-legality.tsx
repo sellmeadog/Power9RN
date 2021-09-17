@@ -3,9 +3,10 @@ import { StyleSheet, TextStyle, View } from 'react-native';
 import { Text } from 'react-native-elements';
 
 import { P9TableTitleDivider, P9ViewSurface } from '../../../components';
+import { P9MagicCardLegalityMap } from '../../../core/public/schema/magic-card-legality-map';
 
 export interface P9MagicCardDetailLegalityProps {
-  legalities?: string[];
+  legalities: P9MagicCardLegalityMap;
 }
 
 enum P9GameFormat {
@@ -23,10 +24,6 @@ enum P9GameFormat {
 
 type P9GameFormatStatus = 'banned' | 'legal' | 'not_legal' | 'restricted';
 
-type P9GameFormatStatusMap = {
-  [key in keyof typeof P9GameFormat]: P9GameFormatStatus;
-};
-
 const formats: P9GameFormat[] = [
   P9GameFormat.standard,
   P9GameFormat.historic,
@@ -40,29 +37,12 @@ const formats: P9GameFormat[] = [
   P9GameFormat.oathbreaker,
 ];
 
-const DEFAULT_GAME_FORMAT_STATUS_MAP: P9GameFormatStatusMap = {
-  brawl: 'not_legal',
-  commander: 'not_legal',
-  historic: 'not_legal',
-  legacy: 'not_legal',
-  modern: 'not_legal',
-  pauper: 'not_legal',
-  pioneer: 'not_legal',
-  standard: 'not_legal',
-  vintage: 'not_legal',
-  oathbreaker: 'not_legal',
-};
-
-export const P9MagicCardDetailLegality: FunctionComponent<P9MagicCardDetailLegalityProps> = ({ legalities = [] }) => {
+export const P9MagicCardDetailLegality: FunctionComponent<P9MagicCardDetailLegalityProps> = ({ legalities }) => {
   const nodes = useMemo(() => {
-    const data = legalities
-      .map((s) => s.split(':'))
-      .reduce((current, [key, value]) => ({ ...current, [key]: value }), DEFAULT_GAME_FORMAT_STATUS_MAP);
-
     return formats.map((format) => (
       <View key={format} style={P9MagicCardLegalitySectionTheme.statusContainer}>
-        <View style={P9MagicCardLegalitySectionTheme[data[format]]}>
-          <Text style={[P9MagicCardLegalitySectionTheme.status]}>{getFormatStatusDisplayName(data[format])}</Text>
+        <View style={P9MagicCardLegalitySectionTheme[legalities[format]]}>
+          <Text style={[P9MagicCardLegalitySectionTheme.status]}>{getFormatStatusDisplayName(legalities[format])}</Text>
         </View>
         <Text style={[P9MagicCardLegalitySectionTheme.format]}>{format}</Text>
       </View>

@@ -24,7 +24,7 @@ export const P9DecklistEntryExplorerItem: FunctionComponent<P9DecklistEntryExplo
     <P9TableViewItem containerStyle={P9DecklistEntryExplorerItemTheme.itemContainer} onPress={handlePress}>
       <P9RowView style={P9DecklistEntryExplorerItemTheme.rowContainer}>
         <ImageBackground
-          source={{ uri: entry.magicCard?.card_faces[0].image_uris?.art_crop }}
+          source={{ uri: entry.magicCard?.card_faces[0].image_uris?.art_crop ?? '' }}
           style={P9DecklistEntryExplorerItemTheme.imageContainer}
         >
           <Text

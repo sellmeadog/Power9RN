@@ -70,8 +70,8 @@ export function useCreateDecklistFacade(): [
         service.activateDecklist(decklist._id);
         navigate('P9:Modal:DecklistExplorer:Editor');
       }
-    } catch (error) {
-      Alert.alert('Decklist Error', error.message);
+    } catch (reason) {
+      Alert.alert('Decklist Error', (reason as any).message);
     }
   }, [navigate, service, user]);
 

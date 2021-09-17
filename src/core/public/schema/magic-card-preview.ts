@@ -1,16 +1,16 @@
-import { NullableString } from './nullable-types';
+import { ObjectSchema } from 'realm';
 
 export interface P9MagicCardPreview {
-  date: NullableString;
-  source_uri: NullableString;
-  source: NullableString;
+  previewed_at: string | null;
+  source_uri: string | null;
+  source: string | null;
 }
 
-export const P9MagicCardPreviewSchema: Realm.ObjectSchema = {
+export const P9MagicCardPreviewSchema: ObjectSchema = {
   name: 'MagicCardPreview',
   embedded: true,
   properties: {
-    date: 'string',
+    previewed_at: 'string?',
     source_uri: 'string?',
     source: 'string?',
   },
