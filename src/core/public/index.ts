@@ -1,4 +1,4 @@
-import { P9MagicCard, P9MagicCardSchema } from './schema/magic-card';
+import { P9MagicCard, P9MagicCardObject, P9MagicCardSchema } from './schema/magic-card';
 import { P9MagicCardFace, P9MagicCardFaceSchema } from './schema/magic-card-face';
 import { P9MagicCardImageUriMap, P9MagicCardImageUriMapSchema } from './schema/magic-card-image-map';
 import { P9MagicCardPreview, P9MagicCardPreviewSchema } from './schema/magic-card-preview';
@@ -10,6 +10,7 @@ export {
   P9MagicCard,
   P9MagicCardFace,
   P9MagicCardImageUriMap,
+  P9MagicCardObject,
   P9MagicCardPreview,
   P9MagicSet,
   P9UserHandle,

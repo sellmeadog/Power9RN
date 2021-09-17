@@ -17,7 +17,7 @@ import { usePower9Theme } from '../../../../core/theme';
 export interface P9MagicCardGalleryMetadataProps {}
 
 export const P9MagicCardGalleryMetadata: FunctionComponent<P9MagicCardGalleryMetadataProps> = () => {
-  const { downloadProgress, isEmpty } = usePublicPartitionMetadata();
+  const { downloadProgress } = usePublicPartitionMetadata();
   const { width } = useWindowDimensions();
   const [{ colors }] = usePower9Theme();
 
@@ -27,7 +27,7 @@ export const P9MagicCardGalleryMetadata: FunctionComponent<P9MagicCardGalleryMet
   }));
 
   useEffect(() => {
-    if (downloadProgress === 1) {
+    if (downloadProgress > 0.99) {
       animated.value = downloadProgress;
     }
   }, [animated, downloadProgress]);
@@ -48,11 +48,11 @@ export const P9MagicCardGalleryMetadata: FunctionComponent<P9MagicCardGalleryMet
           </View>
           <View style={P9MagicCardGalleryMetadataTheme.progressContainerRight}>
             <Text style={[P9MagicCardGalleryMetadataTheme.title, P9MagicCardGalleryMetadataTheme.shadow]}>
-              {isEmpty
+              {downloadProgress === 0
                 ? 'Connecting to the database...'
-                : downloadProgress === 1
+                : downloadProgress > 0.99
                 ? 'Download complete'
-                : 'Downloading updates...'}
+                : 'Downloading database updates...'}
             </Text>
             <ProgressBar
               borderColor={colors?.white}

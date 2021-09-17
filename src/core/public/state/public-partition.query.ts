@@ -17,11 +17,10 @@ export class P9PublicPartitionQuery extends Query<P9PublicPartitionState> {
   connectionStatus$ = this.partition$.pipe(
     switchMap(
       (partition) =>
-        new Observable((subscriber) => {
+        new Observable<'connected' | 'connecting' | 'disconnected'>((subscriber) => {
           const connectionCallback: ConnectionNotificationCallback = (status) => subscriber.next(status);
 
-          // subscriber.next(partition ? ConnectionState.Connecting : ConnectionState.Disconnected);
-          subscriber.next('Unknown');
+          subscriber.next('disconnected');
           partition?.syncSession?.addConnectionNotification(connectionCallback);
 
           return () => {
@@ -39,7 +38,7 @@ export class P9PublicPartitionQuery extends Query<P9PublicPartitionState> {
             if (transferred > 0) {
               subscriber.next(transferred / transferable);
 
-              if (transferred / transferable > 0.99) {
+              if (transferred / transferable === 1) {
                 subscriber.complete();
               }
             }
@@ -105,7 +104,7 @@ export const usePublicPartitionMetadata = () => {
   const query = useDependency(P9PublicPartitionQuery);
 
   return useObservableState(query.partitionMetadata$, {
-    connectionStatus: undefined,
+    connectionStatus: 'disconnected',
     downloadProgress: 0,
     isEmpty: true,
   });

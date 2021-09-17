@@ -18,7 +18,11 @@ export interface P9MagicCardGalleryProps {
 
 export const P9MagicCardGallery: FunctionComponent<P9MagicCardGalleryProps> = ({ currentIndex, data, onPress }) => {
   const [dataProvider, setDataProvider] = useState(
-    () => new ResultsDataProvider((x: P9MagicCard & Realm.Object, y: P9MagicCard & Realm.Object) => x._id !== y._id),
+    () =>
+      new ResultsDataProvider(
+        (x: P9MagicCard & Realm.Object, y: P9MagicCard & Realm.Object) => x?._id !== y?._id,
+        (index) => data?.[index]?._id ?? index.toString(),
+      ),
   );
 
   const layoutProvider = useMemo(

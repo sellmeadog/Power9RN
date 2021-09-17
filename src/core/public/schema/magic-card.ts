@@ -48,6 +48,8 @@ export interface P9MagicCard {
   preview: P9MagicCardPreview | null;
 }
 
+export type P9MagicCardObject = P9MagicCard & Realm.Object;
+
 export const P9MagicCardSchema: ObjectSchema = {
   name: 'MagicCard',
   primaryKey: '_id',
