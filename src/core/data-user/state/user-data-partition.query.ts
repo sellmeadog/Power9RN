@@ -23,14 +23,21 @@ export function watchCollection<T>(): MonoTypeOperatorFunction<Results<T> | unde
       switchMap(
         (results) =>
           new Observable<Results<T> | undefined>((subscriber) => {
-            const callback: CollectionChangeCallback<T> = (collection) => subscriber.next(collection.snapshot());
+            console.log('[UserDecklist]: Subscribing to changes...');
+            const callback: CollectionChangeCallback<T> = (collection) => {
+              console.log('[UserDecklist]: Receiving changes...');
+              subscriber.next(collection.snapshot());
+              console.log('[UserDecklist]: Changes published');
+            };
 
             subscriber.next(results?.snapshot());
             results?.addListener(callback);
+            console.log('[UserDecklist]: Subscribed');
 
             return () => {
               subscriber.next(undefined);
               results?.removeListener(callback);
+              console.log('[UserDecklist]: Unsubscribed');
             };
           }),
       ),

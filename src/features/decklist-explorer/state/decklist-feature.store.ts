@@ -20,5 +20,5 @@ export class P9UserDecklistFeatureStore extends EntityStore<P9UserDecklistFeatur
     super({ ui: {} }, { idKey: '_id', name: 'user-decklist-feature', producerFn: produce });
   }
 
-  akitaPreAddEntity = (decklist: P9UserDecklist & Realm.Object) => decklist.toJSON();
+  // akitaPreAddEntity = (decklist: P9UserDecklist & Realm.Object) => decklist.toJSON();
 }

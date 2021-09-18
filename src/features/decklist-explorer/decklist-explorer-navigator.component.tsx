@@ -16,11 +16,9 @@ export type P9DecklistExplorerNavigatorParamList = {
 
 export const P9DecklistExplorerNavigator: FunctionComponent = () => {
   return (
-    // <P9DecklistManagementProvider>
     <Navigator headerMode={'none'}>
       <Screen name={'P9:Modal:DecklistExplorer:Home'} component={P9DecklistExplorerHomeScreen} />
       <Screen name={'P9:Modal:DecklistExplorer:Editor'} component={P9DecklistEditorNavigator} />
     </Navigator>
-    // </P9DecklistManagementProvider>
   );
 };

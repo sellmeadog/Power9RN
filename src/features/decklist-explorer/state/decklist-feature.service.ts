@@ -1,6 +1,5 @@
 import { DateTime } from 'luxon';
-import { of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { singleton } from 'tsyringe';
 import { v1 } from 'uuid';
 
@@ -34,17 +33,22 @@ export class P9UserDecklistFeatureService {
     private dataQuery: P9UserDataPartitionQuery,
     private dataService: P9UserDataPartitionService,
     private publicDataService: P9PublicPartitionService,
-  ) {}
+  ) {
+    this.dataQuery.decklists$
+      .pipe(
+        whenDefined(),
+        map((results) => results.toJSON() as P9UserDecklist[]),
+      )
+      .forEach((data) => this.store.set(data));
+  }
 
   loadUserDecklists = () => {
-    this.dataQuery.partition$
-      .pipe(
-        switchMap((realm) => of(realm?.objects<P9UserDecklist>(P9UserDecklistSchema.name))),
-        whenDefined(),
-      )
-      .subscribe((results) => {
-        this.store.set(results.slice());
-      });
+    // this.dataQuery.decklists$
+    //   .pipe(
+    //     whenDefined(),
+    //     map((results) => results.toJSON() as P9UserDecklist[]),
+    //   )
+    //   .forEach((data) => this.store.set(data));
   };
 
   createDecklist = async (user: P9User) => {
