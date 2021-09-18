@@ -4,9 +4,11 @@ import { singleton } from 'tsyringe';
 
 import { Store } from '@datorama/akita';
 
+import { P9UserDecklist } from '../schema/user-decklist';
+
 export interface P9UserDataPartitionState {
   partition?: Realm;
-  decklists?: Results<{}>;
+  decklists?: Results<P9UserDecklist>;
 }
 
 @singleton()

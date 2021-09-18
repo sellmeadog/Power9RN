@@ -11,7 +11,7 @@ export const P9_USER_DATA_SCHEMA = [P9UserDecklistEntrySchema, P9UserDecklistMet
 @singleton()
 export class P9UserDataPartitionService {
   #partition: Realm | undefined;
-  #decklists: Results<{}> | undefined;
+  #decklists: Results<P9UserDecklist> | undefined;
 
   get partition$() {
     return this.query.partition$;
