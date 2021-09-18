@@ -3,33 +3,36 @@ import { BaseDataProvider } from 'recyclerlistview';
 
 export type P9DataObject = { _id: string } & Realm.Object;
 
-export class ResultsDataProvider extends BaseDataProvider {
-  results: Results<any> | undefined;
-
-  constructor(public rowHasChanged: (r1: any, r2: any) => boolean, getStableId?: (index: number) => string) {
-    super(rowHasChanged, getStableId);
+export class ResultsDataProvider<T extends P9DataObject = P9DataObject> extends BaseDataProvider {
+  get isValid() {
+    return checkValidity(this.results);
   }
 
-  getDataForIndex = (index: number) => this.results?.[index]?.toJSON(); // this.getAllData()[index];
+  constructor(private results: Results<T> | ArrayLike<T>) {
+    super((a, b) => a?._id !== b?._id, makeGetStableId());
+  }
 
-  getAllData = () => (this.results?.isValid?.() ? (this.results as unknown as any[]) : ([] as any[]));
+  getAllData = () => (this.isValid ? (this.results as unknown as any[]) : []);
 
-  getSize = () => this.results?.length ?? 0;
+  getDataForIndex = (index: number) => (this.isValid ? (this.results[index]?.toJSON() as T | undefined) : undefined);
 
-  hasStableIds = () => true;
+  getSize = () => (this.isValid ? this.results.length : 0);
 
-  requiresDataChangeHandling = () => true;
-
-  getFirstIndexToProcessInternal = () => 0;
-
-  // getStableId = (index: number) => this.results?.[index]?._id ?? index.toString();
-
-  newInstance = (rowHasChanged: (r1: any, r2: any) => boolean) => new ResultsDataProvider(rowHasChanged);
+  newInstance = () => new ResultsDataProvider<T>(this.results);
 
   cloneWithRows = (data: any[]) => {
-    const dp = new ResultsDataProvider(this.rowHasChanged, this.getStableId);
-    dp.results = data as unknown as Results<any>;
-
-    return dp;
+    return new ResultsDataProvider(data);
   };
+}
+
+function checkValidity<T extends { _id: string } = { _id: string }>(results: Results<T> | ArrayLike<T>): boolean {
+  if (results instanceof Results) {
+    return results.isValid();
+  }
+
+  return false;
+}
+
+function makeGetStableId(): ((index: number) => string) | undefined {
+  return (index) => index.toString();
 }
