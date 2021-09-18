@@ -4,8 +4,8 @@ import { singleton } from 'tsyringe';
 import { etl_scryfall } from '../../etl';
 import { P9MagicCard, P9MagicCardSchema } from '../schema/magic-card';
 import { P9MagicCardFaceSchema } from '../schema/magic-card-face';
-import { P9MagicCardImageMapSchema } from '../schema/magic-card-image-map';
-import { P9MagicCardPartSchema } from '../schema/magic-card-part';
+import { P9MagicCardImageUriMapSchema } from '../schema/magic-card-image-map';
+import { P9MagicCardLegalityMapSchema } from '../schema/magic-card-legality-map';
 import { P9MagicCardPreviewSchema } from '../schema/magic-card-preview';
 import { P9MagicSetSchema } from '../schema/magic-set';
 import { P9UserHandleSchema } from '../schema/user-handle';
@@ -14,8 +14,8 @@ import { P9PublicPartitionStore } from './public-partition.store';
 
 export const P9_PUBLIC_SCHEMA = [
   P9MagicCardFaceSchema,
-  P9MagicCardImageMapSchema,
-  P9MagicCardPartSchema,
+  P9MagicCardImageUriMapSchema,
+  P9MagicCardLegalityMapSchema,
   P9MagicCardPreviewSchema,
   P9MagicCardSchema,
   P9MagicSetSchema,
@@ -29,13 +29,19 @@ export class P9PublicPartitionService {
 
   constructor(private store: P9PublicPartitionStore) {}
 
-  open = (user: User): void => {
+  open = async (user: User) => {
     if (!this.#partition || this.#partition.isClosed) {
       console.debug(`Opening PUBLIC partition for ${user.id}...`);
-      this.#partition = new Realm({ schema: P9_PUBLIC_SCHEMA, sync: { partitionValue: 'PUBLIC', user } });
+
+      this.#partition = new Realm({
+        schema: P9_PUBLIC_SCHEMA,
+        sync: { error: (_, reason) => console.error(JSON.stringify(reason)), partitionValue: 'PUBLIC', user },
+      });
+
       this.#magic_cards = this.#partition.objects<P9MagicCard>(P9MagicCardSchema.name).sorted([['name', false]]);
 
       this.store.next({ partition: this.#partition, magicCards: this.#magic_cards });
+
       console.debug('PUBLIC partition opened.');
     } else {
       console.warn(`PUBLIC partition for ${user.id} is already open`);

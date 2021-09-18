@@ -15,15 +15,15 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "Power9RN.app"
-               BlueprintName = "Power9RN"
-               ReferencedContainer = "container:Power9RN.xcodeproj">
+               BuildableName = "Power9.app"
+               BlueprintName = "Power9"
+               ReferencedContainer = "container:Power9.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Debug-AppStore"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
@@ -33,15 +33,15 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "Power9RNTests.xctest"
-               BlueprintName = "Power9RNTests"
-               ReferencedContainer = "container:Power9RN.xcodeproj">
+               BuildableName = "Power9Tests.xctest"
+               BlueprintName = "Power9Tests"
+               ReferencedContainer = "container:Power9.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Debug-AppStore"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
@@ -55,14 +55,14 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Power9RN.app"
-            BlueprintName = "Power9RN"
-            ReferencedContainer = "container:Power9RN.xcodeproj">
+            BuildableName = "Power9.app"
+            BlueprintName = "Power9"
+            ReferencedContainer = "container:Power9.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Release-AppStore"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
@@ -72,17 +72,17 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Power9RN.app"
-            BlueprintName = "Power9RN"
-            ReferencedContainer = "container:Power9RN.xcodeproj">
+            BuildableName = "Power9.app"
+            BlueprintName = "Power9"
+            ReferencedContainer = "container:Power9.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "Debug">
+      buildConfiguration = "Debug-AppStore">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Release-AppStore"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

@@ -1,11 +1,11 @@
 import { useObservableState } from 'observable-hooks';
 import React, { createContext, FunctionComponent, useCallback, useContext, useEffect, useMemo, useRef } from 'react';
-import { Results } from 'realm';
+import { Results, User } from 'realm';
 
 import { useAuthorizedUser } from '../../../core/authorization';
 import { P9UserDataPartitionService } from '../../../core/data-user/state/user-data-partition.service';
 import { useDependency } from '../../../core/di';
-import { P9MagicCard } from '../../../core/public';
+import { P9MagicCardObject } from '../../../core/public';
 import { P9PublicPartitionService } from '../../../core/public/state/public-partition.service';
 import { P9MagicCardGalleryQuery } from '../../magic-cards/state/magic-card.query';
 import { P9MagicCardGalleryStateTuple, P9MagicCardGalleryStore } from '../../magic-cards/state/magic-card.store';
@@ -28,8 +28,8 @@ export const P9PartitionProvider: FunctionComponent<P9PartitionProviderProps> = 
       return;
     }
 
-    publicDataService.open(user);
-    userDataService.open(user);
+    publicDataService.open(user as any as User);
+    userDataService.open(user as any as User);
 
     return () => {
       publicDataService.close();
@@ -43,7 +43,7 @@ export const P9PartitionProvider: FunctionComponent<P9PartitionProviderProps> = 
 };
 
 export function useMagicCardGalleryFacade(): [
-  state: { keywordExpression?: string; visibleResults?: Results<P9MagicCard & Realm.Object> },
+  state: { keywordExpression?: string; visibleResults?: Results<P9MagicCardObject> },
   setKeywordExpression: (expression: string) => void,
 ] {
   const context = useContext(P9PartitionContext);
@@ -56,10 +56,7 @@ export function useMagicCardGalleryFacade(): [
     magicCardGallery: [store, query],
   } = context;
   const keywordExpression = useObservableState(query.keywordExpression$, undefined);
-  const visibleResults = useObservableState(
-    query.visibleResults$,
-    [] as unknown as Results<P9MagicCard & Realm.Object>,
-  );
+  const visibleResults = useObservableState(query.visibleResults$, [] as unknown as Results<P9MagicCardObject>);
 
   const setKeywordExpression = useCallback(
     (expression: string) => store.update((state) => ({ ...state, keywordExpression: expression })),

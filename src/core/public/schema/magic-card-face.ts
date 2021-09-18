@@ -1,56 +1,52 @@
-import { P9MagicCardImageMap } from './magic-card-image-map';
-import { Nullable } from './nullable-types';
+import { ObjectSchema } from 'realm';
 
-export type P9MagicCardFace = {
-  artist: Nullable<string>;
-  color_indicator: Nullable<string[]>;
-  colors: Nullable<string[]>;
-  flavor_text: Nullable<string>;
-  image_uris: Nullable<P9MagicCardImageMap>;
-  loyalty_numeric: Nullable<number>;
-  loyalty: Nullable<string>;
-  mana_cost: Nullable<string>;
-  name_simple: Nullable<string>;
-  name: Nullable<string>;
-  names: Nullable<string[]>;
-  oracle_text: Nullable<string>;
-  power_numeric: Nullable<number>;
-  power: Nullable<string>;
-  printed_name: Nullable<string>;
-  printed_text: Nullable<string>;
-  printed_type_line: Nullable<string>;
-  printed_types: Nullable<string[]>;
-  toughness_numeric: Nullable<number>;
-  toughness: Nullable<string>;
-  type_line: Nullable<string>;
+import { P9MagicCardImageUriMap } from './magic-card-image-map';
+
+export interface P9MagicCardFace {
+  artist: string | null;
+  color_indicator: string[];
+  colors: string[];
+  flavor_text: string | null;
+  image_uris: P9MagicCardImageUriMap | null;
+  loyalty_numeric: number | null;
+  loyalty: string | null;
+  mana_cost: string;
+  name: string;
+  names: string[];
+  oracle_text: string | null;
+  power_numeric: number | null;
+  power: string | null;
+  printed_name: string | null;
+  printed_text: string | null;
+  printed_type_line: string | null;
+  toughness_numeric: number | null;
+  toughness: string | null;
+  type_line: string;
   types: string[];
-  watermark: Nullable<string>;
-};
+  watermark: string | null;
+}
 
-export const P9MagicCardFaceSchema: Realm.ObjectSchema = {
+export const P9MagicCardFaceSchema: ObjectSchema = {
   name: 'MagicCardFace',
   embedded: true,
   properties: {
     artist: 'string?',
-    card: { type: 'linkingObjects', objectType: 'MagicCard', property: 'card_faces' },
     color_indicator: 'string[]',
-    colors: { type: 'string[]' },
+    colors: 'string[]',
     flavor_text: 'string?',
-    image_uris: 'MagicCardImageMap?',
-    loyalty_numeric: 'double?',
+    image_uris: 'MagicCardImageUriMap?',
+    loyalty_numeric: { type: 'int?', indexed: true },
     loyalty: 'string?',
-    mana_cost: 'string?',
-    name_simple: { type: 'string', optional: true },
+    mana_cost: 'string',
     name: 'string',
     names: 'string[]',
     oracle_text: 'string?',
-    power_numeric: 'double?',
+    power_numeric: { type: 'int?', indexed: true },
     power: 'string?',
     printed_name: 'string?',
     printed_text: 'string?',
     printed_type_line: 'string?',
-    printed_types: 'string[]',
-    toughness_numeric: 'double?',
+    toughness_numeric: { type: 'int?', indexed: true },
     toughness: 'string?',
     type_line: 'string',
     types: 'string[]',

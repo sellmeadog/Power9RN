@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/core';
 import { useMagicCardGalleryFacade } from '../../../public/components';
 import { P9MagicCardGallery } from '../magic-card-gallery/magic-card-gallery.component';
 import { P9MagicCardGalleryHeader } from './magic-card-gallery-header.component';
-import { P9MagicCardGalleryProgress } from './magic-card-gallery-progress.component';
+import { P9MagicCardGalleryMetadata } from './magic-card-gallery-metadata.component';
 
 export interface P9MagicCardGalleryScreenProps {}
 
@@ -19,7 +19,7 @@ export const P9MagicCardGalleryScreen: FunctionComponent<P9MagicCardGalleryScree
     <>
       <P9MagicCardGalleryHeader expression={keywordExpression} onExpressionChange={handleKeywordExpressionChange} />
       <P9MagicCardGallery data={visibleResults} onPress={handlePress} />
-      <P9MagicCardGalleryProgress />
+      <P9MagicCardGalleryMetadata />
     </>
   );
 };

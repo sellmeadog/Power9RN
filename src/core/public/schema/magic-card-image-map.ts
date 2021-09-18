@@ -1,23 +1,23 @@
-import { Nullable } from './nullable-types';
+import { ObjectSchema } from 'realm';
 
-export interface P9MagicCardImageMap {
-  small: Nullable<string>;
-  normal: Nullable<string>;
-  large: Nullable<string>;
-  png: Nullable<string>;
-  art_crop: Nullable<string>;
-  border_crop: Nullable<string>;
+export interface P9MagicCardImageUriMap {
+  png: string | null;
+  border_crop: string | null;
+  art_crop: string | null;
+  large: string | null;
+  normal: string | null;
+  small: string | null;
 }
 
-export const P9MagicCardImageMapSchema: Realm.ObjectSchema = {
-  name: 'MagicCardImageMap',
+export const P9MagicCardImageUriMapSchema: ObjectSchema = {
+  name: 'MagicCardImageUriMap',
   embedded: true,
   properties: {
-    small: 'string?',
-    normal: 'string?',
-    large: 'string?',
     png: 'string?',
-    art_crop: 'string?',
     border_crop: 'string?',
+    art_crop: 'string?',
+    large: 'string?',
+    normal: 'string?',
+    small: 'string?',
   },
 };

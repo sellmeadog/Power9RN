@@ -1,10 +1,10 @@
 import React, { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Dimensions, Platform, ScrollViewProps, StyleSheet } from 'react-native';
+import { Dimensions, Platform, ScrollViewProps, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Results } from 'realm';
 import { LayoutProvider, RecyclerListView } from 'recyclerlistview';
 
-import { P9MagicCard } from '../../../../core/public';
+import { P9MagicCard, P9MagicCardObject } from '../../../../core/public';
 import { ResultsDataProvider } from '../../../../core/realm/results-data-provider';
 import { P9MagicCardGalleryItem } from './magic-card-gallery-item.component';
 
@@ -12,14 +12,12 @@ const { width: WIDTH } = Dimensions.get('screen');
 
 export interface P9MagicCardGalleryProps {
   currentIndex?: number;
-  data: Results<P9MagicCard & Realm.Object> | undefined;
+  data: Results<P9MagicCardObject> | undefined;
   onPress?(magicCard: P9MagicCard, index: number): void;
 }
 
 export const P9MagicCardGallery: FunctionComponent<P9MagicCardGalleryProps> = ({ currentIndex, data, onPress }) => {
-  const [dataProvider, setDataProvider] = useState(
-    () => new ResultsDataProvider((x: P9MagicCard & Realm.Object, y: P9MagicCard & Realm.Object) => x._id !== y._id),
-  );
+  const [dataProvider, setDataProvider] = useState(() => new ResultsDataProvider<P9MagicCardObject>(data || []));
 
   const layoutProvider = useMemo(
     () =>
@@ -73,11 +71,12 @@ export const P9MagicCardGallery: FunctionComponent<P9MagicCardGalleryProps> = ({
     );
   }
 
-  return null;
+  return <View style={P9MagicCardGalleryTheme.container} />;
 };
 
 const P9MagicCardGalleryTheme = StyleSheet.create({
   container: {
+    flexGrow: 1,
     paddingLeft: 10,
     paddingTop: 10,
     paddingBottom: 10,

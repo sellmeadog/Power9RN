@@ -21,7 +21,9 @@ export const P9MagicCardGalleryItem: FunctionComponent<P9MagicCardGalleryItemPro
 
     const handlePress = useCallback(() => onPress?.(magicCard, index), [magicCard, index, onPress]);
 
-    if (magicCard.card_faces.length === 1) {
+    if (!magicCard) {
+      return null;
+    } else if (magicCard.card_faces.length === 1) {
       return (
         <Pressable
           onPressIn={() => (pressed.value = 0.95)}
@@ -33,23 +35,29 @@ export const P9MagicCardGalleryItem: FunctionComponent<P9MagicCardGalleryItemPro
           </Animated.View>
         </Pressable>
       );
+    } else {
+      return (
+        <Pressable
+          onPressIn={() => (pressed.value = 0.95)}
+          onPressOut={() => (pressed.value = 1)}
+          onPress={handlePress}
+        >
+          <Animated.View style={[P9MagicCardGalleryItemStyle.container, containerStyle, scaleStyle]}>
+            {magicCard.card_faces.map(({ image_uris }, key) => (
+              <P9MagicCardImage
+                key={key}
+                containerStyle={
+                  key === 0 ? P9MagicCardGalleryItemStyle.frontFace : P9MagicCardGalleryItemStyle.backFace
+                }
+                sourceUri={image_uris?.large as string | undefined}
+              />
+            ))}
+          </Animated.View>
+        </Pressable>
+      );
     }
-
-    return (
-      <Pressable onPressIn={() => (pressed.value = 0.95)} onPressOut={() => (pressed.value = 1)} onPress={handlePress}>
-        <Animated.View style={[P9MagicCardGalleryItemStyle.container, containerStyle, scaleStyle]}>
-          {magicCard.card_faces.map(({ image_uris }, key) => (
-            <P9MagicCardImage
-              key={key}
-              containerStyle={key === 0 ? P9MagicCardGalleryItemStyle.frontFace : P9MagicCardGalleryItemStyle.backFace}
-              sourceUri={image_uris?.large as string | undefined}
-            />
-          ))}
-        </Animated.View>
-      </Pressable>
-    );
   },
-  ({ magicCard: a }, { magicCard: b }) => a._id === b._id,
+  ({ magicCard: a }, { magicCard: b }) => a?._id === b?._id,
 );
 
 const P9MagicCardGalleryItemStyle = StyleSheet.create({

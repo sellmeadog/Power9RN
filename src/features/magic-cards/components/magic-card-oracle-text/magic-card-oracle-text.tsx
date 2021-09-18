@@ -5,7 +5,7 @@ import { P9BulletedText } from '../../../../components';
 import { P9MagicCardText } from '../magic-card-text/magic-card-text';
 
 export interface P9MagicCardOracleTextProps {
-  oracle_text?: string;
+  oracle_text?: string | null;
 }
 
 export const P9MagicCardOracleText: FunctionComponent<P9MagicCardOracleTextProps> = ({ oracle_text }) => {

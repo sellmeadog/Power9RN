@@ -3,47 +3,36 @@ import { BaseDataProvider } from 'recyclerlistview';
 
 export type P9DataObject = { _id: string } & Realm.Object;
 
-export class ResultsDataProvider extends BaseDataProvider {
-  // getAllData = () => {
-  //   const data = super.getAllData() as unknown as Results<any>;
-  //   return data.isValid() ? (data as unknown as any[]) : [];
-  // };
-
-  // getDataForIndex = (index: number): P9DataObject => this.getAllData()[index].toJSON();
-
-  // public newInstance(
-  //   rowHasChanged: (r1: any, r2: any) => boolean,
-  //   getStableId?: ((index: number) => string) | undefined,
-  // ): BaseDataProvider {
-  //   return new ResultsDataProvider(rowHasChanged, getStableId);
-  // }
-
-  results: Results<any> | undefined;
-
-  constructor(public rowHasChanged: (r1: any, r2: any) => boolean) {
-    super(rowHasChanged, (index) => index.toString());
+export class ResultsDataProvider<T extends P9DataObject = P9DataObject> extends BaseDataProvider {
+  get isValid() {
+    return checkValidity(this.results);
   }
 
-  getDataForIndex = (index: number) => this.getAllData()[index];
+  constructor(private results: Results<T> | ArrayLike<T>) {
+    super((a, b) => a?._id !== b?._id, makeGetStableId());
+  }
 
-  getAllData = () => (this.results?.isValid?.() ? (this.results as unknown as any[]) : ([] as any[]));
+  getAllData = () => (this.isValid ? (this.results as unknown as any[]) : []);
 
-  getSize = () => this.getAllData().length;
+  getDataForIndex = (index: number) => (this.isValid ? (this.results[index]?.toJSON() as T | undefined) : undefined);
 
-  hasStableIds = () => true;
+  getSize = () => (this.isValid ? this.results.length : 0);
 
-  requiresDataChangeHandling = () => true;
-
-  getFirstIndexToProcessInternal = () => 0;
-
-  getStableId = (index: number) => index.toString();
-
-  newInstance = (rowHasChanged: (r1: any, r2: any) => boolean) => new ResultsDataProvider(rowHasChanged);
+  newInstance = () => new ResultsDataProvider<T>(this.results);
 
   cloneWithRows = (data: any[]) => {
-    const dp = new ResultsDataProvider(this.rowHasChanged);
-    dp.results = data as unknown as Results<any>;
-
-    return dp;
+    return new ResultsDataProvider(data);
   };
+}
+
+function checkValidity<T extends { _id: string } = { _id: string }>(results: Results<T> | ArrayLike<T>): boolean {
+  if (results instanceof Results) {
+    return results.isValid();
+  }
+
+  return false;
+}
+
+function makeGetStableId(): ((index: number) => string) | undefined {
+  return (index) => index.toString();
 }
