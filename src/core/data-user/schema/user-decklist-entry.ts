@@ -9,6 +9,7 @@ type P9UserDecklistEntryTypeMap = { [key in P9DecklistEntryType]?: number };
 export interface P9UserDecklistEntry extends P9UserDecklistEntryTypeMap {
   id: string;
   cardId: string;
+  colors?: string[];
 }
 
 export const P9UserDecklistEntrySchema: Realm.ObjectSchema = {
@@ -17,14 +18,15 @@ export const P9UserDecklistEntrySchema: Realm.ObjectSchema = {
   properties: {
     id: 'string',
     cardId: 'string',
+    colors: 'string[]',
     maindeck: 'int?',
     sideboard: 'int?',
   },
 };
 
 export interface P9UserDecklistMetadata {
-  defaultCardArtworkUri?: string;
-  defaultCardId?: string;
+  defaultCardArtworkUri?: string | null;
+  defaultCardId?: string | null;
   maindeck: number;
   sideboard: number;
   W?: number;

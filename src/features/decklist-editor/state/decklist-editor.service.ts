@@ -2,7 +2,7 @@ import { DateTime } from 'luxon';
 import { useObservableState } from 'observable-hooks';
 import { useCallback, useEffect } from 'react';
 import { Subscription } from 'rxjs';
-import { debounceTime, skip } from 'rxjs/operators';
+import { debounceTime, distinctUntilKeyChanged, skip, tap } from 'rxjs/operators';
 import { singleton } from 'tsyringe';
 
 import { arrayUpdate, arrayUpsert } from '@datorama/akita';
@@ -46,7 +46,13 @@ export class P9DecklistEditorService {
     if (!this.#subscription) {
       this.#subscription = this.query
         .selectActive()
-        .pipe(whenDefined(), skip(1), debounceTime(500))
+        .pipe(
+          whenDefined(),
+          skip(1),
+          debounceTime(500),
+          distinctUntilKeyChanged('modifiedOn'),
+          tap(({ name, modifiedOn }) => console.log(`Autosaving ${name} at ${modifiedOn}`)),
+        )
         .subscribe((entity) => this.dataService.createObject(P9UserDecklistSchema, entity));
     }
 
@@ -68,23 +74,29 @@ export class P9DecklistEditorService {
     });
   };
 
-  upsertEntry = (
-    { oracle_id: id, _id: cardId, card_faces, color_identity }: P9MagicCard,
-    entryType: P9DecklistEntryType,
-  ) => {
+  upsertEntry = ({ oracle_id: id, _id: cardId, card_faces }: P9MagicCard, entryType: P9DecklistEntryType) => {
     this.store.updateActive((draft) => {
       const entry = draft.entries.find((item) => item.id === id);
 
       if (draft.entries.length === 0) {
-        draft.metadata.defaultCardArtworkUri = card_faces[0].image_uris?.art_crop;
+        draft.metadata.defaultCardArtworkUri = card_faces[0].image_uris?.art_crop ?? undefined;
         draft.metadata.defaultCardId = cardId;
       }
 
-      color_identity?.forEach((color) => {
-        draft.metadata[color] = (draft.metadata[color] ?? 0) + 1;
-      });
+      const colorSet = Array.from(card_faces[0].types).includes('Land')
+        ? new Set<string>()
+        : card_faces.reduce(
+            (set, { colors }) =>
+              colors.length === 0 ? set.add('C') : colors.reduce((set_, color) => set_.add(color), set),
+            new Set<string>(),
+          );
 
-      draft.entries = arrayUpsert(draft.entries, id, { id, cardId, [entryType]: (entry?.[entryType] ?? 0) + 1 }, 'id');
+      draft.entries = arrayUpsert(
+        draft.entries,
+        id,
+        { id, cardId, colors: Array.from(colorSet), [entryType]: (entry?.[entryType] ?? 0) + 1 },
+        'id',
+      );
       updateMetadata(draft);
     });
   };
@@ -100,7 +112,19 @@ export class P9DecklistEditorService {
 function updateMetadata(draft: P9UserDecklist) {
   draft.metadata.maindeck = draft.entries.reduce((sum, { maindeck = 0 }) => sum + maindeck, 0);
   draft.metadata.sideboard = draft.entries.reduce((sum, { sideboard = 0 }) => sum + sideboard, 0);
+  draft.metadata.W = countColorSymbol('W');
+  draft.metadata.U = countColorSymbol('U');
+  draft.metadata.B = countColorSymbol('B');
+  draft.metadata.R = countColorSymbol('R');
+  draft.metadata.G = countColorSymbol('G');
+  draft.metadata.C = countColorSymbol('C');
   draft.modifiedOn = DateTime.local().toSeconds();
+
+  function countColorSymbol(symbol: string): number | undefined {
+    return draft.entries.filter(
+      ({ colors = ['C'], maindeck }) => Boolean(maindeck) && Array.from(colors).includes(symbol),
+    ).length;
+  }
 }
 
 export function useDecklistEditorFacade(): [

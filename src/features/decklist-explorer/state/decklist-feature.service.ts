@@ -12,6 +12,7 @@ import { P9UserDataPartitionQuery } from '../../../core/data-user/state/user-dat
 import { P9UserDataPartitionService } from '../../../core/data-user/state/user-data-partition.service';
 import { useDependency } from '../../../core/di';
 import { whenDefined } from '../../../core/operators';
+import { P9MagicCardObject } from '../../../core/public';
 import { P9PublicPartitionService } from '../../../core/public/state/public-partition.service';
 import { P9CreateDecklistEntryInfo, P9CreateDecklistInfo, parseDocument } from '../../decklist-parse';
 import { P9UserDecklistFeatureQuery } from './decklist-feature.query';
@@ -61,22 +62,46 @@ export class P9UserDecklistFeatureService {
     if (decklistInfo) {
       const { manualEntries: _, parsedEntries = [], ...rest } = decklistInfo;
       const now = DateTime.utc().toSeconds();
+
+      const tuples = this.makeEntryTuples(parsedEntries);
+      const entries = tuples.map(([entry]) => entry);
+      const maindeckEntries = tuples.filter(([{ maindeck }]) => Boolean(maindeck)).map(([entry]) => entry);
+      const maindeckCards = tuples.filter(([{ maindeck }]) => Boolean(maindeck)).map(([__, magicCard]) => magicCard!);
+      const sideboardEntries = tuples.filter(([{ sideboard }]) => Boolean(sideboard)).map(([entry]) => entry);
+
       const decklist = await this.dataService.createUserDecklist({
         _id: v1(),
         _partition: user.id,
         ...rest,
         createdAt: now,
-        entries: this.findEntries(parsedEntries),
+        entries,
         isPublic: false,
         modifiedOn: now,
-        metadata: { maindeck: 0, sideboard: 0 },
+        metadata: {
+          defaultCardArtworkUri: maindeckCards[0]?.card_faces[0].image_uris?.art_crop ?? null,
+          defaultCardId: maindeckCards[0]?._id ?? null,
+          maindeck: maindeckEntries.reduce((sum, { maindeck }) => sum + (maindeck ?? 0), 0),
+          sideboard: sideboardEntries.reduce((sum, { sideboard }) => sum + (sideboard ?? 0), 0),
+          W: countManaSymbol(entries, 'W'),
+          U: countManaSymbol(entries, 'U'),
+          B: countManaSymbol(entries, 'B'),
+          R: countManaSymbol(entries, 'R'),
+          G: countManaSymbol(entries, 'G'),
+          C: countManaSymbol(entries, 'C'),
+        },
       });
 
       this.store.add(decklist);
+
       return decklist;
     }
 
     return null;
+
+    function countManaSymbol(entries: P9UserDecklistEntry[], symbol: 'W' | 'U' | 'B' | 'R' | 'G' | 'C'): number {
+      return entries.filter(({ colors = ['C'], maindeck }) => Boolean(maindeck) && Array.from(colors).includes(symbol))
+        .length;
+    }
   };
 
   activateDecklist = (id: ID) => {
@@ -119,13 +144,34 @@ export class P9UserDecklistFeatureService {
     });
   };
 
-  private findEntries(parsedEntries: P9CreateDecklistEntryInfo[]): P9UserDecklistEntry[] {
+  private findCards(parsedEntries: P9CreateDecklistEntryInfo[]): (P9MagicCardObject | undefined)[] {
+    return parsedEntries.map((info) => {
+      return this.publicDataService.findMagicCard(info.cardName, info.expansionCode, info.collectorNumber);
+    });
+  }
+
+  private findEntries(
+    parsedEntries: P9CreateDecklistEntryInfo[],
+    magicCards: (P9MagicCardObject | undefined)[],
+  ): P9UserDecklistEntry[] {
     return parsedEntries
-      .map((info): P9UserDecklistEntry | undefined => {
-        const magicCard = this.publicDataService.findMagicCard(info.cardName, info.expansionCode, info.collectorNumber);
+      .map((info, index): P9UserDecklistEntry | undefined => {
+        const magicCard = magicCards[index];
+        const colorsSet = Array.from(magicCard?.card_faces[0].types ?? []).includes('Land')
+          ? new Set<string>()
+          : magicCard?.card_faces.reduce(
+              (set, { colors }) =>
+                colors.length === 0 ? set.add('C') : colors.reduce((set_, color) => set_.add(color), set),
+              new Set<string>(),
+            ) ?? new Set('C');
 
         if (magicCard) {
-          return { id: magicCard.oracle_id, cardId: magicCard._id, [info.type]: Number(info.count) };
+          return {
+            id: magicCard.oracle_id,
+            cardId: magicCard._id,
+            colors: Array.from(colorsSet),
+            [info.type]: Number(info.count),
+          };
         }
 
         return undefined;
@@ -134,6 +180,15 @@ export class P9UserDecklistFeatureService {
       .reduce((acc, curr) => {
         return arrayUpsert(acc, curr.id, curr);
       }, [] as P9UserDecklistEntry[]);
+  }
+
+  private makeEntryTuples(
+    parsedEntries: P9CreateDecklistEntryInfo[],
+  ): [entry: P9UserDecklistEntry, magicCard: P9MagicCardObject | undefined][] {
+    const magicCards = this.findCards(parsedEntries);
+    const entries = this.findEntries(parsedEntries, magicCards);
+
+    return entries.map((entry) => [entry, magicCards.find((magicCard) => magicCard?._id === entry.cardId)]);
   }
 }
 

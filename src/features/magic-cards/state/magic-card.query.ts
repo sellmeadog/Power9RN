@@ -50,6 +50,16 @@ function selectKeywordPredicate(): (store: P9MagicCardGalleryState) => string | 
       ?.trim()
       .split(' ')
       .filter(Boolean)
-      .map((expression) => `card_faces.names BEGINSWITH[c] "${expression.trim()}"`)
+      .map((expression) => `card_faces.names BEGINSWITH[c] "${cleanExpression(expression)}"`)
       .join(' AND ');
 }
+
+const cleanExpression = (value?: string): string[] => {
+  return (
+    value
+      ?.trim()
+      .replace(/[^\w\s+-]/gi, '')
+      .split(' ')
+      .filter(Boolean) ?? []
+  );
+};

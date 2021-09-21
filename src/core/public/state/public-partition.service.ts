@@ -1,8 +1,9 @@
+import { Alert } from 'react-native';
 import Realm, { Results, User } from 'realm';
 import { singleton } from 'tsyringe';
 
 import { etl_scryfall } from '../../etl';
-import { P9MagicCard, P9MagicCardSchema } from '../schema/magic-card';
+import { P9MagicCard, P9MagicCardObject, P9MagicCardSchema } from '../schema/magic-card';
 import { P9MagicCardFaceSchema } from '../schema/magic-card-face';
 import { P9MagicCardImageUriMapSchema } from '../schema/magic-card-image-map';
 import { P9MagicCardLegalityMapSchema } from '../schema/magic-card-legality-map';
@@ -35,7 +36,13 @@ export class P9PublicPartitionService {
 
       this.#partition = new Realm({
         schema: P9_PUBLIC_SCHEMA,
-        sync: { error: (_, reason) => console.error(JSON.stringify(reason)), partitionValue: 'PUBLIC', user },
+        sync: {
+          error: (_, reason) => {
+            Alert.alert(reason.name, JSON.stringify(reason, undefined, 2));
+          },
+          partitionValue: 'PUBLIC',
+          user,
+        },
       });
 
       this.#magic_cards = this.#partition.objects<P9MagicCard>(P9MagicCardSchema.name).sorted([['name', false]]);
@@ -78,15 +85,17 @@ export class P9PublicPartitionService {
     return this.#partition?.objectForPrimaryKey<P9MagicCard>(P9MagicCardSchema.name, id);
   };
 
-  findMagicCard = (name: string, setCode?: string, collectorNumber?: string): P9MagicCard | undefined => {
+  findMagicCard = (name: string, setCode?: string, collectorNumber?: string): P9MagicCardObject | undefined => {
     let results = this.#magic_cards
       ?.sorted([
         ['digital', false],
+        ['promo', false],
         ['released_at', true],
       ])
       .filtered(
-        'name ==[c] $0 OR name_simple ==[c] $0 OR card_faces.name ==[c] $0 OR card_faces.name_simple ==[c] $0',
-        name,
+        cleanExpression(name)
+          .map((expression) => `card_faces.names BEGINSWITH[c] "${expression.trim()}"`)
+          .join(' AND '),
       );
 
     if (setCode) {
@@ -102,3 +111,12 @@ export class P9PublicPartitionService {
 }
 
 export type P9PartitionServiceTuple = [query: P9PublicPartitionQuery, service: P9PublicPartitionService];
+
+const cleanExpression = (value?: string): string[] => {
+  return (
+    value
+      ?.replace(/[^\w\s+-]/gi, '')
+      .split(' ')
+      .filter(Boolean) ?? []
+  );
+};
