@@ -28,7 +28,7 @@ export class P9MagicCardGalleryQuery extends Query<P9MagicCardGalleryState> {
         .replace(/^(AND)/, '')
         .replace(/(\sAND)$/, ''),
     ]),
-    map(([results, predicate]) => (predicate ? results?.filtered(predicate) : results)),
+    map(([results, predicate]) => (predicate ? results?.filtered(predicate) : results?.filtered('games.@count > 0'))),
   );
 
   constructor(
