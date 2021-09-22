@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { useObservableState } from 'observable-hooks';
 import React, { FunctionComponent, useCallback } from 'react';
-import { KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native';
+import { KeyboardAvoidingView, ScrollView } from 'react-native';
 import { Header } from 'react-native-elements';
 
 import { useNavigation } from '@react-navigation/core';
@@ -12,12 +12,13 @@ import { useDependency } from '../../../core/di';
 import { whenDefined } from '../../../core/operators';
 import { P9UserDecklistFeatureQuery, P9UserDecklistFeatureStore } from '../../decklist-explorer/state';
 import { P9_GAME_FORMATS } from '../../decklist-explorer/state/decklist-feature.model';
+import { P9DecklistEntryArtworkExplorer } from './decklist-entry-artwork-explorer.component';
 
 export interface P9DecklistSettingsEditorProps {}
 
 export const P9DecklistSettingsEditor: FunctionComponent<P9DecklistSettingsEditorProps> = () => {
   const { goBack } = useNavigation();
-  const [{ name, description, formatId = 'casual' }, updateFn] = useDecklistSettingsEditorFacade();
+  const [{ name, description, entries, formatId = 'casual', metadata }, updateFn] = useDecklistSettingsEditorFacade();
 
   return (
     <>
@@ -36,6 +37,7 @@ export const P9DecklistSettingsEditor: FunctionComponent<P9DecklistSettingsEdito
           <P9TableViewInputItem
             autoCapitalize={'words'}
             autoCorrect={false}
+            clearButtonMode={'never'}
             onChangeText={(value) => updateFn({ name: value })}
             placeholder={'Name'}
             value={name}
@@ -48,11 +50,17 @@ export const P9DecklistSettingsEditor: FunctionComponent<P9DecklistSettingsEdito
             selectedValue={formatId}
             title={'Format'}
           />
+          <P9TableDivider title={'Decklist Artwork'} />
+          <P9DecklistEntryArtworkExplorer
+            entries={entries}
+            onSelected={(patch) => updateFn({ metadata: { ...metadata, ...patch } })}
+            selected={metadata?.defaultCardId}
+          />
           <P9TableDivider />
           <P9TableViewInputItem
             multiline
-            placeholder={'Quickly describe the theme of your deck, general strategy, and win conditions.'}
             onChangeText={(value) => updateFn({ description: value })}
+            placeholder={'Quickly describe the theme of your deck, general strategy, and win conditions.'}
             title={'Description'}
             value={description}
           />
@@ -61,8 +69,6 @@ export const P9DecklistSettingsEditor: FunctionComponent<P9DecklistSettingsEdito
     </>
   );
 };
-
-const P9DecklistSettingsEditorTheme = StyleSheet.create({});
 
 const useDecklistSettingsEditorFacade = (): [
   state: P9UserDecklist,
