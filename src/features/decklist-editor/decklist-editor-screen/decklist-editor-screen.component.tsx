@@ -14,11 +14,11 @@ import { P9DecklistEditorBottomSheet } from './decklist-editor-bottom-sheet.comp
 
 export interface P9DecklistEditorHomeScreenProps {
   navigation: NavigationProp<P9DecklistEditorNavigatorParamList, 'P9:Modal:DecklistExplorer:Editor:Home'>;
-  route: RouteProp<P9DecklistEditorNavigatorParamList, 'P9:Modal:DecklistExplorer:Editor:Entry'>;
+  route: RouteProp<P9DecklistEditorNavigatorParamList, 'P9:Modal:DecklistExplorer:Editor:Home'>;
 }
 
 export const P9DecklistEditorHomeScreen: FunctionComponent<P9DecklistEditorHomeScreenProps> = ({ navigation }) => {
-  const [{ activeEntryType = 'maindeck', name, entries }, updateFn] = useDecklistEditorFacade();
+  const [{ activeEntryType = 'maindeck', name, entries }, updateFn, _, settingsFn] = useDecklistEditorFacade();
   const [activeId, setActiveId] = useState<ID>();
   const { goBack } = navigation;
 
@@ -31,7 +31,11 @@ export const P9DecklistEditorHomeScreen: FunctionComponent<P9DecklistEditorHomeS
 
   return (
     <>
-      <Header leftComponent={{ icon: 'arrow-back-ios', onPress: goBack, size: 24 }} centerComponent={{ text: name }} />
+      <Header
+        leftComponent={{ icon: 'arrow-back-ios', onPress: goBack, size: 24 }}
+        centerComponent={{ text: name }}
+        rightComponent={{ icon: 'dots-vertical', type: 'material-community', size: 24, onPress: settingsFn }}
+      />
       <P9DecklistEditorTabView
         activeEntryType={activeEntryType}
         onActiveEntryTypeChange={handleActiveEntryTypeChange}

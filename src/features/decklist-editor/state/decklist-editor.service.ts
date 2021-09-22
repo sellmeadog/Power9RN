@@ -6,6 +6,7 @@ import { debounceTime, distinctUntilKeyChanged, skip, tap } from 'rxjs/operators
 import { singleton } from 'tsyringe';
 
 import { arrayUpdate, arrayUpsert } from '@datorama/akita';
+import { useNavigation } from '@react-navigation/core';
 
 import { P9DecklistEntryType, P9UserDecklist, P9UserDecklistSchema } from '../../../core/data-user';
 import { P9UserDataPartitionService } from '../../../core/data-user/state/user-data-partition.service';
@@ -131,8 +132,10 @@ export function useDecklistEditorFacade(): [
   state: P9DecklistEditorState,
   updateFn: <K extends keyof P9DecklistEditorUIState>(key: K, value: P9DecklistEditorUIState[K]) => void,
   upsertEntryFn: (magicCard: P9MagicCard, entryType: P9DecklistEntryType) => void,
+  navigateSettingsFn: () => void,
 ] {
   const service = useDependency(P9DecklistEditorService);
+  const { navigate } = useNavigation();
 
   useEffect(() => {
     const hanldes = [service.activateEditorUI(), service.activateAutoSave()];
@@ -154,5 +157,6 @@ export function useDecklistEditorFacade(): [
       (magicCard: P9MagicCard, entryType: P9DecklistEntryType) => service.upsertEntry(magicCard, entryType),
       [service],
     ),
+    useCallback(() => navigate('P9:Modal:DecklistExplorer:Editor:Settings'), [navigate]),
   ];
 }
