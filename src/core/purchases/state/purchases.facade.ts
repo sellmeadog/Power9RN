@@ -101,21 +101,35 @@ export function usePurchasesUIState(): P9PurchasesUIState {
 export const useActiveEntitlementGuard = (
   callToAction: string,
   prompt: string,
-  predicate: () => boolean,
-  resolve: () => void,
+  predicate?: () => boolean,
+  resolve?: () => void,
   reject?: () => void,
-): (() => void) => {
+): ((resolve?: () => void, reject?: () => void) => void) => {
   const service = useDependency(P9PurchasesService);
   const state = usePurchasesUIState();
 
-  return useCallback(async () => {
-    if (state.activeSubscription || predicate()) {
-      resolve();
-    } else {
-      Alert.alert('Power 9+', `${callToAction} ${prompt}`, [
-        { text: 'Maybe Later', style: 'cancel' },
-        { text: 'Start Free Trial', onPress: () => service.trialSubscription().then(resolve).catch(reject) },
-      ]);
-    }
-  }, [callToAction, predicate, prompt, reject, resolve, service, state.activeSubscription]);
+  return useCallback(
+    async (onResolve?: () => void, onReject?: () => void) => {
+      if (state.activeSubscription || predicate?.()) {
+        resolve?.();
+        onResolve?.();
+      } else {
+        Alert.alert('Power 9+', `${callToAction} ${prompt}`, [
+          { text: 'Maybe Later', style: 'cancel' },
+          {
+            text: 'Start Free Trial',
+            onPress: () =>
+              service
+                .trialSubscription()
+                .then(() => {
+                  resolve?.();
+                  onReject?.();
+                })
+                .catch(reject),
+          },
+        ]);
+      }
+    },
+    [callToAction, predicate, prompt, reject, resolve, service, state.activeSubscription],
+  );
 };

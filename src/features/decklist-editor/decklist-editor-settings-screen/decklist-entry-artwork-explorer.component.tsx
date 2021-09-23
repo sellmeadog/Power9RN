@@ -7,6 +7,7 @@ import { P9UserDecklistEntry, P9UserDecklistMetadata } from '../../../core/data-
 import { useDependency } from '../../../core/di';
 import { P9MagicCard } from '../../../core/public';
 import { P9PublicPartitionService } from '../../../core/public/state/public-partition.service';
+import { useActiveEntitlementGuard } from '../../../core/purchases';
 import { P9MagicCardArtwork } from '../../magic-cards';
 
 export interface P9DecklistEntryArtworkExplorerProps {
@@ -21,6 +22,10 @@ export const P9DecklistEntryArtworkExplorer: FunctionComponent<P9DecklistEntryAr
   onSelected,
 }) => {
   const service = useDependency(P9PublicPartitionService);
+  const withGuard = useActiveEntitlementGuard(
+    'Ready to change the default artwork?',
+    'Try Power 9+ to unlock all deck building features',
+  );
 
   const data = useMemo(
     () => entries?.map(({ cardId }) => service.magicCardById(cardId)).sort((a, b) => (a?.cmc ?? 0) - (b?.cmc ?? 0)),
@@ -36,7 +41,7 @@ export const P9DecklistEntryArtworkExplorer: FunctionComponent<P9DecklistEntryAr
         <P9SpringPressable
           springValue={0.9}
           stiffness={300}
-          onPress={() => onSelected?.({ defaultCardArtworkUri, defaultCardId })}
+          onPress={() => withGuard(() => onSelected?.({ defaultCardArtworkUri, defaultCardId }))}
         >
           <View style={[P9DecklistEntryArtworkExplorerTheme.itemContainer]}>
             <ImageBackground
@@ -53,7 +58,7 @@ export const P9DecklistEntryArtworkExplorer: FunctionComponent<P9DecklistEntryAr
         </P9SpringPressable>
       );
     },
-    [onSelected, selected],
+    [onSelected, selected, withGuard],
   );
 
   return (
