@@ -80,12 +80,12 @@ export function serializeColorPredicateGroup({
 
 export function serializeLegalityPredicateGroup({ predicates }: P9PredicateAttributeGroup<string>) {
   const legalitySerializeFn = ({ attribute, expression, logicalOperator }: P9Predicate<string>): string => {
+    const expression_ = expression.toLowerCase();
+
     if (logicalOperator === P9LogicalOperator.Not) {
-      return `${P9LogicalOperator.And} (${attribute} =[c] "${expression}:banned")`;
+      return `${P9LogicalOperator.And} (${attribute}.${expression_} =[c] "banned")`;
     } else {
-      return `${logicalOperator} (${['legal', 'restricted']
-        .map((status) => [attribute, '=[c]', `"${expression}:${status}"`].join(' ').trim())
-        .join(' OR ')})`;
+      return `${attribute}.${expression_} =[c] "legal" OR ${attribute}.${expression_} =[c] "restricted"`;
     }
   };
 
