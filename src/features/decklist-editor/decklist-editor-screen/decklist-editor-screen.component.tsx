@@ -11,6 +11,7 @@ import { P9DecklistEditorNavigatorParamList } from '../decklist-editor.navigator
 import { P9DecklistEntryInspector } from '../decklist-entry-inspector/decklist-entry-inspector.component';
 import { useDecklistEditorFacade } from '../state/decklist-editor.service';
 import { P9DecklistEditorBottomSheet } from './decklist-editor-bottom-sheet.component';
+import { P9DecklistEditorToolbar } from './decklist-editor-toolbar.component';
 
 export interface P9DecklistEditorHomeScreenProps {
   navigation: NavigationProp<P9DecklistEditorNavigatorParamList, 'P9:Modal:DecklistExplorer:Editor:Home'>;
@@ -45,6 +46,7 @@ export const P9DecklistEditorHomeScreen: FunctionComponent<P9DecklistEditorHomeS
         }}
       />
       <P9DecklistEditorBottomSheet />
+      <P9DecklistEditorToolbar />
       <P9DecklistEntryInspector activeId={activeId} entries={entries} ref={modalRef} />
     </>
   );

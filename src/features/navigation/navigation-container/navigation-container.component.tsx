@@ -8,6 +8,7 @@ import { P9PurchasesScreen } from '../../../core/purchases';
 import { usePower9Theme } from '../../../core/theme';
 import { P9AuthorizationNavigator } from '../../authorization/components/authorization.navigator';
 import { P9CreateDecklistScreen } from '../../decklist-explorer';
+import { P9DecklistSimulatorScreen } from '../../decklist-simulator';
 import { P9MagicCardFilterNavigator } from '../../magic-card-filter';
 import { P9ScryfallCatalogService } from '../../magic-card-filter/state/scryfall-catalog/scryfall-catalog.service';
 import { P9DrawerNavigator } from '../drawer-navigator/drawer-navigator.component';
@@ -18,6 +19,7 @@ export type P9NavigationContainerParamsList = {
   'P9:MagicCardFilter': undefined;
   'P9:Modal:CreateDecklist': undefined;
   'P9:Modal:Purchases': undefined;
+  'P9:Modal:Decklist:Simulator': undefined;
 };
 
 const { Navigator, Screen } = createStackNavigator<P9NavigationContainerParamsList>();
@@ -48,6 +50,11 @@ export const P9NavigationContainer: FunctionComponent<P9NavigationContainerProps
         <Screen name={'P9:MagicCardFilter'} component={P9MagicCardFilterNavigator} />
         <Screen name={'P9:Modal:CreateDecklist'} component={P9CreateDecklistScreen} />
         <Screen name={'P9:Modal:Purchases'} component={P9PurchasesScreen} />
+        <Screen
+          name={'P9:Modal:Decklist:Simulator'}
+          component={P9DecklistSimulatorScreen}
+          options={{ gestureEnabled: false }}
+        />
       </Navigator>
     </NavigationContainer>
   );

@@ -31,6 +31,6 @@ export const P9DecklistEntryExplorer: FunctionComponent<P9DecklistEntryExplorerP
 
 const P9DecklistEntryExplorerTheme = StyleSheet.create({
   footerContainer: {
-    height: 88,
+    height: 45,
   },
 });

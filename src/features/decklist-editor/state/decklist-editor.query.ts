@@ -3,12 +3,18 @@ import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 import { singleton } from 'tsyringe';
 
-import { combineQueries, QueryEntity } from '@datorama/akita';
+import { QueryEntity } from '@datorama/akita';
 
+import { P9UserDecklistEntry } from '../../../core/data-user/schema/user-decklist-entry';
 import { whenDefined } from '../../../core/operators';
 import { P9UserDecklistFeatureState, P9UserDecklistFeatureStore } from '../../decklist-explorer/state';
 import { P9MagicCardGalleryQuery } from '../../magic-cards/state/magic-card.query';
 import { P9DecklistEditorEntry, P9DecklistEditorState } from '../decklist-editor.model';
+
+export interface P9DecklistEntryInspectorState {
+  entries?: P9UserDecklistEntry[];
+  activeEntry?: P9UserDecklistEntry;
+}
 
 @singleton()
 export class P9DecklistEditorQuery extends QueryEntity<P9UserDecklistFeatureState> {
@@ -77,12 +83,12 @@ export class P9DecklistEditorQuery extends QueryEntity<P9UserDecklistFeatureStat
     sideboard: this.sideboardEntrySections$,
   });
 
-  readonly entryInspectorState$ = combineQueries([
-    this.entries$,
-    this.select(({ ui }) => ui.decklistEditorState?.activeEntryId).pipe(
+  readonly entryInspectorState$: Observable<P9DecklistEntryInspectorState> = combineLatest({
+    entries: this.entries$,
+    activeEntry: this.select(({ ui }) => ui.decklistEditorState?.activeEntryId).pipe(
       switchMap((activeId) => this.entries$.pipe(map((entries) => entries?.find(({ id }) => id === activeId)))),
     ),
-  ]).pipe(map(([entries, activeEntry]) => ({ entries, activeEntry })));
+  });
 
   constructor(store: P9UserDecklistFeatureStore, private magicCardQuery: P9MagicCardGalleryQuery) {
     super(store);

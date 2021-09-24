@@ -5,11 +5,15 @@ import { Header, HeaderProps } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 
 export interface P9ModalHeaderProps extends HeaderProps {
+  cancelButtonIcon?: string;
+  cancelButtonIconType?: 'material' | 'material-community';
   cancelButtonTitle?: string;
 }
 
 export const P9ModalHeader: FunctionComponent<P9ModalHeaderProps> = ({
-  cancelButtonTitle,
+  cancelButtonIcon,
+  cancelButtonIconType = 'material',
+  cancelButtonTitle = 'Cancel',
   containerStyle,
   leftComponent,
   ...rest
@@ -19,7 +23,15 @@ export const P9ModalHeader: FunctionComponent<P9ModalHeaderProps> = ({
   return (
     <Header
       containerStyle={[P9ModalHeaderTheme.container, containerStyle]}
-      leftComponent={leftComponent ?? { text: cancelButtonTitle ?? 'Cancel', onPress: goBack }}
+      leftComponent={
+        leftComponent ?? {
+          icon: cancelButtonIcon,
+          onPress: goBack,
+          size: 24,
+          text: cancelButtonIcon ? undefined : cancelButtonTitle,
+          type: cancelButtonIconType,
+        }
+      }
       {...rest}
     />
   );

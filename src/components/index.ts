@@ -1,5 +1,6 @@
 export * from './artist-label/artist-label.component';
 export * from './avatar/avatar.component';
+export * from './bottom-sheet/bottom-sheet-background.component';
 export * from './bulleted-text/bulleted-text';
 export * from './bulleted-text/unordered-list';
 export * from './button-spin/button-spin.component';

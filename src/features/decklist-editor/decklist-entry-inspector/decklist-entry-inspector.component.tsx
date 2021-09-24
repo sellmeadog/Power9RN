@@ -5,11 +5,11 @@ import { LayoutRectangle, StyleSheet } from 'react-native';
 import { ID } from '@datorama/akita';
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
 
-import { P9RowView, P9SpinButton } from '../../../components';
+import { P9BottomSheetBackground, P9RowView, P9SpinButton } from '../../../components';
 import { P9DecklistEntryType } from '../../../core/data-user';
 import { P9UserDecklistEntry } from '../../../core/data-user/schema/user-decklist-entry';
 import { useDependency } from '../../../core/di';
-import { P9DecklistEditorBottomSheetBackground } from '../decklist-editor-screen/decklist-editor-bottom-sheet.component';
+import { P9DecklistEntryInspectorState } from '../state/decklist-editor.query';
 import { P9DecklistEditorService } from '../state/decklist-editor.service';
 import { P9DecklistEntryCarousel } from './decklist-entry-carousel.component';
 
@@ -49,7 +49,7 @@ export const P9DecklistEntryInspector = forwardRef<BottomSheet, P9DecklistEntryI
       index={-1}
       snapPoints={snapPoints}
       backdropComponent={BottomSheetBackdrop}
-      backgroundComponent={P9DecklistEditorBottomSheetBackground}
+      backgroundComponent={P9BottomSheetBackground}
     >
       <BottomSheetView onLayout={(event) => setLayout(event.nativeEvent.layout)}>
         <P9DecklistEntryCarousel
@@ -73,11 +73,6 @@ const P9DecklistEditorEntryInspectorTheme = StyleSheet.create({
     paddingLeft: 0,
   },
 });
-
-type P9DecklistEntryInspectorState = {
-  entries?: P9UserDecklistEntry[];
-  activeEntry?: P9UserDecklistEntry;
-};
 
 function useDecklistEditorEntryFacade(): [
   state: P9DecklistEntryInspectorState,
