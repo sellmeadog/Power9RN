@@ -30,7 +30,7 @@ export const P9MagicCardText: FunctionComponent<P9MagicCardTextProps> = ({
             return (
               <FastImage
                 key={`${token}_${index}`}
-                source={getGameSymbolSource(token)}
+                source={getGameSymbolSource(token.replace('/', ''))}
                 style={[P9MagicCardTextTheme.gameSymbol, style]}
                 resizeMode={'contain'}
               />
