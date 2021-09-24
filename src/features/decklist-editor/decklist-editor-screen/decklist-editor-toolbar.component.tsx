@@ -3,15 +3,14 @@ import { StyleSheet, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { useNavigation } from '@react-navigation/core';
-
 import { usePower9Theme } from '../../../core/theme';
+import { useNavigationService } from '../../navigation';
 
 export interface P9DecklistEditorToolbarProps {}
 
 export const P9DecklistEditorToolbar: FunctionComponent<P9DecklistEditorToolbarProps> = () => {
   const [{ colors }] = usePower9Theme();
-  const { navigate } = useNavigation();
+  const [{ openDecklistSettings, openDecklistSimulator }] = useNavigationService();
 
   return (
     <SafeAreaView
@@ -25,14 +24,14 @@ export const P9DecklistEditorToolbar: FunctionComponent<P9DecklistEditorToolbarP
         <Icon
           name={'cog-outline'}
           size={24}
-          onPress={() => console.log('play')}
+          onPress={openDecklistSettings}
           containerStyle={[P9DecklistEditorToolbarTheme.iconContainer]}
           type={'material-community'}
         />
         <Icon
           name={'test-tube'}
           size={24}
-          onPress={() => navigate('P9:Modal:Decklist:Simulator')}
+          onPress={openDecklistSimulator}
           containerStyle={[P9DecklistEditorToolbarTheme.iconContainer]}
           type={'material-community'}
         />
