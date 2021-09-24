@@ -59,7 +59,7 @@ export const P9DecklistEntryCarousel: FunctionComponent<P9DecklistEntryCarouselP
       <P9MagicCardImage
         containerStyle={[P9DecklistEntryEditorCarouselTheme.magicCardItemContainer, magicCardItemContainerStyle]}
         imageContainerStyle={[P9DecklistEntryEditorCarouselTheme.magicCardImageContainer, magicCardImageContainerStyle]}
-        sourceUri={magicCard?.card_faces[0].image_uris?.normal ?? ''}
+        sourceUri={magicCard?.card_faces[0].image_uris?.normal ?? undefined}
       />
     ),
     [magicCardImageContainerStyle, magicCardItemContainerStyle],

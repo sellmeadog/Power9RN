@@ -34,7 +34,7 @@ export const P9DecklistEntryArtworkExplorer: FunctionComponent<P9DecklistEntryAr
 
   const renderItem: ListRenderItem<P9MagicCard | undefined> = useCallback(
     ({ item }) => {
-      const defaultCardArtworkUri = item?.card_faces[0].image_uris?.art_crop ?? '';
+      const defaultCardArtworkUri = item?.card_faces[0].image_uris?.art_crop ?? undefined;
       const defaultCardId = item?._id;
 
       return (
@@ -45,7 +45,7 @@ export const P9DecklistEntryArtworkExplorer: FunctionComponent<P9DecklistEntryAr
         >
           <View style={[P9DecklistEntryArtworkExplorerTheme.itemContainer]}>
             <ImageBackground
-              source={{ uri: item?.card_faces[0].image_uris?.art_crop ?? '' }}
+              source={{ uri: item?.card_faces[0].image_uris?.art_crop ?? undefined }}
               style={[P9DecklistEntryArtworkExplorerTheme.itemArtwork]}
             >
               <Icon
@@ -80,7 +80,7 @@ const P9DecklistEntryArtworkExplorerTheme = StyleSheet.create({
   itemContainer: {
     aspectRatio: P9MagicCardArtwork.ASPECT_RATIO,
     borderRadius: 10,
-    height: 135,
+    height: 150,
     paddingRight: 10,
     paddingVertical: 10,
   },
