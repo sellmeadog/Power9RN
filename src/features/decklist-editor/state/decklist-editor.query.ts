@@ -5,15 +5,14 @@ import { singleton } from 'tsyringe';
 
 import { QueryEntity } from '@datorama/akita';
 
-import { P9UserDecklistEntry } from '../../../core/data-user/schema/user-decklist-entry';
 import { whenDefined } from '../../../core/operators';
 import { P9UserDecklistFeatureState, P9UserDecklistFeatureStore } from '../../decklist-explorer/state';
 import { P9MagicCardGalleryQuery } from '../../magic-cards/state/magic-card.query';
 import { P9DecklistEditorEntry, P9DecklistEditorState } from '../decklist-editor.model';
 
 export interface P9DecklistEntryInspectorState {
-  entries?: P9UserDecklistEntry[];
-  activeEntry?: P9UserDecklistEntry;
+  entries?: P9DecklistEditorEntry[];
+  activeEntry?: P9DecklistEditorEntry;
 }
 
 @singleton()

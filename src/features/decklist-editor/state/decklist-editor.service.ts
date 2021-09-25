@@ -36,6 +36,7 @@ export class P9DecklistEditorService {
     return () => {
       if (this.query.hasActive()) {
         this.store.removeActive(this.query.getActiveId());
+
         this.store.update((draft) => {
           draft.ui.decklistEditorState = undefined;
         });
@@ -108,6 +109,12 @@ export class P9DecklistEditorService {
       updateMetadata(draft);
     });
   };
+
+  updateEntryPrinting(entryId: string, cardId: string) {
+    this.store.updateActive((draft) => {
+      draft.entries = arrayUpdate(draft.entries, entryId, { cardId });
+    });
+  }
 }
 
 function updateMetadata(draft: P9UserDecklist) {
