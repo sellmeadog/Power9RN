@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react';
+import { Alert } from 'react-native';
 
 import { useNavigation } from '@react-navigation/core';
 import { NavigationProp } from '@react-navigation/native';
@@ -22,7 +23,10 @@ export function useNavigationService<T extends NavigationProp<P9NavigationParams
     useMemo(
       () => ({
         openDecklistSettings: () => navigate('P9:Modal:DecklistExplorer:Editor:Settings'),
-        openDecklistSimulator: () => navigate('P9:Modal:Decklist:Simulator'),
+        openDecklistSimulator: () => {
+          Alert.alert('Coming Soon', 'This feature is still being developed and will be available in a future update.');
+          // navigate('P9:Modal:Decklist:Simulator')
+        },
       }),
       [navigate],
     ),
