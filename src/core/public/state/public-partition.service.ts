@@ -1,4 +1,3 @@
-import { Alert } from 'react-native';
 import Realm, { Results, User } from 'realm';
 import { singleton } from 'tsyringe';
 
@@ -38,7 +37,7 @@ export class P9PublicPartitionService {
         schema: P9_PUBLIC_SCHEMA,
         sync: {
           error: (_, reason) => {
-            Alert.alert(reason.name, JSON.stringify(reason, undefined, 2));
+            console.log(reason);
           },
           partitionValue: 'PUBLIC',
           user,
