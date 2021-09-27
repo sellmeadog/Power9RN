@@ -22,7 +22,8 @@ export class P9MagicCardGalleryQuery extends Query<P9MagicCardGalleryState> {
   ]).pipe(
     map(([results, filterPredicate, keywordPredicate]): [Results<P9MagicCard & Realm.Object> | undefined, string] => [
       results,
-      [filterPredicate, keywordPredicate]
+      [filterPredicate, keywordPredicate, 'default_card == true']
+        .filter(Boolean)
         .join(' AND ')
         .trim()
         .replace(/^(AND)/, '')
@@ -50,7 +51,12 @@ function selectKeywordPredicate(): (store: P9MagicCardGalleryState) => string | 
       ?.trim()
       .split(' ')
       .filter(Boolean)
-      .map((expression) => `card_faces.names BEGINSWITH[c] "${cleanExpression(expression)}"`)
+      .map(
+        (expression) =>
+          `(card_faces.name ==[c] "${cleanExpression(expression)}" OR card_faces.names BEGINSWITH[c] "${cleanExpression(
+            expression,
+          )}")`,
+      )
       .join(' AND ');
 }
 
