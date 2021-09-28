@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 import Animated, { interpolateColor, useAnimatedStyle } from 'react-native-reanimated';
 
@@ -6,13 +6,45 @@ import { BottomSheetBackgroundProps } from '@gorhom/bottom-sheet';
 
 import { usePower9Theme } from '../../core/theme';
 
-export interface P9BottomSheetBackgroundProps extends BottomSheetBackgroundProps {}
+export interface P9BottomSheetBackgroundProps extends BottomSheetBackgroundProps {
+  elevation?: 0 | 1 | 2 | 3 | 4 | 5;
+}
 
-export const P9BottomSheetBackground: FunctionComponent<P9BottomSheetBackgroundProps> = ({ animatedIndex, style }) => {
+export const P9BottomSheetBackground: FunctionComponent<P9BottomSheetBackgroundProps> = ({
+  animatedIndex,
+  elevation,
+  style,
+}) => {
   const [{ colors }] = usePower9Theme();
-  const animatedStyle = useAnimatedStyle(() => ({
-    backgroundColor: interpolateColor(animatedIndex.value, [0, 1], [colors!.grey2!, colors!.grey2!]),
-  }));
+  const color = useMemo(() => {
+    switch (elevation) {
+      case 0:
+        return colors?.grey0;
+
+      case 1:
+        return colors?.grey1;
+
+      default:
+      case 2:
+        return colors?.grey2;
+
+      case 3:
+        return colors?.grey3;
+
+      case 4:
+        return colors?.grey4;
+
+      case 5:
+        return colors?.grey5;
+    }
+  }, [colors, elevation]);
+
+  const animatedStyle = useAnimatedStyle(
+    () => ({
+      backgroundColor: interpolateColor(animatedIndex.value, [0, 1], [color!, color!]),
+    }),
+    [colors, elevation],
+  );
 
   return (
     <Animated.View
