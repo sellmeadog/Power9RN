@@ -26,7 +26,7 @@ export const P9DecklistEditorBottomSheet: FunctionComponent<P9DecklistEditorBott
   const { bottom, top } = useSafeAreaInsets();
   const { height } = useWindowDimensions();
 
-  const snapPoints = useMemo(() => [45 + bottom, height - 120], [bottom, height]);
+  const snapPoints = useMemo(() => [bottom + 44 + 54, height - 120], [bottom, height]);
 
   const handleEntryPress = useCallback(
     (magicCard: P9MagicCard) => upsertEntry(magicCard, activeEntryType),
