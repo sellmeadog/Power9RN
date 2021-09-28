@@ -69,6 +69,17 @@ export class P9PublicPartitionQuery extends Query<P9PublicPartitionState> {
 
   findMagicCard = (id: string) =>
     this.getValue().partition?.objectForPrimaryKey<P9MagicCard>(P9MagicCardSchema.name, id);
+
+  findMagicCardPrintings = (oracle_id: string) =>
+    this.magicCards$.pipe(
+      map((results) =>
+        results?.filtered('oracle_id == $0', oracle_id).sorted([
+          ['released_at', true],
+          ['magic_set.name', false],
+          ['collector_number', false],
+        ]),
+      ),
+    );
 }
 
 export function watchCollection<T>(): MonoTypeOperatorFunction<Results<T> | undefined> {
