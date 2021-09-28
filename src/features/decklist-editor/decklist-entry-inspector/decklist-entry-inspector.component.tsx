@@ -1,9 +1,9 @@
 import { useObservableState } from 'observable-hooks';
-import React, { forwardRef, useCallback, useMemo, useState } from 'react';
-import { LayoutRectangle, StyleSheet } from 'react-native';
+import React, { forwardRef, useCallback, useMemo } from 'react';
+import { StyleSheet } from 'react-native';
 
 import { ID } from '@datorama/akita';
-import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
+import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 
 import { P9BottomSheetBackground, P9RowView, P9SpinButton } from '../../../components';
 import { P9DecklistEntryType } from '../../../core/data-user';
@@ -19,63 +19,69 @@ export interface P9DecklistEntryInspectorProps {
   entries?: P9DecklistEditorEntry[];
 }
 
-export const P9DecklistEntryInspector = forwardRef<BottomSheet, P9DecklistEntryInspectorProps>(({ activeId }, ref) => {
-  const [{ activeEntry, entries }, activateEntry, updateCount, updatePrinting] = useDecklistEditorEntryFacade();
-  const [layout, setLayout] = useState<LayoutRectangle>({ height: 1, width: 0, x: 0, y: 0 });
-  const snapPoints = useMemo(() => [0, layout.height], [layout]);
+export const P9DecklistEntryInspector = forwardRef<BottomSheetModal, P9DecklistEntryInspectorProps>(
+  ({ activeId }, ref) => {
+    const [{ activeEntry, entries }, activateEntry, updateCount, updatePrinting] = useDecklistEditorEntryFacade();
+    const snapPoints = useMemo(() => [562 + 12], []);
 
-  const handleEditorEntryChange = useCallback((entryId) => entryId && activateEntry(entryId), [activateEntry]);
+    const handleEditorEntryChange = useCallback((entryId) => entryId && activateEntry(entryId), [activateEntry]);
 
-  const handleMaindeckValueChange = useCallback(
-    (count: number) => {
-      if (activeEntry) {
-        updateCount(activeEntry.id, 'maindeck', count);
-      }
-    },
-    [activeEntry, updateCount],
-  );
+    const handleMaindeckValueChange = useCallback(
+      (count: number) => {
+        if (activeEntry) {
+          updateCount(activeEntry.id, 'maindeck', count);
+        }
+      },
+      [activeEntry, updateCount],
+    );
 
-  const handleSideboardValueChange = useCallback(
-    (count: number) => {
-      if (activeEntry) {
-        updateCount(activeEntry.id, 'sideboard', count);
-      }
-    },
-    [activeEntry, updateCount],
-  );
+    const handleSideboardValueChange = useCallback(
+      (count: number) => {
+        if (activeEntry) {
+          updateCount(activeEntry.id, 'sideboard', count);
+        }
+      },
+      [activeEntry, updateCount],
+    );
 
-  const handlePrintingChange = useCallback(
-    (cardId: string) => {
-      if (activeEntry) {
-        updatePrinting(activeEntry.id, cardId);
-      }
-    },
-    [activeEntry, updatePrinting],
-  );
+    const handlePrintingChange = useCallback(
+      (cardId: string) => {
+        if (activeEntry) {
+          updatePrinting(activeEntry.id, cardId);
+        }
+      },
+      [activeEntry, updatePrinting],
+    );
 
-  return (
-    <BottomSheet
-      ref={ref}
-      index={-1}
-      snapPoints={snapPoints}
-      backdropComponent={BottomSheetBackdrop}
-      backgroundComponent={P9BottomSheetBackground}
-    >
-      <BottomSheetView onLayout={(event) => setLayout(event.nativeEvent.layout)}>
-        <P9DecklistEntryCarousel
-          activeId={activeId}
-          editorEntries={entries}
-          onEditorEntryChanged={handleEditorEntryChange}
-        />
-        <P9MagicCardPrintingPicker printing={activeEntry?.magicCard} onPrintingChange={handlePrintingChange} />
-        <P9RowView edges={['bottom']} style={P9DecklistEditorEntryInspectorTheme.spinButtonRow}>
-          <P9SpinButton title={'main'} onValueChange={handleMaindeckValueChange} value={activeEntry?.maindeck} />
-          <P9SpinButton title={'sideboard'} onValueChange={handleSideboardValueChange} value={activeEntry?.sideboard} />
-        </P9RowView>
-      </BottomSheetView>
-    </BottomSheet>
-  );
-});
+    return (
+      <BottomSheetModal
+        ref={ref}
+        backdropComponent={BottomSheetBackdrop}
+        backgroundComponent={P9BottomSheetBackground}
+        enablePanDownToClose={true}
+        index={0}
+        snapPoints={snapPoints}
+      >
+        <BottomSheetView>
+          <P9DecklistEntryCarousel
+            activeId={activeId}
+            editorEntries={entries}
+            onEditorEntryChanged={handleEditorEntryChange}
+          />
+          <P9MagicCardPrintingPicker printing={activeEntry?.magicCard} onPrintingChange={handlePrintingChange} />
+          <P9RowView edges={['bottom']} style={P9DecklistEditorEntryInspectorTheme.spinButtonRow}>
+            <P9SpinButton title={'main'} onValueChange={handleMaindeckValueChange} value={activeEntry?.maindeck} />
+            <P9SpinButton
+              title={'sideboard'}
+              onValueChange={handleSideboardValueChange}
+              value={activeEntry?.sideboard}
+            />
+          </P9RowView>
+        </BottomSheetView>
+      </BottomSheetModal>
+    );
+  },
+);
 
 const P9DecklistEditorEntryInspectorTheme = StyleSheet.create({
   spinButtonRow: {

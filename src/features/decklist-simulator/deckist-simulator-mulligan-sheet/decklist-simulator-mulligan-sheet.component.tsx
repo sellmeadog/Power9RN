@@ -15,8 +15,9 @@ export const P9DecklistSimulatorMulliganSheet: FunctionComponent<P9DecklistSimul
       <BottomSheet
         backdropComponent={BottomSheetBackdrop}
         backgroundComponent={P9BottomSheetBackground}
-        snapPoints={[bottom, 300]}
+        enablePanDownToClose={true}
         index={1}
+        snapPoints={[bottom, 300]}
       >
         <P9TitleText>{'Opening Hand'}</P9TitleText>
       </BottomSheet>

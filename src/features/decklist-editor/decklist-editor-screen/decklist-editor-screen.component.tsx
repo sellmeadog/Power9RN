@@ -2,11 +2,12 @@ import React, { FunctionComponent, useCallback, useRef, useState } from 'react';
 import { Header } from 'react-native-elements';
 
 import { ID } from '@datorama/akita';
-import BottomSheet from '@gorhom/bottom-sheet';
+import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { NavigationProp, RouteProp } from '@react-navigation/native';
 
 import { P9DecklistEntryType } from '../../../core/data-user';
 import { P9DecklistEditorTabView } from '../decklist-editor-tab-view/decklist-editor-tab-view.component';
+import { P9DecklistEditorEntry } from '../decklist-editor.model';
 import { P9DecklistEditorNavigatorParamList } from '../decklist-editor.navigator';
 import { P9DecklistEntryInspector } from '../decklist-entry-inspector/decklist-entry-inspector.component';
 import { useDecklistEditorFacade } from '../state/decklist-editor.service';
@@ -28,26 +29,30 @@ export const P9DecklistEditorHomeScreen: FunctionComponent<P9DecklistEditorHomeS
     [updateFn],
   );
 
-  const modalRef = useRef<BottomSheet>(null);
+  const modalRef = useRef<BottomSheetModal>(null);
+
+  const handlePress = useCallback((entry: P9DecklistEditorEntry) => {
+    setActiveId(entry.id);
+    modalRef.current?.present();
+  }, []);
 
   return (
     <>
-      <Header
-        leftComponent={{ icon: 'arrow-back-ios', onPress: goBack, size: 24 }}
-        centerComponent={{ text: name }}
-        rightComponent={{ icon: 'dots-vertical', type: 'material-community', size: 24, onPress: settingsFn }}
-      />
-      <P9DecklistEditorTabView
-        activeEntryType={activeEntryType}
-        onActiveEntryTypeChange={handleActiveEntryTypeChange}
-        onPress={(entry) => {
-          setActiveId(entry.id);
-          modalRef.current?.expand();
-        }}
-      />
-      <P9DecklistEditorBottomSheet />
-      <P9DecklistEditorToolbar />
-      <P9DecklistEntryInspector activeId={activeId} entries={entries} ref={modalRef} />
+      <BottomSheetModalProvider>
+        <Header
+          leftComponent={{ icon: 'arrow-back-ios', onPress: goBack, size: 24 }}
+          centerComponent={{ text: name }}
+          rightComponent={{ icon: 'dots-vertical', type: 'material-community', size: 24, onPress: settingsFn }}
+        />
+        <P9DecklistEditorTabView
+          activeEntryType={activeEntryType}
+          onActiveEntryTypeChange={handleActiveEntryTypeChange}
+          onPress={handlePress}
+        />
+        <P9DecklistEditorBottomSheet />
+        <P9DecklistEditorToolbar />
+        <P9DecklistEntryInspector activeId={activeId} entries={entries} ref={modalRef} />
+      </BottomSheetModalProvider>
     </>
   );
 };
