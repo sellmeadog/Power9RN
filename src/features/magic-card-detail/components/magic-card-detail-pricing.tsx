@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { Text } from 'react-native-elements';
 
 import { gql, useQuery } from '@apollo/client';
@@ -8,6 +8,7 @@ import { P9CaptionText, P9TableTitleDivider, P9ViewSurface } from '../../../comp
 import { usePower9Theme } from '../../../core/theme';
 
 export interface P9MagicCardDetailPricingProps {
+  containerStyle?: StyleProp<ViewStyle>;
   id?: string;
 }
 
@@ -31,13 +32,13 @@ const GET_CARD_PRICE_SUMMARY = gql`
   }
 `;
 
-export const P9MagicCardDetailPricing: FunctionComponent<P9MagicCardDetailPricingProps> = ({ id }) => {
+export const P9MagicCardDetailPricing: FunctionComponent<P9MagicCardDetailPricingProps> = ({ containerStyle, id }) => {
   const { data } = useQuery<P9MagicCardPriceQueryResponse>(GET_CARD_PRICE_SUMMARY, {
     variables: { id },
   });
 
   return (
-    <P9ViewSurface>
+    <P9ViewSurface style={[containerStyle]}>
       <P9TableTitleDivider>{'Pricing'}</P9TableTitleDivider>
       <View style={P9MagicCardDetailPricingTheme.sectionContainer}>
         <P9MagicCardPrice title={'normal'} price={data?.price?.normal} />

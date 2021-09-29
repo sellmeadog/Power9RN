@@ -1,6 +1,6 @@
 import { useObservable, useObservableState } from 'observable-hooks';
 import React, { FunctionComponent } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
 import { defer, of } from 'rxjs';
 import { map, mergeMap, retry, switchMap } from 'rxjs/operators';
 
@@ -16,17 +16,21 @@ import { ScryfallRuling, ScryfallRulingList, ScryfallRulingSource } from '../../
 import { P9MagicCardText } from '../../magic-cards';
 
 export interface P9MagicCardDetailRulingProps {
+  containerStyle?: StyleProp<ViewStyle>;
   rulings_uri?: string;
 }
 
-export const P9MagicCardDetailRuling: FunctionComponent<P9MagicCardDetailRulingProps> = ({ rulings_uri }) => {
+export const P9MagicCardDetailRuling: FunctionComponent<P9MagicCardDetailRulingProps> = ({
+  containerStyle,
+  rulings_uri,
+}) => {
   const response = useObservableState(
     useObservable((rulings_uri$) => rulings_uri$.pipe(switchMap(([uri]) => fetchRulings(uri))), [rulings_uri]),
     <P9EmptyListItem message={'No Rulings Available'} />,
   );
 
   return (
-    <P9ViewSurface>
+    <P9ViewSurface style={[containerStyle]}>
       <P9TableTitleDivider>{'Rulings'}</P9TableTitleDivider>
       {response}
     </P9ViewSurface>

@@ -1,57 +1,31 @@
-import { pluckFirst, useObservable, useObservableState } from 'observable-hooks';
-import React, { FunctionComponent, useCallback, useRef } from 'react';
-import { StyleSheet } from 'react-native';
-import { filter, switchMap } from 'rxjs/operators';
+import React, { FunctionComponent } from 'react';
+import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
 
-import BottomSheet from '@gorhom/bottom-sheet';
-
-import { useDependency } from '../../../../core/di';
 import { P9MagicCard } from '../../../../core/public';
-import { P9PublicPartitionQuery } from '../../../../core/public/state/public-partition.query';
 import { P9MagicCardPrintingPickerSheet } from './magic-card-printing-picker-sheet.component';
 import { P9MagicCardPrintingPickerToggle } from './magic-card-printing-picker-toggle.component';
 
 export interface P9MagicCardPrintingPickerProps {
-  printing?: P9MagicCard;
+  activeColor?: string;
+  inactiveColor?: string;
   onPrintingChange?: (cardId: string) => void;
+  printing?: P9MagicCard;
+  toggleContainerStyle?: StyleProp<ViewStyle>;
 }
 
 export const P9MagicCardPrintingPicker: FunctionComponent<P9MagicCardPrintingPickerProps> = ({
-  printing,
-  onPrintingChange,
+  activeColor,
+  inactiveColor,
+  toggleContainerStyle,
 }) => {
-  const ref = useRef<BottomSheet>(null);
-  const handleToggle = useCallback(() => {
-    ref.current?.expand();
-  }, []);
-
-  const query = useDependency(P9PublicPartitionQuery);
-  const printings = useObservableState(
-    useObservable(
-      (oracleId$) =>
-        oracleId$.pipe(
-          pluckFirst,
-          filter(Boolean),
-          switchMap((oracleId) => query.findMagicCardPrintings(oracleId)),
-        ),
-      [printing?.oracle_id],
-    ),
-  );
-
   return (
     <>
       <P9MagicCardPrintingPickerToggle
-        containerStyle={[P9MagicCardPrintingPickerTheme.toggleContainer]}
-        onToggle={handleToggle}
-        printing={printing}
-        printingCount={printings?.length}
+        activeColor={activeColor}
+        containerStyle={[P9MagicCardPrintingPickerTheme.toggleContainer, toggleContainerStyle]}
+        inactiveColor={inactiveColor}
       />
-      <P9MagicCardPrintingPickerSheet
-        ref={ref}
-        printings={printings}
-        selectedPrintingId={printing?._id}
-        onSelectedPrintingChange={onPrintingChange}
-      />
+      <P9MagicCardPrintingPickerSheet />
     </>
   );
 };

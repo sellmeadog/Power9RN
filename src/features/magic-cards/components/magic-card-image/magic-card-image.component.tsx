@@ -7,28 +7,30 @@ import { P9MagicCardImagePlaceholder } from './magic-card-image-placeholder.comp
 import { P9MagicCardImageTheme } from './magic-card-image.theme';
 
 export interface P9MagicCardImageProps {
-  sourceUri?: string;
+  borderRadius?: number;
   containerStyle?: StyleProp<ViewStyle>;
   imageContainerStyle?: StyleProp<ViewStyle>;
   imageStyle?: StyleProp<ImageStyle>;
+  sourceUri?: string;
 }
 
 export const P9MagicCardImage: P9ImageFunctionComponent<P9MagicCardImageProps> = ({
-  sourceUri,
+  borderRadius = 10,
   containerStyle,
   imageContainerStyle,
   imageStyle,
+  sourceUri,
 }) => {
   const [hasError, setHasError] = useState(false);
 
   return (
-    <View style={[P9MagicCardImageTheme.containerStyle, containerStyle]}>
-      <View style={[P9MagicCardImageTheme.imageContainerStyle, imageContainerStyle]}>
+    <View style={[P9MagicCardImageTheme.containerStyle, { borderRadius }, containerStyle]}>
+      <View style={[P9MagicCardImageTheme.imageContainerStyle, { borderRadius }, imageContainerStyle]}>
         <P9MagicCardImagePlaceholder hasError={hasError} />
         <FastImage
           onError={() => setHasError(true)}
           source={{ uri: sourceUri }}
-          style={[P9MagicCardImageTheme.imageStyle, imageStyle]}
+          style={[P9MagicCardImageTheme.imageStyle, { borderRadius }, imageStyle]}
         />
       </View>
     </View>

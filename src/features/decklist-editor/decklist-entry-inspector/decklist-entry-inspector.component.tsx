@@ -8,7 +8,11 @@ import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/
 import { P9BottomSheetBackground, P9RowView, P9SpinButton } from '../../../components';
 import { P9DecklistEntryType } from '../../../core/data-user';
 import { useDependency } from '../../../core/di';
-import { P9MagicCardPrintingPicker } from '../../magic-cards';
+import {
+  P9MagicCardPrintingPickerProvider,
+  P9MagicCardPrintingPickerSheet,
+  P9MagicCardPrintingPickerToggle,
+} from '../../magic-cards';
 import { P9DecklistEditorEntry } from '../decklist-editor.model';
 import { P9DecklistEntryInspectorState } from '../state/decklist-editor.query';
 import { P9DecklistEditorService } from '../state/decklist-editor.service';
@@ -24,7 +28,12 @@ export const P9DecklistEntryInspector = forwardRef<BottomSheetModal, P9DecklistE
     const [{ activeEntry, entries }, activateEntry, updateCount, updatePrinting] = useDecklistEditorEntryFacade();
     const snapPoints = useMemo(() => [562 + 12], []);
 
-    const handleEditorEntryChange = useCallback((entryId) => entryId && activateEntry(entryId), [activateEntry]);
+    const handleEditorEntryChange = useCallback(
+      (entryId) => {
+        entryId && activateEntry(entryId);
+      },
+      [activateEntry],
+    );
 
     const handleMaindeckValueChange = useCallback(
       (count: number) => {
@@ -62,22 +71,25 @@ export const P9DecklistEntryInspector = forwardRef<BottomSheetModal, P9DecklistE
         index={0}
         snapPoints={snapPoints}
       >
-        <BottomSheetView>
-          <P9DecklistEntryCarousel
-            activeId={activeId}
-            editorEntries={entries}
-            onEditorEntryChanged={handleEditorEntryChange}
-          />
-          <P9MagicCardPrintingPicker printing={activeEntry?.magicCard} onPrintingChange={handlePrintingChange} />
-          <P9RowView edges={['bottom']} style={P9DecklistEditorEntryInspectorTheme.spinButtonRow}>
-            <P9SpinButton title={'main'} onValueChange={handleMaindeckValueChange} value={activeEntry?.maindeck} />
-            <P9SpinButton
-              title={'sideboard'}
-              onValueChange={handleSideboardValueChange}
-              value={activeEntry?.sideboard}
+        <P9MagicCardPrintingPickerProvider magicCard={activeEntry?.magicCard} onPrintingChange={handlePrintingChange}>
+          <BottomSheetView>
+            <P9DecklistEntryCarousel
+              activeId={activeId}
+              editorEntries={entries}
+              onEditorEntryChanged={handleEditorEntryChange}
             />
-          </P9RowView>
-        </BottomSheetView>
+            <P9MagicCardPrintingPickerToggle />
+            <P9RowView edges={['bottom']} style={P9DecklistEditorEntryInspectorTheme.spinButtonRow}>
+              <P9SpinButton title={'main'} onValueChange={handleMaindeckValueChange} value={activeEntry?.maindeck} />
+              <P9SpinButton
+                title={'sideboard'}
+                onValueChange={handleSideboardValueChange}
+                value={activeEntry?.sideboard}
+              />
+            </P9RowView>
+          </BottomSheetView>
+          <P9MagicCardPrintingPickerSheet />
+        </P9MagicCardPrintingPickerProvider>
       </BottomSheetModal>
     );
   },

@@ -1,12 +1,13 @@
 import React, { FunctionComponent, useMemo } from 'react';
-import { StyleSheet, TextStyle, View } from 'react-native';
+import { StyleProp, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
 import { Text } from 'react-native-elements';
 
 import { P9TableTitleDivider, P9ViewSurface } from '../../../components';
 import { P9MagicCardLegalityMap } from '../../../core/public/schema/magic-card-legality-map';
 
 export interface P9MagicCardDetailLegalityProps {
-  legalities: P9MagicCardLegalityMap;
+  containerStyle?: StyleProp<ViewStyle>;
+  legalities?: P9MagicCardLegalityMap;
 }
 
 enum P9GameFormat {
@@ -37,7 +38,22 @@ const formats: P9GameFormat[] = [
   P9GameFormat.oathbreaker,
 ];
 
-export const P9MagicCardDetailLegality: FunctionComponent<P9MagicCardDetailLegalityProps> = ({ legalities }) => {
+export const P9MagicCardDetailLegality: FunctionComponent<P9MagicCardDetailLegalityProps> = ({
+  containerStyle,
+  legalities = {
+    brawl: 'not_legal',
+    commander: 'not_legal',
+    future: 'not_legal',
+    historic: 'not_legal',
+    legacy: 'not_legal',
+    modern: 'not_legal',
+    oathbreaker: 'not_legal',
+    pauper: 'not_legal',
+    pioneer: 'not_legal',
+    standard: 'not_legal',
+    vintage: 'not_legal',
+  },
+}) => {
   const nodes = useMemo(() => {
     return formats.map((format) => (
       <View key={format} style={P9MagicCardLegalitySectionTheme.statusContainer}>
@@ -50,7 +66,7 @@ export const P9MagicCardDetailLegality: FunctionComponent<P9MagicCardDetailLegal
   }, [legalities]);
 
   return (
-    <P9ViewSurface>
+    <P9ViewSurface style={[containerStyle]}>
       <P9TableTitleDivider>{'Legality'}</P9TableTitleDivider>
       <View style={[P9MagicCardLegalitySectionTheme.container]}>{nodes}</View>
     </P9ViewSurface>

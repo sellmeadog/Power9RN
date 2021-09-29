@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
 import { P9TableTitleDivider, P9ViewSurface } from '../../../components';
 import { P9MagicCardFace } from '../../../core/public';
@@ -8,9 +8,13 @@ import { P9MagicCardOracleText, P9MagicCardText } from '../../magic-cards';
 
 export interface P9MagicCardDetailOracleTextProps {
   card_faces?: P9MagicCardFace[];
+  containerStyle?: StyleProp<ViewStyle>;
 }
 
-export const P9MagicCardDetailOracleText: FunctionComponent<P9MagicCardDetailOracleTextProps> = ({ card_faces }) => {
+export const P9MagicCardDetailOracleText: FunctionComponent<P9MagicCardDetailOracleTextProps> = ({
+  card_faces,
+  containerStyle,
+}) => {
   const [{ colors }] = usePower9Theme();
   const oracleTextNode = useMemo(
     () =>
@@ -33,10 +37,10 @@ export const P9MagicCardDetailOracleText: FunctionComponent<P9MagicCardDetailOra
   );
 
   return (
-    <>
+    <View style={[containerStyle]}>
       <P9TableTitleDivider>{'Oracle Text'}</P9TableTitleDivider>
       <P9ViewSurface style={P9MagicCardDetailOracleTextTheme.textContainer}>{oracleTextNode}</P9ViewSurface>
-    </>
+    </View>
   );
 };
 

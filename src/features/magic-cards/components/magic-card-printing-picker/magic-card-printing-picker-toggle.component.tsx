@@ -3,28 +3,34 @@ import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { Icon, Text } from 'react-native-elements';
 
 import { P9PressableHighlight } from '../../../../components';
-import { P9MagicCard } from '../../../../core/public';
 import { usePower9Theme } from '../../../../core/theme';
+import { useMagicCardPrintingPickerToggle } from './magic-card-printing-picker-provider.component';
 
 export interface P9MagicCardPrintingPickerToggleProps {
+  activeColor?: string;
   containerStyle?: StyleProp<ViewStyle>;
-  onToggle?: () => void;
-  printing?: P9MagicCard;
-  printingCount?: number;
+  inactiveColor?: string;
 }
 
 export const P9MagicCardPrintingPickerToggle: FunctionComponent<P9MagicCardPrintingPickerToggleProps> = ({
+  activeColor,
   containerStyle,
-  onToggle,
-  printing,
-  printingCount,
+  inactiveColor,
 }) => {
   const [{ colors }] = usePower9Theme();
+  const [
+    {
+      printing,
+      printings: { length },
+    },
+    handlePress,
+  ] = useMagicCardPrintingPickerToggle();
 
   return (
     <P9PressableHighlight
-      onPress={onToggle}
-      inactiveColor={colors?.grey2}
+      activeColor={activeColor}
+      inactiveColor={inactiveColor ?? colors?.grey2}
+      onPress={handlePress}
       pressableContainerStyle={[P9MagicCardPrintingPickerToggleTheme.container, containerStyle]}
     >
       <View>
@@ -37,7 +43,7 @@ export const P9MagicCardPrintingPickerToggle: FunctionComponent<P9MagicCardPrint
         </Text>
         <View style={[P9MagicCardPrintingPickerToggleTheme.printingCountContainer]}>
           <Text style={[P9MagicCardPrintingPickerToggleTheme.subtitle, { color: colors?.primary }]}>
-            {(printingCount ?? 1) > 1 ? `${printingCount} Printings` : '1 Printing'}
+            {(length ?? 1) > 1 ? `${length} Printings` : '1 Printing'}
           </Text>
           <Icon name={'arrow-drop-down'} />
         </View>

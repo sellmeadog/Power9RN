@@ -71,6 +71,7 @@ export const P9MagicCardDetailGallery: FunctionComponent<P9MagicCardDetailGaller
         layoutProvider={layoutProvider}
         rowRenderer={renderItem}
         scrollViewProps={scrollViewProps}
+        disableRecycling={true}
         style={{ width: WIDTH, height: HEIGHT }}
         // onVisibleIndicesChanged={handleVisibleIndicesChanged}
       />
@@ -81,18 +82,5 @@ export const P9MagicCardDetailGallery: FunctionComponent<P9MagicCardDetailGaller
 };
 
 function renderItem(_: string | number, item: P9MagicCard) {
-  return (
-    <P9MagicCardDetailGalleryItem
-      magicCard={item}
-      // id={_id}
-      // card_faces={card_faces}
-      // collector_number={collector_number}
-      // magic_set={magic_set}
-      // rarity={rarity}
-      // rulings_uri={rulings_uri}
-      // legalities={legalities}
-      // name={name}
-      // artist={card_faces.map(({ artist }) => artist).join(' // ')}
-    />
-  );
+  return <P9MagicCardDetailGalleryItem magicCard={item} />;
 }
