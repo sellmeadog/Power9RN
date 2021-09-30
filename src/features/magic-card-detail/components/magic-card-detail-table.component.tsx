@@ -58,7 +58,10 @@ export const P9MagicCardDetailTable: FunctionComponent<P9MagicCardDetailTablePro
             style={[{ backgroundColor: colors?.grey1 }, P9MagicCardDetailTableTheme.parallaxForegroundSurfaceContainer]}
           />
         </View>
-        <P9MagicCardPrintingPickerToggle />
+        <P9MagicCardPrintingPickerToggle
+          containerStyle={[P9MagicCardDetailTableTheme.parallaxContainer]}
+          inactiveColor={colors?.grey1}
+        />
         <P9MagicCardDetailPricing id={printing?._id} />
         <P9MagicCardDetailOracleText card_faces={printing?.card_faces} />
         <P9MagicCardDetailLegality legalities={printing?.legalities} />

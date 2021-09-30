@@ -78,7 +78,9 @@ export const P9DecklistEntryInspector = forwardRef<BottomSheetModal, P9DecklistE
               editorEntries={entries}
               onEditorEntryChanged={handleEditorEntryChange}
             />
-            <P9MagicCardPrintingPickerToggle />
+            <P9MagicCardPrintingPickerToggle
+              containerStyle={[P9DecklistEditorEntryInspectorTheme.printingToggleContainer]}
+            />
             <P9RowView edges={['bottom']} style={P9DecklistEditorEntryInspectorTheme.spinButtonRow}>
               <P9SpinButton title={'main'} onValueChange={handleMaindeckValueChange} value={activeEntry?.maindeck} />
               <P9SpinButton
@@ -101,6 +103,10 @@ const P9DecklistEditorEntryInspectorTheme = StyleSheet.create({
     justifyContent: 'center',
     paddingLeft: 0,
     zIndex: -1,
+  },
+
+  printingToggleContainer: {
+    marginBottom: 16,
   },
 });
 
