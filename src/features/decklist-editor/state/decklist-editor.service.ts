@@ -113,6 +113,7 @@ export class P9DecklistEditorService {
   updateEntryPrinting(entryId: string, cardId: string) {
     this.store.updateActive((draft) => {
       draft.entries = arrayUpdate(draft.entries, entryId, { cardId });
+      draft.modifiedOn = DateTime.local().toSeconds();
     });
   }
 }
