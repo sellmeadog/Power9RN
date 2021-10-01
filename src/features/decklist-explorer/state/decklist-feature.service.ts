@@ -1,4 +1,3 @@
-import { DateTime } from 'luxon';
 import { map } from 'rxjs/operators';
 import { singleton } from 'tsyringe';
 import { v1 } from 'uuid';
@@ -14,6 +13,7 @@ import { useDependency } from '../../../core/di';
 import { whenDefined } from '../../../core/operators';
 import { P9MagicCardObject } from '../../../core/public';
 import { P9PublicPartitionService } from '../../../core/public/state/public-partition.service';
+import { UTC_NOW } from '../../../core/utils';
 import { P9CreateDecklistEntryInfo, P9CreateDecklistInfo, parseDocument } from '../../decklist-parse';
 import { P9UserDecklistFeatureQuery } from './decklist-feature.query';
 import { P9UserDecklistFeatureStore } from './decklist-feature.store';
@@ -40,17 +40,8 @@ export class P9UserDecklistFeatureService {
         whenDefined(),
         map((results) => results.toJSON() as P9UserDecklist[]),
       )
-      .forEach((data) => this.store.set(data));
+      .forEach((data) => this.store.upsertMany(data));
   }
-
-  loadUserDecklists = () => {
-    // this.dataQuery.decklists$
-    //   .pipe(
-    //     whenDefined(),
-    //     map((results) => results.toJSON() as P9UserDecklist[]),
-    //   )
-    //   .forEach((data) => this.store.set(data));
-  };
 
   createDecklist = async (user: P9User) => {
     if (!user?.id) {
@@ -61,7 +52,7 @@ export class P9UserDecklistFeatureService {
 
     if (decklistInfo) {
       const { manualEntries: _, parsedEntries = [], ...rest } = decklistInfo;
-      const now = DateTime.utc().toSeconds();
+      const now = UTC_NOW();
 
       const tuples = this.makeEntryTuples(parsedEntries);
       const entries = tuples.map(([entry]) => entry);

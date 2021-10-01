@@ -1,4 +1,3 @@
-import { DateTime } from 'luxon';
 import { useObservableState } from 'observable-hooks';
 import { useCallback, useEffect } from 'react';
 import { Subscription } from 'rxjs';
@@ -13,6 +12,7 @@ import { P9UserDataPartitionService } from '../../../core/data-user/state/user-d
 import { useDependency } from '../../../core/di';
 import { whenDefined } from '../../../core/operators';
 import { P9MagicCard } from '../../../core/public';
+import { UTC_NOW } from '../../../core/utils';
 import { P9UserDecklistFeatureStore } from '../../decklist-explorer/state';
 import { P9DecklistEditorUIState } from '../../decklist-explorer/state/decklist-feature.model';
 import { P9DecklistEditorState } from '../decklist-editor.model';
@@ -113,7 +113,7 @@ export class P9DecklistEditorService {
   updateEntryPrinting(entryId: string, cardId: string) {
     this.store.updateActive((draft) => {
       draft.entries = arrayUpdate(draft.entries, entryId, { cardId });
-      draft.modifiedOn = DateTime.local().toSeconds();
+      draft.modifiedOn = UTC_NOW();
     });
   }
 }
@@ -127,7 +127,7 @@ function updateMetadata(draft: P9UserDecklist) {
   draft.metadata.R = countColorSymbol('R');
   draft.metadata.G = countColorSymbol('G');
   draft.metadata.C = countColorSymbol('C');
-  draft.modifiedOn = DateTime.local().toSeconds();
+  draft.modifiedOn = UTC_NOW();
 
   function countColorSymbol(symbol: string): number | undefined {
     return draft.entries.filter(

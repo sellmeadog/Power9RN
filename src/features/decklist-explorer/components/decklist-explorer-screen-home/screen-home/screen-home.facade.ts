@@ -19,10 +19,6 @@ export function useHomeScreenFacade(): [
   const [documentInfo, pickDocumentAsync] = useDocumentPicker();
 
   useEffect(() => {
-    service.loadUserDecklists();
-  }, [service]);
-
-  useEffect(() => {
     const importDecklist = async () => {
       if (documentInfo) {
         await service.importCreateDecklistUI(documentInfo);

@@ -1,4 +1,3 @@
-import { DateTime } from 'luxon';
 import { useObservableState } from 'observable-hooks';
 import React, { FunctionComponent, useCallback } from 'react';
 import { KeyboardAvoidingView, ScrollView } from 'react-native';
@@ -10,6 +9,7 @@ import { P9ItemSeparator, P9TableDivider, P9TableViewInputItem, P9TableViewPicke
 import { P9UserDecklist } from '../../../core/data-user';
 import { useDependency } from '../../../core/di';
 import { whenDefined } from '../../../core/operators';
+import { UTC_NOW } from '../../../core/utils';
 import { P9UserDecklistFeatureQuery, P9UserDecklistFeatureStore } from '../../decklist-explorer/state';
 import { P9_GAME_FORMATS } from '../../decklist-explorer/state/decklist-feature.model';
 import { P9DecklistEntryArtworkExplorer } from './decklist-entry-artwork-explorer.component';
@@ -81,7 +81,7 @@ const useDecklistSettingsEditorFacade = (): [
     useObservableState(query.selectActive().pipe(whenDefined()), {} as P9UserDecklist),
     useCallback(
       (patch: Partial<P9UserDecklist>) => {
-        store.updateActive({ ...patch, modifiedOn: DateTime.local().toSeconds() });
+        store.updateActive({ ...patch, modifiedOn: UTC_NOW() });
       },
       [store],
     ),
