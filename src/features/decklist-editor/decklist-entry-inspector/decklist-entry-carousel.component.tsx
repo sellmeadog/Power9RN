@@ -5,8 +5,8 @@ import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { ID } from '@datorama/akita';
 
 import { usePower9Theme } from '../../../core/theme';
-import { P9MagicCardImage } from '../../magic-cards';
 import { P9DecklistEditorEntry } from '../decklist-editor.model';
+import { P9DecklistEntryCarouselItem } from './decklist-entry-carousel-item.component';
 
 type CarouselRenderItem<TData> = (item: { item: TData; index: number }) => ReactElement;
 
@@ -56,10 +56,10 @@ export const P9DecklistEntryCarousel: FunctionComponent<P9DecklistEntryCarouselP
 
   const renderItem: CarouselRenderItem<P9DecklistEditorEntry> = useCallback(
     ({ item: { magicCard } }) => (
-      <P9MagicCardImage
-        containerStyle={[P9DecklistEntryEditorCarouselTheme.magicCardItemContainer, magicCardItemContainerStyle]}
-        imageContainerStyle={[P9DecklistEntryEditorCarouselTheme.magicCardImageContainer, magicCardImageContainerStyle]}
-        sourceUri={magicCard?.card_faces[0].image_uris?.normal ?? undefined}
+      <P9DecklistEntryCarouselItem
+        magicCard={magicCard}
+        magicCardImageContainerStyle={magicCardImageContainerStyle}
+        magicCardItemContainerStyle={magicCardItemContainerStyle}
       />
     ),
     [magicCardImageContainerStyle, magicCardItemContainerStyle],
@@ -97,7 +97,7 @@ export const P9DecklistEntryCarousel: FunctionComponent<P9DecklistEntryCarouselP
   );
 };
 
-const P9DecklistEntryEditorCarouselTheme = StyleSheet.create({
+export const P9DecklistEntryEditorCarouselTheme = StyleSheet.create({
   container: {
     alignItems: 'center',
     flexShrink: 1,

@@ -1,5 +1,5 @@
 import { useObservableState } from 'observable-hooks';
-import React, { forwardRef, useCallback, useMemo } from 'react';
+import React, { forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { ID } from '@datorama/akita';
@@ -53,14 +53,25 @@ export const P9DecklistEntryInspector = forwardRef<BottomSheetModal, P9DecklistE
       [activeEntry, updateCount],
     );
 
-    const handlePrintingChange = useCallback(
-      (cardId: string) => {
-        if (activeEntry) {
-          updatePrinting(activeEntry.id, cardId);
+    const [printing, handlePrintingChange] = useState(activeEntry?.magicCard);
+
+    useEffect(() => {
+      if (!activeEntry?.magicCard) {
+        return;
+      }
+
+      if (!printing) {
+        return;
+      }
+
+      if (activeEntry.magicCard.oracle_id === printing.oracle_id) {
+        if (activeEntry.magicCard._id === printing._id) {
+          return;
         }
-      },
-      [activeEntry, updatePrinting],
-    );
+
+        updatePrinting(activeEntry.id, printing._id);
+      }
+    }, [activeEntry, printing, updatePrinting]);
 
     return (
       <BottomSheetModal

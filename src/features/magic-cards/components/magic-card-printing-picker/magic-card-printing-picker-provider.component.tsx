@@ -1,11 +1,12 @@
-import { pluckFirst, useObservable, useObservableState, useSubscription } from 'observable-hooks';
+import { pluckFirst, useObservable, useObservableState } from 'observable-hooks';
 import React, { createContext, FunctionComponent, useCallback, useContext, useRef } from 'react';
 import { merge } from 'rxjs';
-import { distinctUntilChanged, filter, map, pluck, switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, distinctUntilKeyChanged, filter, map, switchMap, tap } from 'rxjs/operators';
 
 import BottomSheet from '@gorhom/bottom-sheet';
 
 import { useDependency } from '../../../../core/di';
+import { whenDefined } from '../../../../core/operators';
 import { P9MagicCard } from '../../../../core/public';
 import { P9PublicPartitionQuery } from '../../../../core/public/state/public-partition.query';
 
@@ -20,7 +21,7 @@ const P9MagicCardPrintingPickerContext = createContext<P9MagicCardPrintingPicker
 
 export interface P9MagicCardPrintingPickerProviderProps {
   magicCard?: P9MagicCard;
-  onPrintingChange?: (cardId: string) => void;
+  onPrintingChange?: (printing: P9MagicCard) => void;
 }
 
 export const P9MagicCardPrintingPickerProvider: FunctionComponent<P9MagicCardPrintingPickerProviderProps> = ({
@@ -31,19 +32,23 @@ export const P9MagicCardPrintingPickerProvider: FunctionComponent<P9MagicCardPri
   const ref = useRef<BottomSheet>(null);
   const query = useDependency(P9PublicPartitionQuery);
 
-  const magicCard$ = useObservable((input$) => input$.pipe(pluckFirst), [magicCard]);
+  const magicCard$ = useObservable(
+    (input$) =>
+      input$.pipe(
+        map(([input]) => input),
+        whenDefined(),
+      ),
+    [magicCard],
+  );
 
   const [printing, setPrinting] = useObservableState<P9MagicCard | undefined, string>(
-    (id$) => merge(magicCard$, id$.pipe(map((id) => query.findMagicCard(id) as P9MagicCard))),
+    (id$) =>
+      merge(magicCard$, id$.pipe(map((id) => query.findMagicCard(id) as P9MagicCard))).pipe(
+        distinctUntilKeyChanged('_id'),
+        tap((value) => onPrintingChange?.(value)),
+      ),
     magicCard,
   );
-
-  const printing$ = useObservable(
-    (input$) => input$.pipe(pluckFirst, filter(Boolean), pluck('_id'), distinctUntilChanged()),
-    [printing],
-  );
-
-  useSubscription(printing$, onPrintingChange);
 
   const printings = useObservableState(
     useObservable(
