@@ -51,6 +51,7 @@
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "3.6.0",
     "react-native-section-list-get-item-layout": "2.2.3",
+    "react-native-skeleton-placeholder": "^5.0.0",
     "react-native-snap-carousel": "3.9.1",
     "react-native-status-bar-height": "2.6.0",
     "react-native-svg": "12.1.1",
