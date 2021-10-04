@@ -10,7 +10,7 @@ export interface P9DeveloperNavigatorProps {}
 
 export const P9DeveloperNavigator: FunctionComponent<P9DeveloperNavigatorProps> = () => {
   return (
-    <Navigator headerMode={'none'}>
+    <Navigator screenOptions={{ headerShown: false }}>
       <Screen name={'P9:Drawer:Developer:Home'} component={P9DeveloperScreen} />
     </Navigator>
   );

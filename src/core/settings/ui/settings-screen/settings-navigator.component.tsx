@@ -13,7 +13,7 @@ export const P9SettingsNavigator: FunctionComponent<P9SettingsNavigatorProps> = 
   const [{ colors }] = usePower9Theme();
 
   return (
-    <Navigator headerMode={'none'} screenOptions={{ cardStyle: { backgroundColor: colors?.grey0 } }}>
+    <Navigator screenOptions={{ cardStyle: { backgroundColor: colors?.grey0 }, headerShown: false }}>
       <Screen name={'P9:Drawer:Settings:Home'} component={P9SettingsScreen} />
     </Navigator>
   );

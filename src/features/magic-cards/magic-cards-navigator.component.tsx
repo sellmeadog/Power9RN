@@ -16,7 +16,7 @@ export interface P9MagicCardFeatureNavigatorProps {}
 
 export const P9MagicCardFeatureNavigator: FunctionComponent<P9MagicCardFeatureNavigatorProps> = () => {
   return (
-    <Navigator headerMode={'none'}>
+    <Navigator screenOptions={{ headerShown: false }}>
       <Screen name={'P9:Modal:MagicCardFeature:Home'} component={P9MagicCardGalleryScreen} />
       <Screen name={'P9:Modal:MagicCardFeature:Detail'} component={P9MagicCardDetailScreen} />
     </Navigator>

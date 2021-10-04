@@ -13,7 +13,7 @@ const { Navigator, Screen } = createStackNavigator<P9DecklistEditorNavigatorPara
 
 export const P9DecklistEditorNavigator: FunctionComponent = () => {
   return (
-    <Navigator mode={'modal'} headerMode={'none'}>
+    <Navigator screenOptions={{ headerShown: false, presentation: 'modal' }}>
       <Screen name={'P9:Modal:DecklistExplorer:Editor:Home'} component={P9DecklistEditorHomeScreen} />
     </Navigator>
   );

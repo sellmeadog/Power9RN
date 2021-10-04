@@ -23,7 +23,7 @@ export interface P9MagicCardFilterNavigatorProps {}
 
 export const P9MagicCardFilterNavigator: FunctionComponent<P9MagicCardFilterNavigatorProps> = () => {
   return (
-    <Navigator headerMode={'none'}>
+    <Navigator screenOptions={{ headerShown: false }}>
       <Screen name={'P9:Modal:MagicCardFilter:Home'} component={P9MagicCardFilterScreen} />
       <Screen name={'P9:Modal:MagicCardFilter:PredicatePickerTable'} component={P9PredicatePickerTableScreen} />
     </Navigator>

@@ -10,7 +10,7 @@ export interface P9AuthorizationNavigatorProps {}
 
 export const P9AuthorizationNavigator: FunctionComponent<P9AuthorizationNavigatorProps> = () => {
   return (
-    <Navigator headerMode={'none'}>
+    <Navigator screenOptions={{ headerShown: false }}>
       <Screen name={'P9:Authorization:Login'} component={P9LoginScreen} />
     </Navigator>
   );

@@ -46,7 +46,7 @@ export const P9NavigationContainer: FunctionComponent<P9NavigationContainerProps
 
   return (
     <NavigationContainer theme={theme}>
-      <Navigator headerMode={'none'} mode={'modal'}>
+      <Navigator screenOptions={{ headerShown: false, presentation: 'modal' }}>
         <Screen name={'P9:Drawer'} component={P9DrawerNavigator} />
         <Screen name={'P9:Authorization'} component={P9AuthorizationNavigator} />
         <Screen name={'P9:MagicCardFilter'} component={P9MagicCardFilterNavigator} />
