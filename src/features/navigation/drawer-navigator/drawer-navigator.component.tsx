@@ -17,8 +17,8 @@ export interface P9DrawerNavigatorProps {}
 export const P9DrawerNavigator: FunctionComponent<P9DrawerNavigatorProps> = () => {
   return (
     <Navigator
+      screenOptions={{ headerShown: false, drawerLabelStyle: { marginLeft: -20 } }}
       drawerContent={(props) => <P9DrawerContent {...props} />}
-      drawerContentOptions={{ labelStyle: { marginLeft: -20 } }}
     >
       <Screen
         name={'P9:Drawer:Home'}
