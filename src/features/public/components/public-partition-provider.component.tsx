@@ -6,6 +6,7 @@ import { useAuthorizedUser } from '../../../core/authorization';
 import { P9UserDataPartitionService } from '../../../core/data-user/state/user-data-partition.service';
 import { useDependency } from '../../../core/di';
 import { P9MagicCardObject } from '../../../core/public';
+import { usePublicPartitionStatus } from '../../../core/public/state/public-partition.query';
 import { P9PublicPartitionService } from '../../../core/public/state/public-partition.service';
 import { P9MagicCardGalleryQuery } from '../../magic-cards/state/magic-card.query';
 import { P9MagicCardGalleryStateTuple, P9MagicCardGalleryStore } from '../../magic-cards/state/magic-card.store';
@@ -36,6 +37,8 @@ export const P9PartitionProvider: FunctionComponent<P9PartitionProviderProps> = 
       userDataService.close();
     };
   }, [publicDataService, user, userDataService]);
+
+  usePublicPartitionStatus();
 
   const state = useMemo(() => ({ magicCardGallery: galleryRef.current }), []);
 

@@ -89,4 +89,12 @@ export class P9UserDataPartitionService {
       this.#partition?.delete(this.#partition.objectForPrimaryKey(name, id));
     });
   };
+
+  pauseSync() {
+    this.#partition?.syncSession?.pause();
+  }
+
+  resumeSync() {
+    this.#partition?.syncSession?.resume();
+  }
 }

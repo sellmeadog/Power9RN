@@ -1,4 +1,5 @@
 import { useObservable, useObservableState } from 'observable-hooks';
+import { useEffect } from 'react';
 import { CollectionChangeCallback, ConnectionNotificationCallback, ProgressNotificationCallback, Results } from 'realm';
 import { combineLatest, MonoTypeOperatorFunction, Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -6,8 +7,11 @@ import { singleton } from 'tsyringe';
 
 import { Query } from '@datorama/akita';
 
+import { P9UserDataPartitionService } from '../../data-user/state/user-data-partition.service';
+import { P9AppState } from '../../device/app-state';
 import { useDependency } from '../../di';
 import { P9MagicCard, P9MagicCardSchema } from '../schema/magic-card';
+import { P9PublicPartitionService } from './public-partition.service';
 import { P9PublicPartitionState, P9PublicPartitionStore } from './public-partition.store';
 
 @singleton()
@@ -18,7 +22,10 @@ export class P9PublicPartitionQuery extends Query<P9PublicPartitionState> {
     switchMap(
       (partition) =>
         new Observable<'connected' | 'connecting' | 'disconnected'>((subscriber) => {
-          const connectionCallback: ConnectionNotificationCallback = (status) => subscriber.next(status);
+          const connectionCallback: ConnectionNotificationCallback = (status) => {
+            console.log('PUBLIC partition sync session is', status);
+            subscriber.next(status);
+          };
 
           subscriber.next('disconnected');
           partition?.syncSession?.addConnectionNotification(connectionCallback);
@@ -119,4 +126,26 @@ export const usePublicPartitionMetadata = () => {
     downloadProgress: 0,
     isEmpty: true,
   });
+};
+
+export const usePublicPartitionStatus = () => {
+  const appState = useDependency(P9AppState);
+  const publicParition = useDependency(P9PublicPartitionService);
+  const userDataPartition = useDependency(P9UserDataPartitionService);
+
+  useEffect(() => {
+    const subscription = appState.active$.subscribe((active) => {
+      if (active) {
+        publicParition.resumeSync();
+        userDataPartition.resumeSync();
+      } else {
+        publicParition.pauseSync();
+        userDataPartition.pauseSync();
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [appState, publicParition, userDataPartition]);
 };

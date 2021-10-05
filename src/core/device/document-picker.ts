@@ -37,7 +37,7 @@ export const useDocumentPicker = (
       callback?.(documentPickerResponse);
       return true;
     } catch (error) {
-      if (!DocumentPicker.isCancel(error)) {
+      if (!DocumentPicker.isCancel(error as { code?: string })) {
         Alert.alert('Document Error', 'An error occurred in the document picker. Please try again.');
       }
       return false;

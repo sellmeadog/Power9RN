@@ -1,4 +1,4 @@
-import { CollectionChangeCallback, Results } from 'realm';
+import { CollectionChangeCallback, ConnectionNotificationCallback, Results } from 'realm';
 import { MonoTypeOperatorFunction, Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { injectable } from 'tsyringe';
@@ -11,6 +11,25 @@ import { P9UserDataPartitionState, P9UserDataPartitionStore } from './user-data-
 export class P9UserDataPartitionQuery extends Query<P9UserDataPartitionState> {
   partition$ = this.select(({ partition }) => partition);
   decklists$ = this.select(({ decklists }) => decklists).pipe(watchCollection());
+
+  connectionStatus$ = this.partition$.pipe(
+    switchMap(
+      (partition) =>
+        new Observable<'connected' | 'connecting' | 'disconnected'>((subscriber) => {
+          const connectionCallback: ConnectionNotificationCallback = (status) => {
+            console.log('USER partition sync session is', status);
+            subscriber.next(status);
+          };
+
+          subscriber.next('disconnected');
+          partition?.syncSession?.addConnectionNotification(connectionCallback);
+
+          return () => {
+            partition?.syncSession?.removeConnectionNotification(connectionCallback);
+          };
+        }),
+    ),
+  );
 
   constructor(store: P9UserDataPartitionStore) {
     super(store);

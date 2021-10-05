@@ -107,6 +107,14 @@ export class P9PublicPartitionService {
 
     return results?.[0];
   };
+
+  pauseSync() {
+    this.#partition?.syncSession?.pause();
+  }
+
+  resumeSync() {
+    this.#partition?.syncSession?.resume();
+  }
 }
 
 export type P9PartitionServiceTuple = [query: P9PublicPartitionQuery, service: P9PublicPartitionService];
