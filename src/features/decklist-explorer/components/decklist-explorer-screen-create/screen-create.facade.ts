@@ -68,6 +68,7 @@ export function useCreateDecklistFacade(): [
 
       if (decklist) {
         service.activateDecklist(decklist._id);
+        // @ts-ignore TODO: Update navigation type definitions per v6: https://reactnavigation.org/docs/upgrading-from-5.x#stricter-types-for-typescript
         navigate('P9:Modal:DecklistExplorer:Editor');
       }
     } catch (reason) {

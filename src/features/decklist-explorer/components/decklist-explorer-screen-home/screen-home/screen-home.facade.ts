@@ -22,6 +22,7 @@ export function useHomeScreenFacade(): [
     const importDecklist = async () => {
       if (documentInfo) {
         await service.importCreateDecklistUI(documentInfo);
+        // @ts-ignore TODO: Update navigation type defintions per v6: https://reactnavigation.org/docs/upgrading-from-5.x#stricter-types-for-typescript
         navigate('P9:Modal:CreateDecklist');
       }
     };
@@ -34,6 +35,7 @@ export function useHomeScreenFacade(): [
     useCallback(
       (id: ID) => {
         service.activateDecklist(id);
+        // @ts-ignore TODO: Update navigation type defintions per v6: https://reactnavigation.org/docs/upgrading-from-5.x#stricter-types-for-typescript
         navigate('P9:Modal:DecklistExplorer:Editor');
       },
       [navigate, service],

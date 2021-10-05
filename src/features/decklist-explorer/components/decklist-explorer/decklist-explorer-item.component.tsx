@@ -34,7 +34,7 @@ export const P9DecklistExplorerItem: FunctionComponent<P9DecklistExplorerItemPro
       style={[P9DecklistExplorerTheme.itemContainer]}
     >
       <ImageBackground
-        source={{ uri: item.metadata?.defaultCardArtworkUri }}
+        source={{ uri: item.metadata?.defaultCardArtworkUri ?? '' }}
         style={P9DecklistExplorerTheme.itemBackground}
       >
         <P9RowView style={P9DecklistExplorerTheme.itemColorIdentityContainer}>

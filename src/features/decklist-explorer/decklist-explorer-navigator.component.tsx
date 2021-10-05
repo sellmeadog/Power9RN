@@ -8,9 +8,7 @@ import { P9DecklistExplorerHomeScreen } from './components/decklist-explorer-scr
 const { Navigator, Screen } = createStackNavigator<P9DecklistExplorerNavigatorParamList>();
 
 export type P9DecklistExplorerNavigatorParamList = {
-  'P9:Modal:DecklistExplorer:Home': {
-    /*createDecklistInfo?: P9CreateDecklistInfo*/
-  };
+  'P9:Modal:DecklistExplorer:Home': undefined;
   'P9:Modal:DecklistExplorer:Editor': { decklistId: string };
 };
 

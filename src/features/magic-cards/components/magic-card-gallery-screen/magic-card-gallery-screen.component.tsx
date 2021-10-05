@@ -14,6 +14,7 @@ export const P9MagicCardGalleryScreen: FunctionComponent<P9MagicCardGalleryScree
   const [{ visibleResults, keywordExpression }, handleKeywordExpressionChange] = useMagicCardGalleryFacade();
   const { navigate } = useNavigation();
 
+  // @ts-ignore TODO: update navigation type defintions per v6: https://reactnavigation.org/docs/upgrading-from-5.x#stricter-types-for-typescript
   const handlePress = useCallback((_, index) => navigate('P9:Modal:MagicCardFeature:Detail', { index }), [navigate]);
 
   return (

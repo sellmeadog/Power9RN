@@ -165,6 +165,6 @@ export function useDecklistEditorFacade(): [
       (magicCard: P9MagicCard, entryType: P9DecklistEntryType) => service.upsertEntry(magicCard, entryType),
       [service],
     ),
-    useCallback(() => navigate('P9:Modal:DecklistExplorer:Editor:Settings'), [navigate]),
+    useCallback(() => navigate({ key: 'P9:Modal:DecklistExplorer:Editor:Settings' }), [navigate]),
   ];
 }

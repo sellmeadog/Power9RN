@@ -28,6 +28,7 @@ export const P9DecklistExplorerActionButton: FunctionComponent<P9DecklistExplore
     () => decklistCount < 5,
     () => {
       service.initCreateDecklistUI();
+      // @ts-ignore TODO: Update navigation type definitions per v6: https://reactnavigation.org/docs/upgrading-from-5.x#stricter-types-for-typescript
       navigate('P9:Modal:CreateDecklist');
     },
   );
@@ -47,13 +48,13 @@ export const P9DecklistExplorerActionButton: FunctionComponent<P9DecklistExplore
         buttonStyle={[P9DecklistCollectionScreenActionButtonStyle.actionButtonSecondary, buttonTheme]}
         containerStyle={[P9DecklistCollectionScreenActionButtonStyle.buttonContainer]}
         icon={{ color: colors?.white, name: 'file-download', size: 22 }}
-        onPress={canImportDecklist}
+        onPress={canImportDecklist as () => void}
       />
       <Button
         containerStyle={[P9DecklistCollectionScreenActionButtonStyle.buttonContainer]}
         buttonStyle={[P9DecklistCollectionScreenActionButtonStyle.actionButtonPrimary, buttonTheme]}
         icon={{ color: colors?.white, name: 'add', size: 28 }}
-        onPress={canCreateDecklist}
+        onPress={canCreateDecklist as () => void}
       />
     </View>
   );
