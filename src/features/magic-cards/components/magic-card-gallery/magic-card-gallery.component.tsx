@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useMemo, useRef } from 'react';
 import { Dimensions, Platform, ScrollViewProps, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Results } from 'realm';
@@ -12,13 +12,16 @@ const { width: WIDTH } = Dimensions.get('screen');
 
 export interface P9MagicCardGalleryProps {
   currentIndex?: number;
-  data: Results<P9MagicCardObject> | undefined;
+  data?: Results<P9MagicCardObject> | undefined;
+  dataProvider: ResultsDataProvider<P9MagicCardObject>;
   onPress?(magicCard: P9MagicCard, index: number): void;
 }
 
-export const P9MagicCardGallery: FunctionComponent<P9MagicCardGalleryProps> = ({ currentIndex, data, onPress }) => {
-  const [dataProvider, setDataProvider] = useState(() => new ResultsDataProvider<P9MagicCardObject>(data || []));
-
+export const P9MagicCardGallery: FunctionComponent<P9MagicCardGalleryProps> = ({
+  currentIndex,
+  dataProvider,
+  onPress,
+}) => {
   const layoutProvider = useMemo(
     () =>
       new LayoutProvider(
@@ -30,10 +33,6 @@ export const P9MagicCardGallery: FunctionComponent<P9MagicCardGalleryProps> = ({
       ),
     [],
   );
-
-  useEffect(() => {
-    setDataProvider((d) => d.cloneWithRows((data || []) as unknown as Array<P9MagicCard & Realm.Object>));
-  }, [data]);
 
   const renderItem = useCallback(
     (_: string | number, item: P9MagicCard, index: number) => (

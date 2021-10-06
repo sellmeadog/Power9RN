@@ -1,3 +1,5 @@
+import { useObservable, useObservableState } from 'observable-hooks';
+import { useCallback } from 'react';
 import { Results } from 'realm';
 import { combineLatest } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
@@ -5,10 +7,14 @@ import { singleton } from 'tsyringe';
 
 import { Query } from '@datorama/akita';
 
-import { P9MagicCard } from '../../../core/public';
+import { useDependency } from '../../../core/di';
+import { P9MagicCard, P9MagicCardObject } from '../../../core/public';
 import { P9PublicPartitionQuery } from '../../../core/public/state/public-partition.query';
+import { ResultsDataProvider } from '../../../core/realm/results-data-provider';
 import { P9MagicCardFilterQuery } from '../../magic-card-filter';
 import { P9MagicCardGalleryState, P9MagicCardGalleryStore } from './magic-card.store';
+
+const dataProvider = new ResultsDataProvider<P9MagicCardObject>([]);
 
 @singleton()
 export class P9MagicCardGalleryQuery extends Query<P9MagicCardGalleryState> {
@@ -30,6 +36,10 @@ export class P9MagicCardGalleryQuery extends Query<P9MagicCardGalleryState> {
         .replace(/(\sAND)$/, ''),
     ]),
     map(([results, predicate]) => (predicate ? results?.filtered(predicate) : results?.filtered('games.@count > 0'))),
+  );
+
+  dataProvider$ = this.visibleResults$.pipe(
+    map((data) => dataProvider.cloneWithRows(data as unknown as P9MagicCardObject[])),
   );
 
   constructor(
@@ -69,3 +79,36 @@ const cleanExpression = (value?: string): string[] => {
       .filter(Boolean) ?? []
   );
 };
+
+export interface P9MagicCardGalleryFacade {
+  dataProvider: ResultsDataProvider<P9MagicCardObject>;
+  keywordExpression?: string;
+  visibleResults?: Results<P9MagicCardObject>;
+}
+
+export function useMagicCardGalleryFacade(): [
+  state: P9MagicCardGalleryFacade,
+  setKeywordExpression: (expression: string) => void,
+] {
+  const store = useDependency(P9MagicCardGalleryStore);
+  const query = useDependency(P9MagicCardGalleryQuery);
+
+  const setKeywordExpression = useCallback(
+    (expression: string) => store.update((state) => ({ ...state, keywordExpression: expression })),
+    [store],
+  );
+
+  return [
+    useObservableState(
+      useObservable(() =>
+        combineLatest({
+          dataProvider: query.dataProvider$,
+          keywordExpression: query.keywordExpression$,
+          visibleResults: query.visibleResults$,
+        }),
+      ),
+      { dataProvider } as P9MagicCardGalleryFacade,
+    ),
+    setKeywordExpression,
+  ];
+}

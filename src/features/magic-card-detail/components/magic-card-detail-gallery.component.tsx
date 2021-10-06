@@ -1,19 +1,23 @@
-import React, { FunctionComponent, useEffect, useMemo, useState } from 'react';
-import { Platform, ScrollViewProps, useWindowDimensions } from 'react-native';
+import React, { FunctionComponent } from 'react';
+// import { Platform, ScrollViewProps, useWindowDimensions } from 'react-native';
 import { Results } from 'realm';
-import { DataProvider, LayoutProvider, RecyclerListView } from 'recyclerlistview';
 
-import { P9MagicCard } from '../../../core/public';
-import { P9MagicCardDetailGalleryItem } from './magic-card-detail-gallery-item.component';
+// import { LayoutProvider, RecyclerListView } from 'recyclerlistview';
+import { P9MagicCardObject } from '../../../core/public';
+import { ResultsDataProvider } from '../../../core/realm/results-data-provider';
+import { P9MagicCardDetailFlatList } from './magic-card-detail-flat-list.component';
 
-const KEYBOARD_DISMISS_MODE: 'on-drag' | 'interactive' | 'none' | undefined = Platform.select({
-  android: 'on-drag',
-  ios: 'interactive',
-});
+// import { P9MagicCardDetailGalleryItem } from './magic-card-detail-gallery-item.component';
+
+// const KEYBOARD_DISMISS_MODE: 'on-drag' | 'interactive' | 'none' | undefined = Platform.select({
+//   android: 'on-drag',
+//   ios: 'interactive',
+// });
 
 export interface P9MagicCardDetailGalleryProps {
   currentIndex?: number;
-  data?: Results<P9MagicCard>;
+  data?: Results<P9MagicCardObject>;
+  dataProvider?: ResultsDataProvider<P9MagicCardObject>;
   onCurrentIndexChange?(index: number): void;
 }
 
@@ -21,66 +25,57 @@ export const P9MagicCardDetailGallery: FunctionComponent<P9MagicCardDetailGaller
   currentIndex = 0,
   data,
 }) => {
-  const { height: HEIGHT, width: WIDTH } = useWindowDimensions();
+  // const { height: HEIGHT, width: WIDTH } = useWindowDimensions();
 
-  const [dataProvider, setDataProvider] = useState(
-    () => new DataProvider((x: P9MagicCard, y: P9MagicCard) => x._id !== y._id),
-  );
-
-  const layoutProvider = useMemo(
-    () =>
-      new LayoutProvider(
-        () => 0,
-        (_, dim) => {
-          dim.width = WIDTH;
-          dim.height = HEIGHT;
-        },
-      ),
-    [HEIGHT, WIDTH],
-  );
-
-  useEffect(() => {
-    if (data) {
-      setDataProvider((d) => d.cloneWithRows(data as unknown as any[]));
-    }
-  }, [data]);
+  // const layoutProvider = useMemo(
+  //   () =>
+  //     new LayoutProvider(
+  //       () => 0,
+  //       (_, dim) => {
+  //         dim.width = WIDTH;
+  //         dim.height = HEIGHT;
+  //       },
+  //     ),
+  //   [HEIGHT, WIDTH],
+  // );
 
   // const handleVisibleIndicesChanged: TOnItemStatusChanged = useCallback((_, [index]) => onCurrentIndexChange?.(index), [
   //   onCurrentIndexChange,
   // ]);
 
-  const scrollViewProps: ScrollViewProps = useMemo(
-    () => ({
-      decelerationRate: 'fast',
-      disableIntervalMomentum: true,
-      keyboardDismissMode: KEYBOARD_DISMISS_MODE,
-      keyboardShouldPersistTaps: 'handled',
-      showsHorizontalScrollIndicator: false,
-      snapToAlignment: 'center',
-      snapToInterval: WIDTH,
-    }),
-    [WIDTH],
-  );
+  // const scrollViewProps: ScrollViewProps = useMemo(
+  //   () => ({
+  //     decelerationRate: 'fast',
+  //     disableIntervalMomentum: true,
+  //     keyboardDismissMode: KEYBOARD_DISMISS_MODE,
+  //     keyboardShouldPersistTaps: 'handled',
+  //     showsHorizontalScrollIndicator: false,
+  //     snapToAlignment: 'center',
+  //     snapToInterval: WIDTH,
+  //   }),
+  //   [WIDTH],
+  // );
 
-  if (data?.length) {
-    return (
-      <RecyclerListView
-        dataProvider={dataProvider}
-        initialRenderIndex={currentIndex}
-        isHorizontal={true}
-        layoutProvider={layoutProvider}
-        rowRenderer={renderItem}
-        scrollViewProps={scrollViewProps}
-        disableRecycling={true}
-        style={{ width: WIDTH, height: HEIGHT }}
-        // onVisibleIndicesChanged={handleVisibleIndicesChanged}
-      />
-    );
-  }
+  // if (dataProvider.getSize()) {
+  //   return (
+  //     <RecyclerListView
+  //       dataProvider={dataProvider}
+  //       initialRenderIndex={currentIndex}
+  //       isHorizontal={true}
+  //       layoutProvider={layoutProvider}
+  //       rowRenderer={renderItem}
+  //       scrollViewProps={scrollViewProps}
+  //       disableRecycling={true}
+  //       style={{ width: WIDTH, height: HEIGHT }}
+  //       // onVisibleIndicesChanged={handleVisibleIndicesChanged}
+  //     />
+  //   );
+  // }
 
-  return null;
+  // return null;
+  return <P9MagicCardDetailFlatList current={currentIndex} data={data} />;
 };
 
-function renderItem(_: string | number, item: P9MagicCard) {
-  return <P9MagicCardDetailGalleryItem magicCard={item} />;
-}
+// function renderItem(_: string | number, item: P9MagicCard) {
+//   return <P9MagicCardDetailGalleryItem magicCard={item} />;
+// }

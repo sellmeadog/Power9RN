@@ -10,3 +10,5 @@ export * from './components/magic-card-printing-picker/magic-card-printing-picke
 export * from './components/magic-card-search-bar/magic-card-search-bar.component';
 export * from './components/magic-card-text/magic-card-text';
 export * from './magic-cards-navigator.component';
+export * from './state/magic-card.query';
+export * from './state/magic-card.store';
