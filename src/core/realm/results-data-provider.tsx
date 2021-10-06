@@ -21,7 +21,7 @@ export class ResultsDataProvider<T extends P9DataObject = P9DataObject> extends 
   newInstance = () => new ResultsDataProvider<T>(this.results);
 
   cloneWithRows = (data: any[]) => {
-    return new ResultsDataProvider(data);
+    return new ResultsDataProvider<T>(data);
   };
 }
 
