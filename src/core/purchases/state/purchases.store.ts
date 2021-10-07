@@ -1,7 +1,7 @@
 import { produce } from 'immer';
 import { PurchaserInfo, PurchasesPackage } from 'react-native-purchases';
 import { Observer } from 'rxjs';
-import { singleton } from 'tsyringe';
+import { Lifecycle, scoped } from 'tsyringe';
 
 import { Store } from '@datorama/akita';
 
@@ -10,7 +10,7 @@ export interface P9PurchasesState extends SimpleObject {
   packages: PurchasesPackage[];
 }
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class P9PurchasesStore extends Store<P9PurchasesState> implements Observer<P9PurchasesState> {
   constructor() {
     super({ packages: [] }, { name: 'purchases', producerFn: produce });

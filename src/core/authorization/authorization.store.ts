@@ -1,7 +1,7 @@
 import { produce } from 'immer';
 import { User } from 'realm';
 import { Observer } from 'rxjs';
-import { singleton } from 'tsyringe';
+import { Lifecycle, scoped } from 'tsyringe';
 
 import { Store } from '@datorama/akita';
 
@@ -16,7 +16,7 @@ export interface P9AuthorizationState extends Record<string, unknown> {
   profile?: SimpleObject;
 }
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class P9AuthorizationStore
   extends Store<P9AuthorizationState>
   implements Observer<Partial<P9AuthorizationState>>

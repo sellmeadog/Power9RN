@@ -1,6 +1,6 @@
 import Realm, { Results } from 'realm';
 import { Observer } from 'rxjs';
-import { singleton } from 'tsyringe';
+import { Lifecycle, scoped } from 'tsyringe';
 
 import { Store } from '@datorama/akita';
 
@@ -11,7 +11,7 @@ export interface P9UserDataPartitionState {
   decklists?: Results<P9UserDecklist>;
 }
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class P9UserDataPartitionStore
   extends Store<P9UserDataPartitionState>
   implements Observer<Partial<P9UserDataPartitionState>>

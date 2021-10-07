@@ -1,8 +1,8 @@
 import { useObservableState } from 'observable-hooks';
 import { useCallback, useEffect } from 'react';
 import { Subscription } from 'rxjs';
-import { debounceTime, distinctUntilKeyChanged, skip, tap } from 'rxjs/operators';
-import { singleton } from 'tsyringe';
+import { debounceTime, distinctUntilKeyChanged, skip } from 'rxjs/operators';
+import { Lifecycle, scoped } from 'tsyringe';
 
 import { arrayUpdate, arrayUpsert } from '@datorama/akita';
 import { useNavigation } from '@react-navigation/core';
@@ -18,7 +18,7 @@ import { P9DecklistEditorUIState } from '../../decklist-explorer/state/decklist-
 import { P9DecklistEditorState } from '../decklist-editor.model';
 import { P9DecklistEditorQuery } from './decklist-editor.query';
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class P9DecklistEditorService {
   #subscription: Subscription | undefined;
 
@@ -53,7 +53,7 @@ export class P9DecklistEditorService {
           skip(1),
           debounceTime(500),
           distinctUntilKeyChanged('modifiedOn'),
-          tap(({ name, modifiedOn }) => console.log(`Autosaving ${name} at ${modifiedOn}`)),
+          // tap(({ name, modifiedOn }) => console.log(`Autosaving ${name} at ${modifiedOn}`)),
         )
         .subscribe((entity) => this.dataService.createObject(P9UserDecklistSchema, entity));
     }

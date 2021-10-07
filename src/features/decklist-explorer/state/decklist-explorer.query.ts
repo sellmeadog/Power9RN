@@ -1,13 +1,13 @@
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { singleton } from 'tsyringe';
+import { Lifecycle, scoped } from 'tsyringe';
 
 import { Order, QueryEntity } from '@datorama/akita';
 
 import { P9_GAME_FORMATS } from './decklist-feature.model';
 import { P9UserDecklistFeatureState, P9UserDecklistFeatureStore } from './decklist-feature.store';
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class P9DecklistExplorerQuery extends QueryEntity<P9UserDecklistFeatureState> {
   decklistCount$ = this.selectAll().pipe(map(({ length }) => length));
 

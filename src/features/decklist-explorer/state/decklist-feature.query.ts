@@ -1,12 +1,12 @@
 import { combineLatest } from 'rxjs';
-import { singleton } from 'tsyringe';
+import { Lifecycle, scoped } from 'tsyringe';
 
 import { QueryEntity } from '@datorama/akita';
 
 import { useDependency } from '../../../core/di';
 import { P9UserDecklistFeatureState, P9UserDecklistFeatureStore } from './decklist-feature.store';
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class P9UserDecklistFeatureQuery extends QueryEntity<P9UserDecklistFeatureState> {
   decklists$ = this.selectAll({ sortBy: (entity) => entity.modifiedOn });
   homeScreenState$ = combineLatest({ data: this.decklists$ });

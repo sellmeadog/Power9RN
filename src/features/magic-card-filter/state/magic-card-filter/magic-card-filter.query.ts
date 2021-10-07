@@ -1,6 +1,6 @@
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { singleton } from 'tsyringe';
+import { Lifecycle, scoped } from 'tsyringe';
 
 import { QueryEntity } from '@datorama/akita';
 
@@ -23,7 +23,7 @@ const MAGIC_CARD_FILTER_ATTRIBUTES = [
   'rarity',
 ];
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class P9MagicCardFilterQuery extends QueryEntity<P9MagicCardFilterState> {
   canReset$: Observable<boolean> = this.selectAll({ filterBy: ({ predicates }) => Boolean(predicates.length) }).pipe(
     map(({ length }) => Boolean(length)),

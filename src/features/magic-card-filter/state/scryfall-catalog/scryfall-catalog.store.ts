@@ -1,5 +1,5 @@
 import { Observer } from 'rxjs';
-import { singleton } from 'tsyringe';
+import { Lifecycle, scoped } from 'tsyringe';
 
 import { EntityState, EntityStore } from '@datorama/akita';
 
@@ -10,7 +10,7 @@ export interface P9ScryfallCatalogState extends EntityState<P9ScryfallCatalog, s
   expression?: string;
 }
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class P9ScryfallCatalogStore
   extends EntityStore<P9ScryfallCatalogState>
   implements Observer<P9ScryfallCatalog[]>

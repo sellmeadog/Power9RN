@@ -1,7 +1,7 @@
 import { SectionListData } from 'react-native';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, map, switchMap } from 'rxjs/operators';
-import { singleton } from 'tsyringe';
+import { Lifecycle, scoped } from 'tsyringe';
 
 import { QueryEntity } from '@datorama/akita';
 
@@ -15,7 +15,7 @@ export interface P9DecklistEntryInspectorState {
   activeEntry?: P9DecklistEditorEntry;
 }
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class P9DecklistEditorQuery extends QueryEntity<P9UserDecklistFeatureState> {
   readonly activeEditorEntry$ = this.select(({ ui }) => ui.decklistEditorState?.activeEntryId).pipe(
     whenDefined(),

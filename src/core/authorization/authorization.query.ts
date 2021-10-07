@@ -1,11 +1,11 @@
 import { filter, map } from 'rxjs/operators';
-import { singleton } from 'tsyringe';
+import { Lifecycle, scoped } from 'tsyringe';
 
 import { Query } from '@datorama/akita';
 
 import { P9AuthorizationState, P9AuthorizationStore, P9User } from './authorization.store';
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class P9AuthorizationQuery extends Query<P9AuthorizationState> {
   authorization$ = this.select(({ authorization }) => authorization);
   user$ = this.select(({ user }) => user);

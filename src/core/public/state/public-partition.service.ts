@@ -1,5 +1,6 @@
-import Realm, { Results, User } from 'realm';
-import { singleton } from 'tsyringe';
+import Environment from 'react-native-config';
+import Realm, { App, Results, User } from 'realm';
+import { Lifecycle, scoped } from 'tsyringe';
 
 import { etl_scryfall } from '../../etl';
 import { P9MagicCard, P9MagicCardObject, P9MagicCardSchema } from '../schema/magic-card';
@@ -22,8 +23,9 @@ export const P9_PUBLIC_SCHEMA = [
   P9UserHandleSchema,
 ];
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class P9PublicPartitionService {
+  #config: Realm.Configuration | undefined;
   #partition: Realm | undefined;
   #magic_cards: Results<P9MagicCard & Realm.Object> | undefined;
 
@@ -31,31 +33,36 @@ export class P9PublicPartitionService {
 
   open = async (user: User) => {
     if (!this.#partition || this.#partition.isClosed) {
-      console.debug(`Opening PUBLIC partition for ${user.id}...`);
-
-      this.#partition = new Realm({
+      this.#config = {
         schema: P9_PUBLIC_SCHEMA,
         sync: {
           error: (_, reason) => {
-            console.log(reason);
+            if (this.#partition) {
+              if (reason.name === 'ClientReset') {
+                const partition = this.#partition;
+                this.close();
+
+                this._reset(partition);
+                this._open();
+              }
+            }
           },
           partitionValue: 'PUBLIC',
           user,
         },
-      });
+      };
+      // console.debug(`Opening PUBLIC partition for ${user.id}...`);
 
-      this.#magic_cards = this.#partition.objects<P9MagicCard>(P9MagicCardSchema.name).sorted([['name', false]]);
+      this._open();
 
-      this.store.next({ partition: this.#partition, magicCards: this.#magic_cards });
-
-      console.debug('PUBLIC partition opened.');
+      // console.debug('PUBLIC partition opened.');
     } else {
-      console.warn(`PUBLIC partition for ${user.id} is already open`);
+      // console.warn(`PUBLIC partition for ${user.id} is already open`);
     }
   };
 
   close = (): void => {
-    console.debug('Closing PUBLIC partition...');
+    // console.debug('Closing PUBLIC partition...');
     const partition = this.#partition;
 
     this.store.next({ partition: undefined, magicCards: undefined });
@@ -63,7 +70,7 @@ export class P9PublicPartitionService {
     this.#magic_cards = undefined;
 
     partition?.close();
-    console.debug('PUBLIC partition closed.');
+    // console.debug('PUBLIC partition closed.');
   };
 
   etl = () => {
@@ -72,9 +79,9 @@ export class P9PublicPartitionService {
         this.#partition?.beginTransaction();
         batch.forEach((entity) => this.#partition?.create(P9MagicCardSchema.name, entity, Realm.UpdateMode.All));
         this.#partition?.commitTransaction();
-        console.log(`Wrote ${batch.length} magic cards in batch`);
+        // console.log(`Wrote ${batch.length} magic cards in batch`);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         this.#partition?.cancelTransaction();
       }
     });
@@ -107,6 +114,18 @@ export class P9PublicPartitionService {
 
     return results?.[0];
   };
+
+  private _reset(partition: Realm) {
+    App.Sync.initiateClientReset(App.getApp(Environment.P9_MONGODB_REALM_APP_ID), partition.path);
+  }
+
+  private _open() {
+    if (this.#config) {
+      this.#partition = new Realm(this.#config);
+      this.#magic_cards = this.#partition.objects<P9MagicCard>(P9MagicCardSchema.name).sorted([['name', false]]);
+      this.store.next({ partition: this.#partition, magicCards: this.#magic_cards });
+    }
+  }
 
   pauseSync() {
     this.#partition?.syncSession?.pause();

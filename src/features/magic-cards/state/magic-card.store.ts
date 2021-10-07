@@ -1,5 +1,5 @@
 import { Observer } from 'rxjs';
-import { singleton } from 'tsyringe';
+import { Lifecycle, scoped } from 'tsyringe';
 
 import { Store } from '@datorama/akita';
 
@@ -9,7 +9,7 @@ export interface P9MagicCardGalleryState {
   keywordExpression?: string;
 }
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class P9MagicCardGalleryStore
   extends Store<P9MagicCardGalleryState>
   implements Observer<Partial<P9MagicCardGalleryState>>

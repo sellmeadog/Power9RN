@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { CollectionChangeCallback, ConnectionNotificationCallback, ProgressNotificationCallback, Results } from 'realm';
 import { combineLatest, MonoTypeOperatorFunction, Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { singleton } from 'tsyringe';
+import { Lifecycle, scoped } from 'tsyringe';
 
 import { Query } from '@datorama/akita';
 
@@ -14,7 +14,7 @@ import { P9MagicCard, P9MagicCardSchema } from '../schema/magic-card';
 import { P9PublicPartitionService } from './public-partition.service';
 import { P9PublicPartitionState, P9PublicPartitionStore } from './public-partition.store';
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class P9PublicPartitionQuery extends Query<P9PublicPartitionState> {
   partition$ = this.select(({ partition }) => partition);
 
@@ -23,7 +23,7 @@ export class P9PublicPartitionQuery extends Query<P9PublicPartitionState> {
       (partition) =>
         new Observable<'connected' | 'connecting' | 'disconnected'>((subscriber) => {
           const connectionCallback: ConnectionNotificationCallback = (status) => {
-            console.log('PUBLIC partition sync session is', status);
+            // console.log('PUBLIC partition sync session is', status);
             subscriber.next(status);
           };
 

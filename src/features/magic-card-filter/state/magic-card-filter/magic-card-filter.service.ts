@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { singleton } from 'tsyringe';
+import { Lifecycle, scoped } from 'tsyringe';
 import { v1 } from 'uuid';
 
 import { arrayAdd, arrayRemove, arrayToggle, arrayUpdate, ID } from '@datorama/akita';
@@ -16,7 +16,7 @@ import {
 import { P9MagicCardFilterQuery } from './magic-card-filter.query';
 import { P9MagicCardFilterStore } from './magic-card-filter.store';
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class P9MagicCardFilterService {
   constructor(private store: P9MagicCardFilterStore, private query: P9MagicCardFilterQuery) {}
 

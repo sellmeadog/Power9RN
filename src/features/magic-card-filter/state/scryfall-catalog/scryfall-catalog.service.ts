@@ -2,7 +2,7 @@ import { useObservableState } from 'observable-hooks';
 import { useCallback, useState } from 'react';
 import { defer, forkJoin, Observable } from 'rxjs';
 import { map, retry } from 'rxjs/operators';
-import { singleton } from 'tsyringe';
+import { Lifecycle, scoped } from 'tsyringe';
 
 import { useDependency } from '../../../../core/di';
 import { ScryfallCatalog } from '../../../../core/scryfall/model';
@@ -60,7 +60,7 @@ const catalogRequests$: Observable<P9ScryfallCatalog[]> = forkJoin(
   ),
 );
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class P9ScryfallCatalogService {
   constructor(private store: P9ScryfallCatalogStore) {}
 

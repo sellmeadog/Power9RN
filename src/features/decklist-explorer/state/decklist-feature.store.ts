@@ -1,5 +1,5 @@
 import { produce } from 'immer';
-import { singleton } from 'tsyringe';
+import { Lifecycle, scoped } from 'tsyringe';
 
 import { ActiveState, EntityState, EntityStore, ID } from '@datorama/akita';
 
@@ -14,7 +14,7 @@ export interface P9UserDecklistFeatureState extends EntityState<P9UserDecklist, 
   };
 }
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class P9UserDecklistFeatureStore extends EntityStore<P9UserDecklistFeatureState> {
   constructor() {
     super({ ui: {} }, { idKey: '_id', name: 'user-decklist-feature', producerFn: produce });

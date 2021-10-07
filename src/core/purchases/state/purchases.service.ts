@@ -18,7 +18,7 @@ import {
   OperatorFunction,
 } from 'rxjs';
 import { catchError, first, map, mapTo, mergeMap, mergeMapTo, retry, tap } from 'rxjs/operators';
-import { singleton } from 'tsyringe';
+import { Lifecycle, scoped } from 'tsyringe';
 
 import { P9AuthorizationQuery } from '../../authorization';
 import { P9User } from '../../authorization/authorization.store';
@@ -45,7 +45,7 @@ const packages$ = defer(() => Purchases.getOfferings()).pipe(
   catchError(() => of([] as PurchasesPackage[])),
 );
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class P9PurchasesService {
   constructor(
     private store: P9PurchasesStore,
@@ -60,8 +60,7 @@ export class P9PurchasesService {
       .pipe(
         retry(3),
         map(({ purchaserInfo }) => ({ purchaser: purchaserInfo })),
-        catchError((reason) => {
-          console.log(reason);
+        catchError(() => {
           return EMPTY;
         }),
       )
@@ -76,8 +75,7 @@ export class P9PurchasesService {
         retry(3),
         alertRestoreStatus(),
         map((purchaser) => ({ purchaser })),
-        catchError((reason) => {
-          console.log(reason);
+        catchError(() => {
           return EMPTY;
         }),
       )
@@ -133,8 +131,6 @@ function publishState(): OperatorFunction<P9User, P9PurchasesState> {
 
 function setupPurchases(): MonoTypeOperatorFunction<P9User> {
   return tap(({ id }) => {
-    console.log(`Setup RevenueCat SDK for user ${id}...`);
     Purchases.setup(Environment.P9_REVENUECAT_API_KEY, id);
-    console.log('RevenueCat SDK setup!');
   });
 }

@@ -1,6 +1,6 @@
 import { combineLatest, EMPTY, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-import { singleton } from 'tsyringe';
+import { Lifecycle, scoped } from 'tsyringe';
 
 import { QueryEntity } from '@datorama/akita';
 
@@ -8,7 +8,7 @@ import { whenDefined } from '../../../../core/operators';
 import { P9ScryfallCatalog } from './model';
 import { P9ScryfallCatalogState, P9ScryfallCatalogStore } from './scryfall-catalog.store';
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class P9ScryfallCatalogQuery extends QueryEntity<P9ScryfallCatalogState> {
   expression$ = this.select((state) => state.expression).pipe(
     map((expression) => expression?.trim()),

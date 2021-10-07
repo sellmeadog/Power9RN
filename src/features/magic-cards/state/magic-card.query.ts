@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { Results } from 'realm';
 import { combineLatest } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
-import { singleton } from 'tsyringe';
+import { Lifecycle, scoped } from 'tsyringe';
 
 import { Query } from '@datorama/akita';
 
@@ -16,7 +16,7 @@ import { P9MagicCardGalleryState, P9MagicCardGalleryStore } from './magic-card.s
 
 const dataProvider = new ResultsDataProvider<P9MagicCardObject>([]);
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class P9MagicCardGalleryQuery extends Query<P9MagicCardGalleryState> {
   #keywordPredicate$ = this.select(selectKeywordPredicate());
 

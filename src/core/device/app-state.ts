@@ -1,9 +1,9 @@
 import { AppState, AppStateStatus } from 'react-native';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { singleton } from 'tsyringe';
+import { Lifecycle, scoped } from 'tsyringe';
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class P9AppState {
   private appState$ = new BehaviorSubject(AppState.currentState);
 

@@ -1,5 +1,5 @@
 import { map } from 'rxjs/operators';
-import { singleton } from 'tsyringe';
+import { Lifecycle, scoped } from 'tsyringe';
 import { v1 } from 'uuid';
 
 import { arrayUpsert, ID } from '@datorama/akita';
@@ -18,7 +18,7 @@ import { P9CreateDecklistEntryInfo, P9CreateDecklistInfo, parseDocument } from '
 import { P9UserDecklistFeatureQuery } from './decklist-feature.query';
 import { P9UserDecklistFeatureStore } from './decklist-feature.store';
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class P9UserDecklistFeatureService {
   get createDecklistUIState() {
     return this.query.createDecklistUIState$;

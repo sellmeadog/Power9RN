@@ -1,5 +1,6 @@
-import Realm, { ObjectSchema, Results, User } from 'realm';
-import { singleton } from 'tsyringe';
+import Environment from 'react-native-config';
+import Realm, { App, ObjectSchema, Results, User } from 'realm';
+import { Lifecycle, scoped } from 'tsyringe';
 
 import { P9UserDecklist, P9UserDecklistSchema } from '../schema/user-decklist';
 import { P9UserDecklistEntrySchema, P9UserDecklistMetadataSchema } from '../schema/user-decklist-entry';
@@ -8,8 +9,9 @@ import { P9UserDataPartitionStore } from './user-data-partition.store';
 
 export const P9_USER_DATA_SCHEMA = [P9UserDecklistEntrySchema, P9UserDecklistMetadataSchema, P9UserDecklistSchema];
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class P9UserDataPartitionService {
+  #config: Realm.Configuration | undefined;
   #partition: Realm | undefined;
   #decklists: Results<P9UserDecklist> | undefined;
 
@@ -23,33 +25,34 @@ export class P9UserDataPartitionService {
     if (
       user.identities.map((identity) => identity.providerType).every((providerType) => providerType === 'anon-user')
     ) {
-      console.log('User is anonymous');
       return;
     }
 
     if (!this.#partition || this.#partition.isClosed) {
-      console.debug(`Opening USER partition for ${user.id}...`);
-      this.#partition = new Realm({
+      this.#config = {
         schema: P9_USER_DATA_SCHEMA,
         sync: {
           partitionValue: user.id,
           user,
-          error: (_, error) => {
-            console.log(error);
+          error: (_, reason) => {
+            if (this.#partition) {
+              if (reason.name === 'ClientReset') {
+                const partition = this.#partition;
+
+                this.close();
+                this._reset(partition);
+                this._open();
+              }
+            }
           },
         },
-      });
-      this.#decklists = this.#partition.objects<P9UserDecklist>(P9UserDecklistSchema.name).sorted([['name', false]]);
+      };
 
-      this.store.next({ partition: this.#partition, decklists: this.#decklists });
-      console.debug('USER partition opened.');
-    } else {
-      console.warn(`USER partition for ${user.id} is already open`);
+      this._open();
     }
   };
 
   close = (): void => {
-    console.debug('Closing USER partition...');
     const partition = this.#partition;
 
     this.store.next({ partition: undefined, decklists: undefined });
@@ -57,7 +60,6 @@ export class P9UserDataPartitionService {
     this.#decklists = undefined;
 
     partition?.close();
-    console.debug('USER partition closed.');
   };
 
   createObject = async <T>({ name }: ObjectSchema, entity: T): Promise<T> => {
@@ -89,6 +91,19 @@ export class P9UserDataPartitionService {
       this.#partition?.delete(this.#partition.objectForPrimaryKey(name, id));
     });
   };
+
+  private _reset(partition: Realm) {
+    if (!partition.isClosed) {
+      App.Sync.initiateClientReset(App.getApp(Environment.P9_MONGODB_REALM_APP_ID), partition.path);
+    }
+  }
+
+  private _open() {
+    this.#partition = new Realm(this.#config);
+    this.#decklists = this.#partition.objects<P9UserDecklist>(P9UserDecklistSchema.name).sorted([['name', false]]);
+
+    this.store.next({ partition: this.#partition, decklists: this.#decklists });
+  }
 
   pauseSync() {
     this.#partition?.syncSession?.pause();

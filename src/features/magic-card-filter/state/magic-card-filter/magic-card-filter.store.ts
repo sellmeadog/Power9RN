@@ -1,5 +1,5 @@
 import produce from 'immer';
-import { singleton } from 'tsyringe';
+import { Lifecycle, scoped } from 'tsyringe';
 
 import { EntityState, EntityStore } from '@datorama/akita';
 
@@ -7,7 +7,7 @@ import { P9PredicateAttributeGroup } from '../../model';
 
 export interface P9MagicCardFilterState extends EntityState<P9PredicateAttributeGroup, string> {}
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class P9MagicCardFilterStore extends EntityStore<P9MagicCardFilterState> {
   constructor() {
     super({}, { name: 'magic-card-filter', producerFn: produce, idKey: 'attribute' });
