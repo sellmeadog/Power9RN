@@ -28,14 +28,18 @@ export class P9MagicCardGalleryQuery extends Query<P9MagicCardGalleryState> {
   ]).pipe(
     map(([results, filterPredicate, keywordPredicate]): [Results<P9MagicCard & Realm.Object> | undefined, string] => [
       results,
-      [filterPredicate, keywordPredicate, 'default_card == true']
+      [filterPredicate, keywordPredicate] //, 'default_card == true']
         .filter(Boolean)
         .join(' AND ')
         .trim()
         .replace(/^(AND)/, '')
         .replace(/(\sAND)$/, ''),
     ]),
-    map(([results, predicate]) => (predicate ? results?.filtered(predicate) : results?.filtered('games.@count > 0'))),
+    map(([results, predicate]) =>
+      predicate
+        ? results?.filtered(`${predicate} SORT(name ASC, default_card DESC) DISTINCT(oracle_id)`)
+        : results?.filtered('oracle_id == oracle_id SORT(name ASC, default_card DESC) DISTINCT(oracle_id)'),
+    ),
   );
 
   dataProvider$ = this.visibleResults$.pipe(
