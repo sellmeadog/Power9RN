@@ -34,7 +34,7 @@ export const P9DrawerContent: FunctionComponent<P9DrawerContentProps> = (props) 
       <View>
         <DrawerItemList {...props} />
       </View>
-      <P9CaptionText style={[P9DrawerContentTheme.version]}>App Version &mdash; v0.3.0</P9CaptionText>
+      <P9CaptionText style={[P9DrawerContentTheme.version]}>App Version &mdash; v0.30.5</P9CaptionText>
     </SafeAreaView>
   );
 };
