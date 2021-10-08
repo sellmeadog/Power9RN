@@ -35,7 +35,7 @@ export const P9MagicSetSchema: ObjectSchema = {
     icon_svg_uri: 'string',
     magic_cards: {
       type: 'linkingObjects',
-      objectType: 'MagicCard',
+      objectType: 'MagicCard2',
       property: 'magic_set',
     },
   },

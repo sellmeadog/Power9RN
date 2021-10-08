@@ -37,8 +37,8 @@ export class P9MagicCardGalleryQuery extends Query<P9MagicCardGalleryState> {
     ]),
     map(([results, predicate]) =>
       predicate
-        ? results?.filtered(`${predicate} SORT(name ASC, default_card DESC) DISTINCT(oracle_id)`)
-        : results?.filtered('oracle_id == oracle_id SORT(name ASC, default_card DESC) DISTINCT(oracle_id)'),
+        ? results?.filtered(`${predicate} SORT(name ASC, oracle_card DESC) DISTINCT(oracle_id)`)
+        : results?.filtered('oracle_id == oracle_id SORT(name ASC, oracle_card DESC) DISTINCT(oracle_id)'),
     ),
   );
 

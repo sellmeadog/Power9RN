@@ -11,6 +11,7 @@ export interface P9MagicCard {
   _partition: string;
   tcgplayer_id: number | null;
   cardmarket_id: number | null;
+  oracle_card: boolean | null;
   oracle_id: string;
   rulings_uri: string;
 
@@ -30,7 +31,6 @@ export interface P9MagicCard {
   booster: boolean;
   border_color: string;
   collector_number: string;
-  default_card: boolean | null;
   digital: boolean;
   finishes: string[];
   flavor_name: string | null;
@@ -51,7 +51,7 @@ export interface P9MagicCard {
 export type P9MagicCardObject = P9MagicCard & Realm.Object;
 
 export const P9MagicCardSchema: ObjectSchema = {
-  name: 'MagicCard',
+  name: 'MagicCard2',
   primaryKey: '_id',
   properties: {
     // Core Card Fields
@@ -59,6 +59,7 @@ export const P9MagicCardSchema: ObjectSchema = {
     _partition: { type: 'string', indexed: true },
     tcgplayer_id: 'int?',
     cardmarket_id: 'int?',
+    oracle_card: 'bool?',
     oracle_id: { type: 'string', indexed: true },
     rulings_uri: 'string',
 
@@ -78,7 +79,6 @@ export const P9MagicCardSchema: ObjectSchema = {
     booster: 'bool',
     border_color: 'string',
     collector_number: 'string',
-    default_card: { type: 'bool', indexed: true },
     digital: 'bool',
     finishes: 'string[]',
     flavor_name: 'string?',
