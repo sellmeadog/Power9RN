@@ -14,15 +14,14 @@ import BottomSheet, { BottomSheetHandleProps, BottomSheetTextInput } from '@gorh
 
 import { P9BottomSheetBackground } from '../../../components';
 import { P9MagicCard } from '../../../core/public';
-import { P9MagicCardGallery, P9MagicCardSearchBar } from '../../magic-cards';
-import { useMagicCardGalleryFacade } from '../../public/components';
+import { P9MagicCardGallery, P9MagicCardSearchBar, useMagicCardGalleryFacade } from '../../magic-cards';
 import { useDecklistEditorFacade } from '../state/decklist-editor.service';
 
 export interface P9DecklistEditorBottomSheetProps {}
 
 export const P9DecklistEditorBottomSheet: FunctionComponent<P9DecklistEditorBottomSheetProps> = () => {
   const [{ activeEntryType = 'maindeck' }, __, upsertEntry] = useDecklistEditorFacade();
-  const [{ visibleResults }] = useMagicCardGalleryFacade();
+  const [{ dataProvider }] = useMagicCardGalleryFacade();
   const { bottom, top } = useSafeAreaInsets();
   const { height } = useWindowDimensions();
 
@@ -52,7 +51,7 @@ export const P9DecklistEditorBottomSheet: FunctionComponent<P9DecklistEditorBott
       topInset={top}
     >
       <Animated.View style={[animatedStyle]}>
-        <P9MagicCardGallery data={visibleResults} onPress={handleEntryPress} />
+        <P9MagicCardGallery dataProvider={dataProvider} onPress={handleEntryPress} />
       </Animated.View>
     </BottomSheet>
   );

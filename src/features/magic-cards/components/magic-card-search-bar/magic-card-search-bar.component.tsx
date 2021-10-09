@@ -4,7 +4,7 @@ import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { P9SearchBox, P9SearchBoxProps, P9ToggleButton, P9ToggleButtonProps } from '../../../../components';
 import { usePower9Theme } from '../../../../core/theme';
 import { useMagicCardFilterFacade } from '../../../magic-card-filter';
-import { useMagicCardGalleryFacade } from '../../../public/components';
+import { useMagicCardGalleryFacade } from '../../state/magic-card.query';
 
 export interface P9MagicCardSearchBarProps {
   containerStyle?: StyleProp<ViewStyle>;
