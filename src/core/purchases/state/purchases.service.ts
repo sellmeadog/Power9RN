@@ -115,7 +115,7 @@ function alertRestoreStatus(): MonoTypeOperatorFunction<PurchaserInfo> {
     if (Object.keys(purchaser.entitlements.active).length) {
       Alert.alert('Restore Complete', 'Your subscription has been restored!');
     } else {
-      Alert.alert('No Subscription', 'An active Power 9+ subscription was found to restore for your Apple ID.');
+      Alert.alert('No Subscription', 'No active Power 9+ subscription was found to restore for your Apple ID.');
     }
   });
 }
