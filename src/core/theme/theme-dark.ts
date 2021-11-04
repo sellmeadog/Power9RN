@@ -52,7 +52,15 @@ export const P9_THEME_DARK: Partial<FullTheme> = {
     backgroundColor: colors.background,
     statusBarProps: { animated: true, barStyle: 'light-content' },
     centerComponent: {
-      style: [{ color: colors?.white, fontFamily: 'Beleren2016-Bold', fontSize: 19, fontWeight: 'bold' }],
+      style: [
+        {
+          color: colors?.white,
+          fontFamily: 'Beleren2016-Bold',
+          fontSize: 19,
+          fontWeight: 'bold',
+          textTransform: 'capitalize',
+        },
+      ],
     },
     leftContainerStyle: [
       {

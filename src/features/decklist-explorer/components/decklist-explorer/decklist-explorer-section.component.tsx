@@ -1,27 +1,30 @@
-import React, { PropsWithChildren, useCallback } from 'react';
-import { FlatList, FlatListProps, ListRenderItem } from 'react-native';
+import React, { PropsWithChildren, useCallback, useMemo } from 'react';
+import { FlatList, FlatListProps, ListRenderItem, useWindowDimensions } from 'react-native';
 
 import { P9UserDecklist } from '../../../../core/data-user';
+import { useUserDecklistActions } from '../decklist-explorer-screen-home/screen-home/screen-home.facade';
 import { P9DecklistExplorerItem } from './decklist-explorer-item.component';
 
 export interface P9DecklistExplorerSectionProps
-  extends Omit<FlatListProps<P9UserDecklist>, 'keyExtractor' | 'renderItem'> {
-  onLongPressItem(item: P9UserDecklist): void;
-  onPressItem(id: string): void;
-}
+  extends Omit<FlatListProps<P9UserDecklist>, 'keyExtractor' | 'renderItem'> {}
 
 export function P9DecklistExplorerSection({
   data,
-  onLongPressItem,
-  onPressItem,
+  horizontal = true,
   ...rest
 }: PropsWithChildren<P9DecklistExplorerSectionProps>) {
+  const { width } = useWindowDimensions();
+  const itemWidth = useMemo(() => (horizontal ? 250 : width - 20), [horizontal, width]);
+  const [handlePress, _, handleLongPress] = useUserDecklistActions();
+
   const renderItem: ListRenderItem<P9UserDecklist> = useCallback(
-    ({ item }) => <P9DecklistExplorerItem item={item} onPress={onPressItem} onLongPress={onLongPressItem} />,
-    [onPressItem, onLongPressItem],
+    ({ item }) => (
+      <P9DecklistExplorerItem item={item} onPress={handlePress} onLongPress={handleLongPress} width={itemWidth} />
+    ),
+    [handleLongPress, handlePress, itemWidth],
   );
 
-  return <FlatList data={data} keyExtractor={keyExtractor} renderItem={renderItem} horizontal={true} {...rest} />;
+  return <FlatList data={data} keyExtractor={keyExtractor} renderItem={renderItem} horizontal={horizontal} {...rest} />;
 }
 
 function keyExtractor(item: P9UserDecklist): string {

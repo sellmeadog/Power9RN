@@ -1,12 +1,10 @@
-import React, { FunctionComponent, useCallback } from 'react';
-import { Alert } from 'react-native';
+import React, { FunctionComponent } from 'react';
 
 import { P9DrawerNavigatorHeader } from '../../../../../components';
 import { useAuthorizationFacade } from '../../../../../core/authorization';
-import { P9UserDecklist } from '../../../../../core/data-user';
 import { P9AnonymousGuard } from '../../../../authorization';
 import { useUserDecklistExplorerFacade } from '../../../state/decklist-explorer.facade';
-import { P9DecklistExplorer } from '../../decklist-explorer/decklist-explorer.component';
+import { P9DecklistExplorerSectionList } from '../../decklist-explorer/decklist-explorer-section-list.component';
 import { P9DecklistExplorerActionButton } from './screen-home-action-button.component';
 import { useHomeScreenFacade } from './screen-home.facade';
 
@@ -14,22 +12,8 @@ export interface P9DecklistExplorerHomeScreenProps {}
 
 export const P9DecklistExplorerHomeScreen: FunctionComponent<P9DecklistExplorerHomeScreenProps> = () => {
   const [{ isAnonymous }] = useAuthorizationFacade();
-  const [_, handleActivate, handleImportDecklist, onRemove] = useHomeScreenFacade();
+  const [_, __, handleImportDecklist] = useHomeScreenFacade();
   const [{ decklistCount, decklistGroups }] = useUserDecklistExplorerFacade();
-
-  const handleLongPress = useCallback(
-    (decklist: P9UserDecklist) => {
-      Alert.alert(
-        `Delete ${decklist.name}?`,
-        'Are you sure you want to delete this deck? This action cannot be undone.',
-        [
-          { text: 'Cancel', style: 'default' },
-          { text: 'Delete', onPress: () => onRemove(decklist), style: 'destructive' },
-        ],
-      );
-    },
-    [onRemove],
-  );
 
   return isAnonymous ? (
     <P9AnonymousGuard
@@ -47,7 +31,7 @@ export const P9DecklistExplorerHomeScreen: FunctionComponent<P9DecklistExplorerH
   ) : (
     <>
       <P9DrawerNavigatorHeader centerComponent={{ text: 'My Decks' }} />
-      <P9DecklistExplorer sections={decklistGroups} onActivate={handleActivate} onLongPress={handleLongPress} />
+      <P9DecklistExplorerSectionList sections={decklistGroups} />
       <P9DecklistExplorerActionButton decklistCount={decklistCount} onImportDecklist={handleImportDecklist} />
     </>
   );

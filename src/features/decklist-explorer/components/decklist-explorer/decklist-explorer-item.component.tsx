@@ -10,12 +10,14 @@ export interface P9DecklistExplorerItemProps {
   item: P9UserDecklist;
   onLongPress(decklist: P9UserDecklist): void;
   onPress(id: string): void;
+  width?: number;
 }
 
 export const P9DecklistExplorerItem: FunctionComponent<P9DecklistExplorerItemProps> = ({
   item,
   onLongPress,
   onPress,
+  width = 250,
 }) => {
   const colorIdentity = useMemo(
     () => Object.entries(item.metadata).filter(([key, value]) => ['W', 'U', 'B', 'R', 'G', 'C'].includes(key) && value),
@@ -31,7 +33,7 @@ export const P9DecklistExplorerItem: FunctionComponent<P9DecklistExplorerItemPro
       onLongPress={handleLongPress}
       onPress={handlePress}
       springValue={0.9}
-      style={[P9DecklistExplorerTheme.itemContainer]}
+      style={[P9DecklistExplorerTheme.itemContainer, { width }]}
     >
       <ImageBackground
         source={{ uri: item.metadata?.defaultCardArtworkUri ?? '' }}

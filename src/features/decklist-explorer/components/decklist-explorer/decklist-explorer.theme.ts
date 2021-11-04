@@ -16,7 +16,6 @@ export const P9DecklistExplorerTheme = StyleSheet.create({
     elevation: 8,
     marginLeft: 10,
     marginVertical: 10,
-    width: 250,
   },
 
   itemBackground: {

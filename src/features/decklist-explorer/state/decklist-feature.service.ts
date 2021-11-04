@@ -15,6 +15,7 @@ import { P9MagicCardObject } from '../../../core/public';
 import { P9PublicPartitionService } from '../../../core/public/state/public-partition.service';
 import { UTC_NOW } from '../../../core/utils';
 import { P9CreateDecklistEntryInfo, P9CreateDecklistInfo, parseDocument } from '../../decklist-parse';
+import { P9GameFormatType } from './decklist-feature.model';
 import { P9UserDecklistFeatureQuery } from './decklist-feature.query';
 import { P9UserDecklistFeatureStore } from './decklist-feature.store';
 
@@ -97,6 +98,12 @@ export class P9UserDecklistFeatureService {
 
   activateDecklist = (id: ID) => {
     this.store.setActive(id);
+  };
+
+  activateDecklistSection = (type: P9GameFormatType) => {
+    this.store.update((draft) => {
+      draft.ui.activeDecklistSection = type;
+    });
   };
 
   removeDecklist = (entity: P9UserDecklist) => {
