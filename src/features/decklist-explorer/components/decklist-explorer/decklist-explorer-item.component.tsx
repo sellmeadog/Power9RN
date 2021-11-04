@@ -36,7 +36,7 @@ export const P9DecklistExplorerItem: FunctionComponent<P9DecklistExplorerItemPro
       style={[P9DecklistExplorerTheme.itemContainer, { width }]}
     >
       <ImageBackground
-        source={{ uri: item.metadata?.defaultCardArtworkUri ?? '' }}
+        source={{ uri: item.metadata?.defaultCardArtworkUri ?? undefined }}
         style={P9DecklistExplorerTheme.itemBackground}
       >
         <P9RowView style={P9DecklistExplorerTheme.itemColorIdentityContainer}>
@@ -48,7 +48,15 @@ export const P9DecklistExplorerItem: FunctionComponent<P9DecklistExplorerItemPro
             />
           ))}
         </P9RowView>
-        <Text style={[P9DecklistExplorerTheme.itemTitle]}>{item.name}</Text>
+        <Text
+          adjustsFontSizeToFit={true}
+          ellipsizeMode={'tail'}
+          minimumFontScale={0.6}
+          numberOfLines={1}
+          style={[P9DecklistExplorerTheme.itemTitle]}
+        >
+          {item.name}
+        </Text>
       </ImageBackground>
     </P9SpringPressable>
   );
